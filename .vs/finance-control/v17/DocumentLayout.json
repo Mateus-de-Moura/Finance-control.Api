@@ -9,7 +9,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
+<<<<<<< HEAD
           "SelectedChildIndex": -1,
+=======
+<<<<<<< HEAD
+          "SelectedChildIndex": 56,
+=======
+          "SelectedChildIndex": 54,
+>>>>>>> f3c5daa (Fix: adjusting)
+>>>>>>> ef3ac01 (Fix: adjusting)
           "Children": [
             {
               "$type": "Bookmark",
@@ -248,8 +256,31 @@
               "Name": "ST:179:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
+<<<<<<< HEAD
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+<<<<<<< HEAD
+=======
+            },
+            {
+=======
+>>>>>>> f3c5daa (Fix: adjusting)
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BulderExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Api\\BulderExtensions.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
+              "RelativeToolTip": "src\\finance-control.Api\\BulderExtensions.cs",
+<<<<<<< HEAD
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+>>>>>>> f3c5daa (Fix: adjusting)
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T17:29:43.322Z",
+              "EditorCaption": ""
+>>>>>>> ef3ac01 (Fix: adjusting)
             }
           ]
         }
