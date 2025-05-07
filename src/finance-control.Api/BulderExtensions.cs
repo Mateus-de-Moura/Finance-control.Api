@@ -19,10 +19,10 @@ namespace api_clean_architecture.Api
             builder.Services.AddSwaggerGen();
             builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(typeof(CreateUserCommand).Assembly));
 
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));          
-            //});
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+            });
         }
 
         public static void AddJwtAuth(this WebApplicationBuilder builder)
