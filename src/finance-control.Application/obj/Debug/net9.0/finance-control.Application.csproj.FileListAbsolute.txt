@@ -1,0 +1,17 @@
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.csproj.AssemblyReference.cache
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.AssemblyInfoInputs.cache
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.AssemblyInfo.cs
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.csproj.CoreCompileInputs.cache
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Application.deps.json
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Application.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Application.pdb
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Domain.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Infra.Data.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Domain.pdb
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\bin\Debug\net9.0\finance-control.Infra.Data.pdb
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-.08BC26DC.Up2Date
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\refint\finance-control.Application.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.pdb
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\ref\finance-control.Application.dll

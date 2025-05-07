@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "ru2lbIk889vDrl1JNzCIoOnMmlXg7yRwwrXrSW+q3XI=",
+  "Source": "finance-control.Api",
+  "BasePath": "_content/finance-control.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "ContainingType": "finance_control.Api.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "Auth/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "finance_control.Application.UserCQ.Commands.LoginUserCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "finance_control.Application.Response.ResponseBase\u00601[[finance_control.Application.UserCQ.ViewModels.UserInfoViewModel, finance-control.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "finance_control.Api.Controllers.AuthController",
+    "Method": "RefreshToken",
+    "RelativePath": "Auth/RefreshToken",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "comand",
+        "Type": "finance_control.Application.UserCQ.Commands.RefreshTokenCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "finance_control.Application.Response.ResponseBase\u00601[[finance_control.Application.UserCQ.ViewModels.UserInfoViewModel, finance-control.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
