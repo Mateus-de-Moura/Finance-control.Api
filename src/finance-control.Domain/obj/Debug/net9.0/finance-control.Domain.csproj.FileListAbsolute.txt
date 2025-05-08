@@ -10,3 +10,4 @@ C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Domain\
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Domain\obj\Debug\net9.0\finance-control.Domain.pdb
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Domain\obj\Debug\net9.0\ref\finance-control.Domain.dll
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Domain\obj\Debug\net9.0\finance-control.Domain.csproj.AssemblyReference.cache
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Domain\obj\Debug\net9.0\finance-control.Domain.sourcelink.json

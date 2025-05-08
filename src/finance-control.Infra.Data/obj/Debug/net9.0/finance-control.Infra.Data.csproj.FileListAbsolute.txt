@@ -15,3 +15,4 @@ C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Infra.D
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Infra.Data\obj\Debug\net9.0\finance-control.Infra.Data.pdb
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Infra.Data\obj\Debug\net9.0\finance-control.Infra.Data.genruntimeconfig.cache
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Infra.Data\obj\Debug\net9.0\ref\finance-control.Infra.Data.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Infra.Data\obj\Debug\net9.0\finance-control.Infra.Data.sourcelink.json

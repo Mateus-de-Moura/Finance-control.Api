@@ -1,7 +1,16 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|solutionrelative:src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|solutionrelative:src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,15 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-<<<<<<< HEAD
-          "SelectedChildIndex": -1,
-=======
-<<<<<<< HEAD
-          "SelectedChildIndex": 56,
-=======
           "SelectedChildIndex": 54,
->>>>>>> f3c5daa (Fix: adjusting)
->>>>>>> ef3ac01 (Fix: adjusting)
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,10 +35,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:154:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
               "$type": "Bookmark",
@@ -98,10 +95,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:150:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
               "$type": "Bookmark",
@@ -181,23 +174,11 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:158:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:146:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Bookmark",
@@ -256,31 +237,30 @@
               "Name": "ST:179:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-<<<<<<< HEAD
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-<<<<<<< HEAD
-=======
-            },
-            {
-=======
->>>>>>> f3c5daa (Fix: adjusting)
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "BulderExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
-              "RelativeDocumentMoniker": "src\\finance-control.Api\\BulderExtensions.cs",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
-              "RelativeToolTip": "src\\finance-control.Api\\BulderExtensions.cs",
-<<<<<<< HEAD
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
->>>>>>> f3c5daa (Fix: adjusting)
+              "Title": "RevenuesController.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "RelativeToolTip": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAACsAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-07T17:29:43.322Z",
+              "WhenOpened": "2025-05-08T23:25:10.195Z",
               "EditorCaption": ""
->>>>>>> ef3ac01 (Fix: adjusting)
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateRevenueCommandHendler.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
+              "RelativeToolTip": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAgwBIAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T23:19:00.06Z",
+              "EditorCaption": ""
             }
           ]
         }

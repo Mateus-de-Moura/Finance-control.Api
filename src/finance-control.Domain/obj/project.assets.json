@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "Ardalis.Result/10.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Ardalis.Result.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Ardalis.Result.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Authentication.Abstractions/2.3.0": {
         "type": "package",
         "dependencies": {
@@ -1237,6 +1246,22 @@
     }
   },
   "libraries": {
+    "Ardalis.Result/10.1.0": {
+      "sha512": "+WgsXh+JRm0d8BZPlBUc5w0+FTda4vbWRa/IF2q4zDoRsU5BXr8w4rTbYEklZIMNgQQZTcNouR/QfBV5I/4XYQ==",
+      "type": "package",
+      "path": "ardalis.result/10.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ardalis.result.10.1.0.nupkg.sha512",
+        "ardalis.result.nuspec",
+        "icon.png",
+        "lib/net6.0/Ardalis.Result.dll",
+        "lib/net7.0/Ardalis.Result.dll",
+        "lib/net8.0/Ardalis.Result.dll",
+        "lib/netstandard2.0/Ardalis.Result.dll"
+      ]
+    },
     "Microsoft.AspNetCore.Authentication.Abstractions/2.3.0": {
       "sha512": "ve6uvLwKNRkfnO/QeN9M8eUJ49lCnWv/6/9p6iTEuiI6Rtsz+myaBAjdMzLuTViQY032xbTF5AdZF5BJzJJyXQ==",
       "type": "package",
@@ -4159,6 +4184,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Ardalis.Result >= 10.1.0",
       "Microsoft.AspNetCore.Mvc.Core >= 2.3.0"
     ]
   },
@@ -4213,6 +4239,10 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "Ardalis.Result": {
+            "target": "Package",
+            "version": "[10.1.0, )"
+          },
           "Microsoft.AspNetCore.Mvc.Core": {
             "target": "Package",
             "version": "[2.3.0, )"

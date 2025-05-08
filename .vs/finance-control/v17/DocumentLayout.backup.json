@@ -1,16 +1,16 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\",
-<<<<<<< HEAD
-  "Documents": [],
-=======
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.api\\bulderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|solutionrelative:src\\finance-control.api\\bulderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|solutionrelative:src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.application\\revenuescq\\hendlers\\getpagedrevenuescommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|solutionrelative:src\\finance-control.application\\revenuescq\\hendlers\\getpagedrevenuescommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
->>>>>>> f3c5daa (Fix: adjusting)
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 55,
           "Children": [
             {
               "$type": "Bookmark",
@@ -235,22 +235,32 @@
             {
               "$type": "Bookmark",
               "Name": "ST:179:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-<<<<<<< HEAD
-=======
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GetPagedRevenuesCommandHendler.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "RelativeToolTip": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwBsAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T23:02:33.765Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "BulderExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
-              "RelativeDocumentMoniker": "src\\finance-control.Api\\BulderExtensions.cs",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\BulderExtensions.cs",
-              "RelativeToolTip": "src\\finance-control.Api\\BulderExtensions.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Title": "RevenuesController.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "RelativeToolTip": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAowB0AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-07T17:29:43.322Z",
+              "WhenOpened": "2025-05-08T22:43:33.202Z",
               "EditorCaption": ""
->>>>>>> f3c5daa (Fix: adjusting)
             }
           ]
         }

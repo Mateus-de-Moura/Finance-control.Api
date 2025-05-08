@@ -19,6 +19,14 @@
           "finance-control.Infra.Data.dll": {}
         }
       },
+      "Ardalis.Result/10.1.0": {
+        "runtime": {
+          "lib/net8.0/Ardalis.Result.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.0"
+          }
+        }
+      },
       "Azure.Core/1.38.0": {
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "7.0.0",
@@ -1284,6 +1292,7 @@
       },
       "finance-control.Domain/1.0.0": {
         "dependencies": {
+          "Ardalis.Result": "10.1.0",
           "Microsoft.AspNetCore.Mvc.Core": "2.3.0"
         },
         "runtime": {
@@ -1300,6 +1309,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Ardalis.Result/10.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+WgsXh+JRm0d8BZPlBUc5w0+FTda4vbWRa/IF2q4zDoRsU5BXr8w4rTbYEklZIMNgQQZTcNouR/QfBV5I/4XYQ==",
+      "path": "ardalis.result/10.1.0",
+      "hashPath": "ardalis.result.10.1.0.nupkg.sha512"
     },
     "Azure.Core/1.38.0": {
       "type": "package",

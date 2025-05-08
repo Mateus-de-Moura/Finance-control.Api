@@ -15,3 +15,4 @@ C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Applica
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\refint\finance-control.Application.dll
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.pdb
 C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\ref\finance-control.Application.dll
+C:\Users\Mateus\Desktop\projetos\finance-control-api\src\finance-control.Application\obj\Debug\net9.0\finance-control.Application.sourcelink.json

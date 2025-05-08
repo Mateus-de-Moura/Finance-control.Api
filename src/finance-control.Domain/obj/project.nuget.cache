@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "xkSxZxMGIww=",
+  "dgSpecHash": "+P+Oo74XsRA=",
   "success": true,
   "projectFilePath": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Domain\\finance-control.Domain.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Mateus\\.nuget\\packages\\ardalis.result\\10.1.0\\ardalis.result.10.1.0.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.3.0\\microsoft.aspnetcore.authentication.core.2.3.0.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.3.0\\microsoft.aspnetcore.authorization.2.3.0.nupkg.sha512",
