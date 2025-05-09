@@ -23,6 +23,8 @@ namespace api_clean_architecture.Api
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
             });
+
+            builder.Services.AddMemoryCache();
         }
 
         public static void AddJwtAuth(this WebApplicationBuilder builder)
