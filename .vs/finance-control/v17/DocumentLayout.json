@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|solutionrelative:src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8}|src\\finance-control.Api\\finance-control.Api.csproj|solutionrelative:src\\finance-control.api\\controllers\\revenuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|solutionrelative:src\\finance-control.application\\revenuescq\\hendlers\\createrevenuecommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|c:\\users\\mateus\\desktop\\projetos\\finance-control-api\\src\\finance-control.application\\revenuescq\\hendlers\\getpagedrevenuescommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB0EE377-F0C3-429D-9C1F-E0A39F9B1D1D}|src\\finance-control.Application\\finance-control.Application.csproj|solutionrelative:src\\finance-control.application\\revenuescq\\hendlers\\getpagedrevenuescommandhendler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 54,
+          "SelectedChildIndex": 56,
           "Children": [
             {
               "$type": "Bookmark",
@@ -238,26 +242,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "GetPagedRevenuesCommandHendler.cs",
+              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "RelativeDocumentMoniker": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "RelativeToolTip": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\GetPagedRevenuesCommandHendler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T23:26:41.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "RevenuesController.cs",
               "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
               "RelativeDocumentMoniker": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
               "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Api\\Controllers\\RevenuesController.cs",
               "RelativeToolTip": "src\\finance-control.Api\\Controllers\\RevenuesController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAAACsAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAIwCsAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-08T23:25:10.195Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CreateRevenueCommandHendler.cs",
               "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
               "RelativeDocumentMoniker": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
               "ToolTip": "C:\\Users\\Mateus\\Desktop\\projetos\\finance-control-api\\src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
               "RelativeToolTip": "src\\finance-control.Application\\RevenuesCQ\\Hendlers\\CreateRevenueCommandHendler.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAgwBIAAABOAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAcwBoAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-08T23:19:00.06Z",
               "EditorCaption": ""
