@@ -19,6 +19,9 @@ namespace finance_control.Application.Mappings
                 .ForMember(x => x.TokenJwt, x => x.AllowNull());
 
             CreateMap<RefreshTokenViewModel, UserInfoViewModel>();
+
+            CreateMap<User, UserViewModel>()
+               .ForMember(dest => dest.RoleName, map => map.MapFrom(src => src.Role.Name));
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }
