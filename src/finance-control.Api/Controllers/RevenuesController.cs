@@ -23,11 +23,21 @@ namespace finance_control.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
         {
-            var response = await _mediator.Send(new GetPagedRevenuesCommand
+            const string cacheKey = "Revenues";
+
+            var response = await _cache.GetOrCreate(cacheKey, async entry =>
             {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Description = request.Description,
+                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                entry.AbsoluteExpiration = DateTime.UtcNow.AddMinutes(5);
+
+                var responseDb = await _mediator.Send(new GetPagedRevenuesCommand
+                {
+                    PageNumber = request.PageNumber,
+                    PageSize = request.PageSize,
+                    Description = request.Description,
+                });
+
+                return responseDb;
             });
 
             if (response.ResponseInfo is null)

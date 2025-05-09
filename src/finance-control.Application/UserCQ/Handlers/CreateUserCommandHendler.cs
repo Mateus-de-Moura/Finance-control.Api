@@ -69,7 +69,6 @@ namespace finance_control.Application.UserCQ.Handlers
             user.RefreshToken = _authService.GenerateRefreshToken();
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passWordHash;
-            user.AppRoleId = request.RoleId;
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
