@@ -107,6 +107,34 @@ namespace finance_control.Infra.Data.Migrations
                     b.ToTable("Invoices", (string)null);
                 });
 
+            modelBuilder.Entity("finance_control.Domain.Entity.Revenues", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Revenues");
+                });
+
             modelBuilder.Entity("finance_control.Domain.Entity.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,6 +202,17 @@ namespace finance_control.Infra.Data.Migrations
                 });
 
             modelBuilder.Entity("finance_control.Domain.Entity.Invoices", b =>
+                {
+                    b.HasOne("finance_control.Domain.Entity.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("finance_control.Domain.Entity.Revenues", b =>
                 {
                     b.HasOne("finance_control.Domain.Entity.Category", "Category")
                         .WithMany()
