@@ -25,8 +25,11 @@ namespace finance_control.Api.Controllers
         {
             const string cacheKey = "Revenues";
 
-            if (!_cache.TryGetValue(cacheKey, out ResponseBase<PaginatedList<Revenues>> response))
+            var response = await _cache.GetOrCreate(cacheKey, async entry =>
             {
+                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                entry.AbsoluteExpiration = DateTime.UtcNow.AddMinutes(5);
+
                 var responseDb = await _mediator.Send(new GetPagedRevenuesCommand
                 {
                     PageNumber = request.PageNumber,
@@ -34,14 +37,8 @@ namespace finance_control.Api.Controllers
                     Description = request.Description,
                 });
 
-                response = responseDb;
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(1))
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-                _cache.Set(cacheKey, response, cacheEntryOptions);
-            }
+                return responseDb;
+            });
 
             if (response.ResponseInfo is null)
                 return Ok(response.Value);
