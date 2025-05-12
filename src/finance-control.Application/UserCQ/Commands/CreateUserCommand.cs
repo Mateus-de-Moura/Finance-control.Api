@@ -1,6 +1,7 @@
 ﻿using finance_control.Application.Response;
 using finance_control.Application.UserCQ.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace finance_control.Application.UserCQ.Commands
 {
@@ -13,5 +14,7 @@ namespace finance_control.Application.UserCQ.Commands
         public string? Password { get; set; }
         public string? Username { get; set; }
         public Guid RoleId { get; set; }
+
+        public IFormFile Photo { get; set; }
     }
 }

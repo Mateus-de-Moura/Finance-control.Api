@@ -10,6 +10,7 @@ namespace finance_control.Infra.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Invoices> Invoices { get; set; }
         public DbSet<Revenues> Revenues { get; set; }
+        public DbSet<PhotosUsers> PhotosUsers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

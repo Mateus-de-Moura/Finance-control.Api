@@ -37,7 +37,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
+        public async Task<IActionResult> Create([FromForm] CreateUserCommand request)
         {
             var response = await _mediator.Send(request);
 
