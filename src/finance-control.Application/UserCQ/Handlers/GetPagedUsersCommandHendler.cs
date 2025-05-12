@@ -27,7 +27,7 @@ namespace finance_control.Application.UserCQ.Handlers
                 .AsNoTracking()
                 .Include(x => x.Role)
                 .OrderBy(x => x.Name)              
-                .Where(x => x.Active).AsQueryable();
+                .AsQueryable();
 
 
             if (!string.IsNullOrEmpty(request.Name))

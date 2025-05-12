@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using finance_control.Application.Common.Models;
 using finance_control.Application.UserCQ.Commands;
 using MediatR;
@@ -12,6 +13,7 @@ namespace finance_control.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+   
     public class UserController(IMediator madiator, IMemoryCache cache) : ControllerBase
     {
         private readonly IMediator _mediator = madiator;
@@ -38,6 +40,17 @@ namespace finance_control.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
         {
             var response = await _mediator.Send(request);
+
+            if (response.ResponseInfo is null)
+                return Ok(response.Value);
+
+            return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpGet("Roles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var response = await _mediator.Send(new GetRolesToUserCommand());
 
             if (response.ResponseInfo is null)
                 return Ok(response.Value);
