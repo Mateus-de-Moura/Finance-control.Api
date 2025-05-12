@@ -23,7 +23,7 @@ namespace finance_control.Infra.Data.Configurations
             var role = new AppRole
             {
                 Id = new Guid("f39b093c-9887-4a86-bba5-48be3c1466e4"),
-                Name = "Administrator"
+                Name = "Administrador"
             };
 
             builder.HasData(role);

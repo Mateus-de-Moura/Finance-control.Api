@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250512190746_AJUSTANDO_APPROLE")]
+    partial class AJUSTANDO_APPROLE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,27 +108,6 @@ namespace finance_control.Infra.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Invoices", (string)null);
-                });
-
-            modelBuilder.Entity("finance_control.Domain.Entity.PhotosUsers", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("PhotoUser")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("PhotosUsers");
                 });
 
             modelBuilder.Entity("finance_control.Domain.Entity.Revenues", b =>
@@ -233,17 +215,6 @@ namespace finance_control.Infra.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("finance_control.Domain.Entity.PhotosUsers", b =>
-                {
-                    b.HasOne("finance_control.Domain.Entity.User", "User")
-                        .WithOne("PhotosUsers")
-                        .HasForeignKey("finance_control.Domain.Entity.PhotosUsers", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("finance_control.Domain.Entity.Revenues", b =>
                 {
                     b.HasOne("finance_control.Domain.Entity.Category", "Category")
@@ -269,12 +240,6 @@ namespace finance_control.Infra.Data.Migrations
             modelBuilder.Entity("finance_control.Domain.Entity.AppRole", b =>
                 {
                     b.Navigation("appUsers");
-                });
-
-            modelBuilder.Entity("finance_control.Domain.Entity.User", b =>
-                {
-                    b.Navigation("PhotosUsers")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -24,6 +24,7 @@ namespace finance_control.Application.UserCQ.Handlers
         {
             var user = await _contex.Users
                 .Include(x => x.Role)
+                .Include(x => x.PhotosUsers)
                 .FirstOrDefaultAsync(x => x.Email == request.Email);
 
             if (user is null)
@@ -50,6 +51,9 @@ namespace finance_control.Application.UserCQ.Handlers
 
                 RefreshTokenViewModel refreshTokenVM = _mapper.Map<RefreshTokenViewModel>(user);
                 refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!);
+
+                if (user.PhotosUsers is not null)
+                    refreshTokenVM.Photo = Convert.ToBase64String(user.PhotosUsers.PhotoUser);
 
                 return new ResponseBase<RefreshTokenViewModel>()
                 {

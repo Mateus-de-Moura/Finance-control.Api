@@ -1,24 +1,15 @@
-﻿using AutoMapper;
-using Azure;
-using finance_control.Application.Common.Models;
-using finance_control.Application.Response;
+﻿using finance_control.Application.Common.Models;
 using finance_control.Application.RevenuesCQ.Commands;
-using finance_control.Domain.Entity;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace finance_control.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RevenuesController(IMediator madiator, IMapper mapper, IMemoryCache cache) : ControllerBase
+    public class RevenuesController(IMediator madiator) : ControllerBase
     {
-        private readonly IMediator _mediator = madiator;
-        private readonly IMapper _mapper = mapper;
-        private readonly IMemoryCache _cache = cache;
+        private readonly IMediator _mediator = madiator;     
 
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
@@ -37,9 +28,9 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromQuery] CreateRevenueCommand request)
+        public async Task<IActionResult> Create([FromBody] CreateRevenueCommand command)
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(command);
 
             if (response.ResponseInfo is null)
             {
@@ -47,6 +38,20 @@ namespace finance_control.Api.Controllers
             }
 
             return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRevenues([FromBody] UpdateRevenueCommand command)
+        {
+            var response = await _mediator.Send(command);
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+
         }
     }
 }

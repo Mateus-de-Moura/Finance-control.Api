@@ -8,5 +8,6 @@
         public string? Username { get; set; }
         public string? TokenJwt { get; set; }  
         public string? RefreshToken { get; set; }
+        public string Photo {  get; set; }
     }
 }
