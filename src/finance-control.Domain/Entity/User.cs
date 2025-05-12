@@ -31,8 +31,9 @@ namespace finance_control.Domain.Entity
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpirationTime { get; set; }
 
-        public Guid AppRoleId { get; set; }
+        public Guid AppRoleId { get; set; }      
 
+        public virtual PhotosUsers PhotosUsers { get; set; }
         public virtual AppRole Role { get; set; }
 
 
