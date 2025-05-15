@@ -72,10 +72,12 @@ namespace finance_control.Application.UserCQ.Handlers
             user.PasswordHash = passWordHash;
             user.AppRoleId = request.RoleId;
 
-            user.PhotosUsers = new PhotosUsers
-            {
-                PhotoUser = await ConvertToBytes(request.Photo!)
-            };
+            if (request.Photo is not null)
+                user.PhotosUsers = new PhotosUsers
+                {
+                    PhotoUser = await ConvertToBytes(request.Photo!)
+                };
+
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -94,8 +96,8 @@ namespace finance_control.Application.UserCQ.Handlers
         {
             using (var memoryStream = new MemoryStream())
             {
-                await file.CopyToAsync(memoryStream); 
-                return memoryStream.ToArray(); 
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
             }
         }
     }
