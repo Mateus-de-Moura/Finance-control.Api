@@ -2,6 +2,7 @@
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Domain.Abstractions;
 using finance_control.Infra.Data;
+using finance_control.Services;
 using finance_control.Services.AuthService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,7 @@ namespace api_clean_architecture.Api
         public static void AddInjection(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IConvertFormFileToBytes, ConvertFormFileToBytes>();
         }
 
         public static void AddDatabase(this WebApplicationBuilder builder)

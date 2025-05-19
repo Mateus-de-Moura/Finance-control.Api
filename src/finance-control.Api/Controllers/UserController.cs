@@ -57,5 +57,17 @@ namespace finance_control.Api.Controllers
 
             return BadRequest(response.ResponseInfo);
         }
+
+        [HttpPut("update-photo")]
+        public async Task<IActionResult> UpdatePhotoUser([FromForm] UpdatePhotoUserCommand command)
+        {
+            var response = await _mediator.Send(new UpdatePhotoUserCommand { Photo = command.Photo, EmailUser = command.EmailUser});
+
+            if (response.ResponseInfo is null)
+                return Ok(Convert.ToBase64String(response.Value.PhotosUsers.PhotoUser));
+
+            return BadRequest(response.ResponseInfo);
+
+        }
     }
 }
