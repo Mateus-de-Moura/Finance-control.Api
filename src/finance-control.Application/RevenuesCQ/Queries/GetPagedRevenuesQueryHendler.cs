@@ -1,19 +1,17 @@
-﻿
-using finance_control.Application.Common.Models;
+﻿using finance_control.Application.Common.Models;
 using finance_control.Application.Extensions;
 using finance_control.Application.Response;
-using finance_control.Application.RevenuesCQ.Commands;
 using finance_control.Domain.Entity;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace finance_control.Application.RevenuesCQ.Hendlers
+namespace finance_control.Application.RevenuesCQ.Queries
 {
-    public class GetPagedRevenuesCommandHendler(FinanceControlContex context) : IRequestHandler<GetPagedRevenuesCommand, ResponseBase<PaginatedList<Revenues>>>
+    public class GetPagedRevenuesQueryHendler(FinanceControlContex context) : IRequestHandler<GetPagedRevenuesQuery, ResponseBase<PaginatedList<Revenues>>>
     {
         private readonly FinanceControlContex _context = context;
-        public async Task<ResponseBase<PaginatedList<Revenues>>> Handle(GetPagedRevenuesCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseBase<PaginatedList<Revenues>>> Handle(GetPagedRevenuesQuery request, CancellationToken cancellationToken)
         {
 
             var queryable =  _context.Revenues.AsNoTracking()
