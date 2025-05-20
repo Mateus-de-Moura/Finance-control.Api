@@ -7,9 +7,10 @@ using finance_control.Application.Response;
 using finance_control.Domain.Entity;
 using MediatR;
 
-namespace finance_control.Application.UserCQ.Commands
+namespace finance_control.Application.UserCQ.Queries
 {
-    public class GetRolesToUserCommand : IRequest<ResponseBase<List<AppRole>>>
+    public class GetUserByIdQuery : IRequest<ResponseBase<User>>
     {
+        public Guid Id { get; set; }
     }
 }

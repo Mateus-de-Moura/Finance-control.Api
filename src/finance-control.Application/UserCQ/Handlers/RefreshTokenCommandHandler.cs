@@ -22,16 +22,7 @@ namespace finance_control.Application.UserCQ.Handlers
             if (user == null || user.RefreshToken != request.RefreshToken
                 || user.RefreshTokenExpirationTime < DateTime.Now)
             {
-                return new ResponseBase<RefreshTokenViewModel>
-                {
-                    ResponseInfo = new()
-                    {
-                        Title = "Token inválido",
-                        ErrorDescription = "RefreshToken inválido ou  expirado. Faça login novamente",
-                        HttpStatus = 400
-                    },
-                    Value = null
-                };
+                return ResponseBase<RefreshTokenViewModel>.Fail("Token inválido", "RefreshToken inválido ou  expirado. Faça login novamente", 400);              
             }
 
             user.RefreshToken = _authService.GenerateRefreshToken();
@@ -42,11 +33,7 @@ namespace finance_control.Application.UserCQ.Handlers
             RefreshTokenViewModel refreshTokenVM = _mapper.Map<RefreshTokenViewModel>(user);
             refreshTokenVM.RefreshToken = _authService.GenerateJWT(user.Email!, user.UserName!);
 
-            return new ResponseBase<RefreshTokenViewModel>
-            {
-                ResponseInfo = null,
-                Value = refreshTokenVM
-            };
+            return  ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);           
         }
     }
 }

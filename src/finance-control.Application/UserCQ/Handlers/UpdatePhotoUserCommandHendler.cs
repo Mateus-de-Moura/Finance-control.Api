@@ -25,17 +25,7 @@ namespace finance_control.Application.UserCQ.Handlers
                 .FirstOrDefaultAsync();
 
             if (user == null)
-                return new ResponseBase<User>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Usuário inxistente",
-                        ErrorDescription = "Nenhum usuário localizado com o e-mail informado.",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-
+                return ResponseBase<User>.Fail("Usuário inxistente", "Nenhum usuário localizado com o e-mail informado.", 404);
 
             if (user.PhotosUsers == null)
                 await _context.PhotosUsers.AddAsync(new PhotosUsers
@@ -49,23 +39,8 @@ namespace finance_control.Application.UserCQ.Handlers
             var rowsAffected = await _context.SaveChangesAsync(cancellationToken);
 
             return rowsAffected > 0 ?
-            new ResponseBase<User>
-            {
-                ResponseInfo = null,
-                Value = user,
-            } :
-            new ResponseBase<User>
-            {
-                ResponseInfo = new ResponseInfo
-                {
-                    Title = "Erro ao atualizar",
-                    ErrorDescription = "Não foi possivel alterar a foto do  usuário, tente novamente",
-                    HttpStatus = 404
-                },
-                Value = null,
-            };
-
-
+             ResponseBase<User>.Success(user) :
+             ResponseBase<User>.Fail("Erro ao atualizar", "Não foi possivel alterar a foto do  usuário, tente novamente", 404);          
         }
     }
 }
