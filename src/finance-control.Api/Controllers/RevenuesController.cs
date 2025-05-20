@@ -1,7 +1,9 @@
 ﻿using finance_control.Application.Common.Models;
 using finance_control.Application.RevenuesCQ.Commands;
+using finance_control.Application.RevenuesCQ.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace finance_control.Api.Controllers
 {
@@ -14,7 +16,7 @@ namespace finance_control.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
         {
-            var response = await _mediator.Send(new GetPagedRevenuesCommand
+            var response = await _mediator.Send(new GetPagedRevenuesQuery
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
@@ -38,6 +40,20 @@ namespace finance_control.Api.Controllers
             }
 
             return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpGet("update/{id}")]
+        public async Task<IActionResult> Update(Guid Id)
+        {
+            var response = await _mediator.Send(new GetRevenuesByIdQuery { Id = Id});
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+
         }
 
         [HttpPut]
