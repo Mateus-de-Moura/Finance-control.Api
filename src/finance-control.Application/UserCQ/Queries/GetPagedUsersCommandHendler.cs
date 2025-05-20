@@ -43,7 +43,8 @@ namespace finance_control.Application.UserCQ.Queries
             if (response == null)
                 return ResponseBase<PaginatedList<UserViewModel>>.Fail("Falha ao buscar dados", "Nenhum item localizado", 404);
 
-            return  ResponseBase<PaginatedList<UserViewModel>>.Success(response);
-          
+            return ResponseBase<PaginatedList<UserViewModel>>.Success(response);
+
+        }
     }
 }
