@@ -8,14 +8,13 @@ using finance_control.Application.Common.Models;
 using finance_control.Application.Extensions;
 using finance_control.Application.Response;
 using finance_control.Application.RevenuesCQ.Commands;
-using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace finance_control.Application.UserCQ.Handlers
+namespace finance_control.Application.UserCQ.Queries
 {
     public class GetPagedUsersCommandHendler(FinanceControlContex context, IMapper mapper) : IRequestHandler<GetPagedUsersCommand, ResponseBase<PaginatedList<UserViewModel>>>
     {
@@ -26,14 +25,15 @@ namespace finance_control.Application.UserCQ.Handlers
             var queryable = _context.Users
                 .AsNoTracking()
                 .Include(x => x.Role)
-                .OrderBy(x => x.Name)              
+                .OrderBy(x => x.Name)
                 .AsQueryable();
 
 
             if (!string.IsNullOrEmpty(request.Name))
             {
                 queryable = queryable.Where(x => x.Name.Contains(request.Name));
-            };
+            }
+            ;
 
             var response = await queryable
                  .Select(x => _mapper.Map<UserViewModel>(x))
@@ -41,24 +41,10 @@ namespace finance_control.Application.UserCQ.Handlers
 
 
             if (response == null)
-            {
-                return new ResponseBase<PaginatedList<UserViewModel>>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Falha ao buscar dados",
-                        ErrorDescription = "Nenhum item localizado",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<PaginatedList<UserViewModel>>.Fail("Falha ao buscar dados", "Nenhum item localizado", 404);
 
-            return new ResponseBase<PaginatedList<UserViewModel>>
-            {
-                ResponseInfo = null,
-                Value = response
-            };
+            return ResponseBase<PaginatedList<UserViewModel>>.Success(response);
+
         }
     }
 }

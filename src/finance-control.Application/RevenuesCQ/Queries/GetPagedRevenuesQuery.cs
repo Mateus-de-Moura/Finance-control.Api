@@ -9,12 +9,12 @@ using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
 using MediatR;
 
-namespace finance_control.Application.UserCQ.Commands
+namespace finance_control.Application.RevenuesCQ.Queries
 {
-    public class GetPagedUsersCommand : IRequest<ResponseBase<PaginatedList<UserViewModel?>>>
+    public class GetPagedRevenuesQuery : IRequest<ResponseBase<PaginatedList<Revenues>>>
     {
         public int PageNumber = 1;
         public int PageSize = 10;
-        public string Name = string.Empty;
+        public string Description = string.Empty;
     }
 }

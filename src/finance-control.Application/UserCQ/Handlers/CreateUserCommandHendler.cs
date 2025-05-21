@@ -23,45 +23,15 @@ namespace finance_control.Application.UserCQ.Handlers
             var isUniqueEmailAndUsername = await _authService.UniqueEmailAndUserName(request.Email!, request.Username!);
 
             if (isUniqueEmailAndUsername is ValidationFieldsUserEnum.EmailUnavailable)
-            {
-                return new ResponseBase<RefreshTokenViewModel>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Email Indisponivel",
-                        ErrorDescription = "O Email Já está sendo utilizado. Tente outro.",
-                        HttpStatus = 400
-                    },
-                    Value = null
-                };
-            }
+                return ResponseBase<RefreshTokenViewModel>.Fail("Email Indisponivel", "O Email Já está sendo utilizado. Tente outro.", 400);
+
 
             if (isUniqueEmailAndUsername is ValidationFieldsUserEnum.UsernameUnavailable)
-            {
-                return new ResponseBase<RefreshTokenViewModel>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Username Indisponivel",
-                        ErrorDescription = "O username Já está sendo utilizado. Tente outro.",
-                        HttpStatus = 400
-                    },
-                    Value = null
-                };
-            }
+                return ResponseBase<RefreshTokenViewModel>.Fail("Username Indisponivel", "O username Já está sendo utilizado. Tente outro.", 400);
+
             if (isUniqueEmailAndUsername is ValidationFieldsUserEnum.UsernameAndEmailUnavailable)
-            {
-                return new ResponseBase<RefreshTokenViewModel>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Username e Email Indisponíveis",
-                        ErrorDescription = "o username e o email apresentados já estão sendo utilizados. Tente outro.",
-                        HttpStatus = 400
-                    },
-                    Value = null
-                };
-            }
+                return ResponseBase<RefreshTokenViewModel>.Fail("Username e Email Indisponíveis",
+                    "o username e o email apresentados já estão sendo utilizados. Tente outro.", 400);
 
             var passwordSalt = BCrypt.Net.BCrypt.GenerateSalt();
             var passWordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, passwordSalt);
@@ -72,10 +42,12 @@ namespace finance_control.Application.UserCQ.Handlers
             user.PasswordHash = passWordHash;
             user.AppRoleId = request.RoleId;
 
-            user.PhotosUsers = new PhotosUsers
-            {
-                PhotoUser = await ConvertToBytes(request.Photo!)
-            };
+            if (request.Photo is not null)
+                user.PhotosUsers = new PhotosUsers
+                {
+                    PhotoUser = await ConvertToBytes(request.Photo!)
+                };
+
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -83,19 +55,15 @@ namespace finance_control.Application.UserCQ.Handlers
             var refreshTokenVM = _mapper.Map<RefreshTokenViewModel>(user);
             refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!);
 
-            return new ResponseBase<RefreshTokenViewModel>
-            {
-                ResponseInfo = null,
-                Value = refreshTokenVM,
-            };
+            return  ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);          
         }
 
         private async Task<byte[]> ConvertToBytes(IFormFile file)
         {
             using (var memoryStream = new MemoryStream())
             {
-                await file.CopyToAsync(memoryStream); 
-                return memoryStream.ToArray(); 
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
             }
         }
     }

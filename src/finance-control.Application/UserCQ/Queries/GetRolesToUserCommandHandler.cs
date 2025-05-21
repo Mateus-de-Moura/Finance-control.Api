@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using finance_control.Application.Response;
-using finance_control.Application.UserCQ.Commands;
 using finance_control.Domain.Entity;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace finance_control.Application.UserCQ.Handlers
+namespace finance_control.Application.UserCQ.Queries
 {
     public class GetRolesToUserCommandHandler(FinanceControlContex contex) : IRequestHandler<GetRolesToUserCommand, ResponseBase<List<AppRole>>>
     {
@@ -19,11 +18,7 @@ namespace finance_control.Application.UserCQ.Handlers
         {
            var roles =  await _context.AppRole.ToListAsync();
 
-            return new ResponseBase<List<AppRole>>
-            {
-                ResponseInfo = null,
-                Value = roles
-            };
+            return  ResponseBase<List<AppRole>>.Success(roles);            
         }
     }
 }

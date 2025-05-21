@@ -28,18 +28,7 @@ namespace finance_control.Application.UserCQ.Handlers
                 .FirstOrDefaultAsync(x => x.Email == request.Email);
 
             if (user is null)
-            {
-                return new ResponseBase<RefreshTokenViewModel>()
-                {
-                    ResponseInfo = new()
-                    {
-                        Title = "Usuário não encontrado",
-                        ErrorDescription = "Nenhum usuário encontrado com o email informado.",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<RefreshTokenViewModel>.Fail("Usuário não encontrado", "Nenhum usuário encontrado com o email informado.", 404);
 
             if (BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash) is true)
             {
@@ -55,25 +44,10 @@ namespace finance_control.Application.UserCQ.Handlers
                 if (user.PhotosUsers is not null)
                     refreshTokenVM.Photo = Convert.ToBase64String(user.PhotosUsers.PhotoUser);
 
-                return new ResponseBase<RefreshTokenViewModel>()
-                {
-                    ResponseInfo = null,
-                    Value = refreshTokenVM
-                };
+                return ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);
             }
             else
-            {
-                return new ResponseBase<RefreshTokenViewModel>()
-                {
-                    ResponseInfo = new()
-                    {
-                        Title = "Senha incorreta",
-                        ErrorDescription = "A senha informada está incorreta.",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<RefreshTokenViewModel>.Fail("Senha incorreta", "A senha informada está incorreta.", 404);
         }
     }
 }
