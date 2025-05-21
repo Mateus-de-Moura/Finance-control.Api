@@ -11,6 +11,7 @@ namespace finance_control.Infra.Data
         public DbSet<Invoices> Invoices { get; set; }
         public DbSet<Revenues> Revenues { get; set; }
         public DbSet<PhotosUsers> PhotosUsers { get; set; }
+        public DbSet<LoginLocationData> LoginLocationData { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

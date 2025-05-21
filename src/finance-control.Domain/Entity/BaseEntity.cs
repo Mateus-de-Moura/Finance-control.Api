@@ -6,5 +6,6 @@ namespace finance_control.Domain.Entity
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
+        public bool Active { get; set; }
     }
 }

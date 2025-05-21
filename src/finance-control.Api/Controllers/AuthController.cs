@@ -19,6 +19,9 @@ namespace finance_control.Api.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> Login(LoginUserCommand command)
         {
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            command.Ip = ipAddress;
+
             var request = await _mediator.Send(command);
 
             if (request.ResponseInfo is null)
