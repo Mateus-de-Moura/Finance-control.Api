@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Hosting;
+using finance_control.Services.BackGroundService;
+using finance_control.Services.RabbitMqConsumer;
 
 namespace api_clean_architecture.Api
 {
@@ -55,6 +58,8 @@ namespace api_clean_architecture.Api
             });
 
             builder.Services.AddMemoryCache();
+
+            builder.Services.AddHostedService<RabbitMqConsumerBackgroundService>();
         }
 
         public static void AddJwtAuth(this WebApplicationBuilder builder)
@@ -86,6 +91,7 @@ namespace api_clean_architecture.Api
         {
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IConvertFormFileToBytes, ConvertFormFileToBytes>();
+            builder.Services.AddSingleton<Consumer>();
         }
 
         public static void AddDatabase(this WebApplicationBuilder builder)

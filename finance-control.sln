@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Readme.md = Readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C88DD14-F956-CE84-757C-A364CCF449FC}"
@@ -135,5 +136,8 @@ Global
 		{1AB4522B-BEDF-43B8-A1FF-5448C94FC3A8} = {74C57096-A8C4-4E28-A329-00FF1C196B88}
 		{6B1ECF77-C477-4DA3-B369-E1F6FAA9E080} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 		{21AF9F2F-77F9-4F94-A604-B7B57827C000} = {F022CA4B-0A15-FC35-B1A5-1787E5D274B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E041D0F6-5014-4E27-9111-046DB897D95B}
 	EndGlobalSection
 EndGlobal
