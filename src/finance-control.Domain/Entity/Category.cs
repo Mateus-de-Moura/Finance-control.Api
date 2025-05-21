@@ -13,5 +13,7 @@ namespace finance_control.Domain.Entity
 
         public string? Name { get; set; }
         public string? Type { get; set; }
+
+        public List<Expenses> Expenses { get; set; } 
     }
 }
