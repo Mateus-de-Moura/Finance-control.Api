@@ -1,5 +1,6 @@
 using BackgroundService.Auth;
 using BackgroundService.RabbitMqPublisher;
+using BackgroundService.Services;
 using Hangfire;
 using Hangfire.SqlServer;
 
@@ -25,6 +26,6 @@ app.MapGet("/", () => Results.Redirect("/hangfire"));
 
 app.UseHangfireDashboard();
 
-RecurringJob.AddOrUpdate("job-teste", () => Publisher.SendMessage("Executando job!"), Cron.Minutely);
+RecurringJob.AddOrUpdate("job-expenses", () => ExpensesService.CheckExpensesAndNotify(), "0 */3 * * *");
 
 app.Run();
