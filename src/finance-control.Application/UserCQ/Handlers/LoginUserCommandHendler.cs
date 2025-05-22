@@ -44,18 +44,7 @@ namespace finance_control.Application.UserCQ.Handlers
 
                 if (user.PhotosUsers is not null)
                     refreshTokenVM.Photo = Convert.ToBase64String(user.PhotosUsers.PhotoUser);
-
-
-                //salvando os dados do login para relatorio
-                await _contex.LoginLocationData.AddAsync(new LoginLocationData
-                {
-                    AccessDate = DateTime.Now,
-                    EmailRequest = request.Email,
-                    Latitude = request.Latitude,
-                    Longitude = request.Longitude,
-                    Ip = request.Ip,
-                    UserId = user.Id,
-                });
+              
                 await _contex.SaveChangesAsync();
 
                 return ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);
