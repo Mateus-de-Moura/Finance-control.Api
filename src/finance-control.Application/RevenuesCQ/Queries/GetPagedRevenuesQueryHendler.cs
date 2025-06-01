@@ -1,6 +1,8 @@
-﻿using finance_control.Application.Common.Models;
+﻿using AutoMapper;
+using finance_control.Application.Common.Models;
 using finance_control.Application.Extensions;
 using finance_control.Application.Response;
+using finance_control.Application.RevenuesCQ.ViewModels;
 using finance_control.Domain.Entity;
 using finance_control.Infra.Data;
 using MediatR;
@@ -8,13 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.RevenuesCQ.Queries
 {
-    public class GetPagedRevenuesQueryHendler(FinanceControlContex context) : IRequestHandler<GetPagedRevenuesQuery, ResponseBase<PaginatedList<Revenues>>>
+    public class GetPagedRevenuesQueryHendler(FinanceControlContex context, IMapper mapper) : IRequestHandler<GetPagedRevenuesQuery, ResponseBase<PaginatedList<RevenuesViewModel>>>
     {
         private readonly FinanceControlContex _context = context;
-        public async Task<ResponseBase<PaginatedList<Revenues>>> Handle(GetPagedRevenuesQuery request, CancellationToken cancellationToken)
+        private readonly IMapper _mapper = mapper;
+        public async Task<ResponseBase<PaginatedList<RevenuesViewModel>>> Handle(GetPagedRevenuesQuery request, CancellationToken cancellationToken)
         {
 
-            var queryable =  _context.Revenues.AsNoTracking()
+            var queryable =  _context.Revenues
+                .Include(x => x.Category)
+                .AsNoTracking()
                 .Where(x => x.Active).AsQueryable();
 
 
@@ -23,12 +28,14 @@ namespace finance_control.Application.RevenuesCQ.Queries
                 queryable = queryable.Where(x => x.Description.Contains(request.Description));
             };
 
-            var response = await  queryable.PaginatedListAsync(request.PageNumber, request.PageSize);
+            var response = await  queryable
+                .Select(x => _mapper.Map<RevenuesViewModel>(x))
+                .PaginatedListAsync(request.PageNumber, request.PageSize);
 
 
             if (response == null)
             {
-                return new ResponseBase<PaginatedList<Revenues>>
+                return new ResponseBase<PaginatedList<RevenuesViewModel>>
                 {
                     ResponseInfo = new ResponseInfo
                     {
@@ -41,7 +48,7 @@ namespace finance_control.Application.RevenuesCQ.Queries
             }
 
 
-            return new ResponseBase<PaginatedList<Revenues>>
+            return new ResponseBase<PaginatedList<RevenuesViewModel>>
             {
                 ResponseInfo = null,
                 Value = response
