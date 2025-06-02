@@ -40,7 +40,7 @@ namespace finance_control.Application.UserCQ.Handlers
                 await _contex.SaveChangesAsync();
 
                 RefreshTokenViewModel refreshTokenVM = _mapper.Map<RefreshTokenViewModel>(user);
-                refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!);
+                refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!,  user.Id);
 
                 if (user.PhotosUsers is not null)
                     refreshTokenVM.Photo = Convert.ToBase64String(user.PhotosUsers.PhotoUser);

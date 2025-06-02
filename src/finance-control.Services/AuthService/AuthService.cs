@@ -15,7 +15,7 @@ namespace finance_control.Services.AuthService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly FinanceControlContex _context = context;
-        public string GenerateJWT(string email, string username)
+        public string GenerateJWT(string email, string username,  Guid UserId)
         {
             var issuer = _configuration["JWT:Issuer"];
             var audience = _configuration["JWT:Audience"];
@@ -30,7 +30,7 @@ namespace finance_control.Services.AuthService
                 new("Username",username),
                 new("EmailIdentifier", email.Split("@").ToString()!),
                 new("CurrenTime", DateTime.Now.ToString()),
-                //new(ClaimTypes.Role, role)
+                new("UserId", UserId.ToString())
             };
 
             var token = new JwtSecurityToken(issuer: issuer, audience: audience,

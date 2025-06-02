@@ -53,7 +53,7 @@ namespace finance_control.Application.UserCQ.Handlers
             await _context.SaveChangesAsync();
 
             var refreshTokenVM = _mapper.Map<RefreshTokenViewModel>(user);
-            refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!);
+            refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!, user.Id);
 
             return  ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);          
         }
