@@ -14,10 +14,11 @@ namespace finance_control.Api.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetDashBoardByUserId(Guid userId)
+        [HttpGet]
+        public async Task<IActionResult> GetDashBoardByUserId()
         {
-            var response = await _mediator.Send(new DashBoardQuery { UserId = userId });
+            var userId = User.FindFirst("UserId")?.Value;
+            var response = await _mediator.Send(new DashBoardQuery { UserId = Guid.Parse(userId) });
 
             if (response.ResponseInfo is null)
             {
