@@ -25,6 +25,7 @@ namespace finance_control.Application.RevenuesCQ.Hendlers
                 Value = request.Value,
                 Date = request.Date,
                 CategoryId = request.CategoryId,
+                UserId = request.UserId,
             };
 
             await _context.AddAsync(revenue);

@@ -1,4 +1,5 @@
-﻿using finance_control.Application.Common.Models;
+﻿using System.Security.Claims;
+using finance_control.Application.Common.Models;
 using finance_control.Application.RevenuesCQ.Commands;
 using finance_control.Application.RevenuesCQ.Queries;
 using MediatR;
@@ -32,6 +33,9 @@ namespace finance_control.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRevenueCommand command)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            command.UserId = Guid.Parse(userId);
+
             var response = await _mediator.Send(command);
 
             if (response.ResponseInfo is null)

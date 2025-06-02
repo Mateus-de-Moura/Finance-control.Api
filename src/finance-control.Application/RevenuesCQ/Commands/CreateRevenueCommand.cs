@@ -12,6 +12,7 @@ namespace finance_control.Application.RevenuesCQ.Commands
     public class CreateRevenueCommand : IRequest<ResponseBase<Revenues>>
     {
         public bool Active { get; set; }
+        public bool IsCurrent { get; set; } = false;
         public string? Description { get; set; }
 
         public decimal Value { get; set; }
@@ -19,5 +20,6 @@ namespace finance_control.Application.RevenuesCQ.Commands
         public DateTime? Date { get; set; }
 
         public Guid CategoryId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

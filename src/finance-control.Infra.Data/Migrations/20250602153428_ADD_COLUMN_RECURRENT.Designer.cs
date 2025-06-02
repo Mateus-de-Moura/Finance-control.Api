@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250602153428_ADD_COLUMN_RECURRENT")]
+    partial class ADD_COLUMN_RECURRENT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,45 +69,6 @@ namespace finance_control.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category", (string)null);
-                });
-
-            modelBuilder.Entity("finance_control.Domain.Entity.Expenses", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("ProofPath")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("finance_control.Domain.Entity.Invoices", b =>
@@ -310,25 +274,6 @@ namespace finance_control.Infra.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("finance_control.Domain.Entity.Expenses", b =>
-                {
-                    b.HasOne("finance_control.Domain.Entity.Category", "Category")
-                        .WithMany("Expenses")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("finance_control.Domain.Entity.User", "User")
-                        .WithMany("Expenses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("finance_control.Domain.Entity.Invoices", b =>
                 {
                     b.HasOne("finance_control.Domain.Entity.Category", "Category")
@@ -397,15 +342,8 @@ namespace finance_control.Infra.Data.Migrations
                     b.Navigation("appUsers");
                 });
 
-            modelBuilder.Entity("finance_control.Domain.Entity.Category", b =>
-                {
-                    b.Navigation("Expenses");
-                });
-
             modelBuilder.Entity("finance_control.Domain.Entity.User", b =>
                 {
-                    b.Navigation("Expenses");
-
                     b.Navigation("PhotosUsers")
                         .IsRequired();
                 });
