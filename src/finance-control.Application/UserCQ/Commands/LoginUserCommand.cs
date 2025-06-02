@@ -12,9 +12,6 @@ namespace finance_control.Application.UserCQ.Commands
     public record LoginUserCommand : IRequest<ResponseBase<RefreshTokenViewModel>>
     {
         public string Email { get; set; }
-        public string Password { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public string Ip {  get; set; }
+        public string Password { get; set; }  
     }
 }
