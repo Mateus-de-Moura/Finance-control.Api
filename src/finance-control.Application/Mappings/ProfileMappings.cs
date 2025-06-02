@@ -4,11 +4,7 @@ using finance_control.Application.RevenuesCQ.ViewModels;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
-<<<<<<< HEAD
-using AutoMapper;
 using finance_control.Application.ExpenseCQ.ViewModels;
-=======
->>>>>>> main
 
 namespace finance_control.Application.Mappings
 {
@@ -30,15 +26,15 @@ namespace finance_control.Application.Mappings
             CreateMap<User, UserViewModel>()
                .ForMember(dest => dest.RoleName, map => map.MapFrom(src => src.Role.Name));
 
-<<<<<<< HEAD
+
             CreateMap<Expenses, ExpenseViewModel>().ReverseMap();
 
-=======
+
             CreateMap<Revenues, RevenuesViewModel>()
                 .ForMember(dest => dest.Category, map => map.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.Date, map => map.MapFrom(src => src.Date.HasValue ? src.Date.Value.ToString("dd/MM/yyyy") : string.Empty))
                 .ForMember(dest => dest.Value,map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))));
->>>>>>> main
+
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }

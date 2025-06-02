@@ -24,7 +24,6 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 
         public string StatusName
         {
-
             get
             {
                 if (Status == InvoicesStatus.Pago)
@@ -35,7 +34,6 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 
                 return "Pendente";
             }
-
         }
 
         public static ExpenseViewModel FromEntity(Expenses entity)
