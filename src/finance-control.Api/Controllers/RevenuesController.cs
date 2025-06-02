@@ -17,9 +17,11 @@ namespace finance_control.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
         {
+            var userId = User.FindFirst("UserId")?.Value;       
+
             var response = await _mediator.Send(new GetPagedRevenuesQuery
             {
-                UserId = request.UserId,
+                UserId = Guid.Parse(userId),
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
                 Description = request.Description,

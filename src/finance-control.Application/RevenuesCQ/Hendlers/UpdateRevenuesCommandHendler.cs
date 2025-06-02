@@ -35,6 +35,7 @@ namespace finance_control.Application.RevenuesCQ.Hendlers
             }
 
             revenue.Active = request.Active;
+            revenue.IsRecurrent = request.Recurrent;
             revenue.Description = request.Description;
             revenue.Value = request.Value;
             revenue.Date = request.Date;

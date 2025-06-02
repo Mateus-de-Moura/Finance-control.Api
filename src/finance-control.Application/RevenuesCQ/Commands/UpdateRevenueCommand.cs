@@ -12,6 +12,7 @@ namespace finance_control.Application.RevenuesCQ.Commands
     public class UpdateRevenueCommand : IRequest<ResponseBase<Revenues>>
     {
         public Guid Id { get; set; }
+        public bool Recurrent {  get; set; }
         public bool Active { get; set; }
         public string? Description { get; set; }
 
