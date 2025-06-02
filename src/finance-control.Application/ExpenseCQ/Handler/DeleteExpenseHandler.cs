@@ -5,7 +5,6 @@ using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace finance_control.Application.ExpenseCQ.Handler
 {
     public class DeleteExpenseHandler : IRequestHandler<DeleteExpenseCommand, ResponseBase<Expenses>>

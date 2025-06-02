@@ -5,7 +5,6 @@ using finance_control.Application.Extensions;
 using finance_control.Application.Response;
 using finance_control.Infra.Data;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.ExpenseCQ.Query
 {
@@ -28,9 +27,8 @@ namespace finance_control.Application.ExpenseCQ.Query
                 expenses = expenses.Where(e => e.DueDate <= request.EndDate.Value);
 
             if (request.Status.HasValue)
-            {
                 expenses = expenses.Where(e => e.Status.Equals(request.Status));
-            }
+
 
             var paginatedList = await expenses
                 .Select(x => _mapper.Map<ExpenseViewModel>(x))

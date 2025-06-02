@@ -1,6 +1,7 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using MediatR;
 
@@ -23,6 +24,7 @@ namespace finance_control.Application.ExpenseCQ.Handler
                 DueDate = request.DueDate,
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
+                Status = InvoicesStatus.Pendente
             };
 
             await _context.AddAsync(expense);

@@ -20,8 +20,4 @@
     <ProjectReference Include="..\finance-control.Infra.Data\finance-control.Infra.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ExpenseCQ\Validators\" />
-  </ItemGroup>
-
 </Project>

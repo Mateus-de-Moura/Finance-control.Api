@@ -1,6 +1,7 @@
 ﻿using Azure;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Enum;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,7 @@ namespace finance_control.Application.ExpenseCQ.Commands
         public decimal Value {  get; set; }
 
         public DateTime DueDate { get; set; }
+
+        public InvoicesStatus Status {  get; set; }
     }
 }

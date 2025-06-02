@@ -22,7 +22,21 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 
         public InvoicesStatus Status { get; set; }
 
-        public string StatusName => Status.ToString();
+        public string StatusName
+        {
+
+            get
+            {
+                if (Status == InvoicesStatus.Pago)
+                    return "Pago";
+
+                if (DueDate > DateTime.Now)
+                    return "Vencido";
+
+                return "Pendente";
+            }
+
+        }
 
         public static ExpenseViewModel FromEntity(Expenses entity)
             => new ExpenseViewModel(entity.Id,  entity.Value, entity.DueDate, entity.Status);

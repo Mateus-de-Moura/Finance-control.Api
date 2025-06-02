@@ -1,6 +1,7 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,8 @@ namespace finance_control.Application.ExpenseCQ.Handler
 
             expense.Value = request.Value;
             expense.DueDate = request.DueDate;
-
+            expense.Status = request.Status;
+         
             _context.Entry(expense).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();

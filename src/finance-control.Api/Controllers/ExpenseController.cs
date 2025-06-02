@@ -63,7 +63,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, UpdateExpenseCommand command)
+        public async Task<IActionResult> Put(UpdateExpenseCommand command)
         {
             var result = await _mediator.Send(command);
 
