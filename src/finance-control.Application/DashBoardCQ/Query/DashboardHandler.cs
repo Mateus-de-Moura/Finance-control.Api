@@ -26,11 +26,11 @@ namespace finance_control.Application.DashBoardCQ.Query
             {
                 var totalRevenuesToMonth = await _contex.Revenues
                 .Where(x => x.UserId.Equals(request.UserId) && x.Date.Value.Month == DateTime.Now.Month &&
-                 x.Date.Value.Year == DateTime.Now.Year).ToListAsync();
+                 x.Date.Value.Year == DateTime.Now.Year && x.Active).ToListAsync();
 
                 var expensesToMonth = await _contex.Expenses
                     .Where(x => x.UserId.Equals(request.UserId) && x.DueDate.Month == DateTime.Now.Month &&
-                     x.DueDate.Year == DateTime.Now.Year).ToListAsync();
+                     x.DueDate.Year == DateTime.Now.Year && x.Active).ToListAsync();
 
                 var dashboard = new DashboardViewModel
                 {
