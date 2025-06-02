@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace finance_control.Application.Common.Models
 {
-    public sealed record GetPagedRequest(int PageNumber = 1, int PageSize = 10, string Description = null);
+    public sealed record GetPagedRequest(Guid UserId,int PageNumber = 1, int PageSize = 10, string Description = null);
 
 }

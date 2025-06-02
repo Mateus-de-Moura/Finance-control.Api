@@ -19,6 +19,7 @@ namespace finance_control.Api.Controllers
         {
             var response = await _mediator.Send(new GetPagedRevenuesQuery
             {
+                UserId = request.UserId,
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
                 Description = request.Description,
