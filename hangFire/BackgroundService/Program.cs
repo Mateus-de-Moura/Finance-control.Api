@@ -1,31 +1,32 @@
-using BackgroundService.Auth;
-using BackgroundService.RabbitMqPublisher;
+using BackgroundService.Infra;
 using BackgroundService.Services;
 using Hangfire;
-using Hangfire.SqlServer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-// Adiciona o Hangfire
+builder.Services.AddDbContext<FinanceControlContex>(options =>
+              options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddHangfire(config => config
     .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection"))
 );
+
+
+builder.Services.AddScoped<ExpensesService>();
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
-// Redireciona a raiz para a URL /hangfire
 app.MapGet("/", () => Results.Redirect("/hangfire"));
-
-// Configura o Hangfire Dashboard com autenticação básica
-//app.UseHangfireDashboard("/hangfire", new DashboardOptions
-//{
-//    Authorization = new[] { new BasicAuthAuthorizationFilter() }  // Aplica a autenticação
-//});
 
 app.UseHangfireDashboard();
 
-RecurringJob.AddOrUpdate("job-expenses", () => ExpensesService.CheckExpensesAndNotify(), "0 */3 * * *");
+RecurringJob.AddOrUpdate<ExpensesService>(
+    "job-expenses",
+    service => service.CheckExpensesAndNotify(),
+    "0 */3 * * *"
+);
 
 app.Run();

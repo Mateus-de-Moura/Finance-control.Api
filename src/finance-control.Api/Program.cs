@@ -1,4 +1,5 @@
 using api_clean_architecture.Api;
+using finance_control.Services.SignalR;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,23 +14,29 @@ builder.AddJwtAuth();
 builder.AddMapper();
 builder.AddInjection();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy
+          .WithOrigins("http://localhost:5173") // porta React
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials();
     });
 });
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.MapHub<NotificationHub>("/notifyHub");
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -43,7 +50,7 @@ app.MapGet("/", context =>
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
