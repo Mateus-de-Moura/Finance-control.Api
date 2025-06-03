@@ -13,6 +13,7 @@ namespace finance_control.Infra.Data
         public DbSet<PhotosUsers> PhotosUsers { get; set; }
         public DbSet<Expenses> Expenses { get; set; }
         public DbSet<LoginLocationData> LoginLocationData { get; set; }
+        public DbSet<Notify> Notify { get; set; }
 
 
 
