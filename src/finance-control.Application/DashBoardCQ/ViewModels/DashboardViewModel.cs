@@ -13,5 +13,7 @@ namespace finance_control.Application.DashBoardCQ.ViewModels
         public string Expenses { get; set; }
         public string Wallet {  get; set; }
         public string ExpensesOpen { get; set; }
+
+        public List<MonthlyDataViewModel> MonthlySummary { get; set; } = new List<MonthlyDataViewModel>();
     }
 }

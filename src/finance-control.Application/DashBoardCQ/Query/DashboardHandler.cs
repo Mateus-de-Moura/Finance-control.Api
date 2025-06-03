@@ -24,6 +24,8 @@ namespace finance_control.Application.DashBoardCQ.Query
 
             try
             {
+                var currentYear = DateTime.Now.Year;
+
                 var totalRevenuesToMonth = await _contex.Revenues
                 .Where(x => x.UserId.Equals(request.UserId) && x.Date.Value.Month == DateTime.Now.Month &&
                  x.Date.Value.Year == DateTime.Now.Year && x.Active).ToListAsync();
@@ -39,6 +41,35 @@ namespace finance_control.Application.DashBoardCQ.Query
                     ExpensesOpen = expensesToMonth.Where(x => x.Status != InvoicesStatus.Pago).Sum(x => x.Value).ToString("C", cultureInfo),
                     Wallet = (totalRevenuesToMonth.Sum(x => x.Value) - expensesToMonth.Where(x => x.Status == InvoicesStatus.Pago).Sum(x => x.Value)).ToString("C", cultureInfo),
                 };
+
+                dashboard.MonthlySummary = new List<MonthlyDataViewModel>();
+
+                for (int month = 1; month <= 12; month++)
+                {
+                    var monthRevenues = await _contex.Revenues
+                        .Where(x => x.UserId == request.UserId &&
+                                    x.Date.HasValue &&
+                                    x.Date.Value.Month == month &&
+                                    x.Date.Value.Year == DateTime.Now.Year &&
+                                    x.Active)
+                        .SumAsync(x => (decimal?)x.Value) ?? 0;
+
+                    var monthExpenses = await _contex.Expenses
+                        .Where(x => x.UserId == request.UserId &&
+                                    x.DueDate.Month == month &&
+                                    x.DueDate.Year == DateTime.Now.Year &&
+                                    x.Active)
+                        .SumAsync(x => (decimal?)x.Value) ?? 0;
+
+                    var monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM", cultureInfo);
+
+                    dashboard.MonthlySummary.Add(new MonthlyDataViewModel
+                    {
+                        Month = cultureInfo.TextInfo.ToTitleCase(monthName),
+                        Revenues = monthRevenues,
+                        Expenses = monthExpenses
+                    });
+                }
 
                 return new ResponseBase<DashboardViewModel> { ResponseInfo = null, Value = dashboard };
 
