@@ -43,13 +43,29 @@ namespace finance_control.Application.ExpenseCQ.Handler
          
             _context.Entry(expense).State = EntityState.Modified;
 
-            await _context.SaveChangesAsync();
+            var rowsAffected = await _context.SaveChangesAsync();
 
-            return new ResponseBase<Expenses>
+            if (rowsAffected > 0)
+
+                return new ResponseBase<Expenses>
+                {
+                    ResponseInfo = null,
+                    Value = expense,
+                };
+            else
             {
-                ResponseInfo = null,
-                Value = expense,
-            };
+                return new ResponseBase<Expenses>
+                {
+                    ResponseInfo = new ResponseInfo
+                    {
+                        Title = "Falha na atualização.",
+                        ErrorDescription = "Nenhuma linha foi afetada. A operação não pôde ser concluída.",
+                        HttpStatus = 400
+                    },
+                    Value = null
+                };
+
+            }
         }
     }
 }
