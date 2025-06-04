@@ -50,7 +50,7 @@ public class CreateUserCommandHandlerTests
         _authServiceMock.Setup(x => x.GenerateRefreshToken())
             .Returns("some-refresh-token");
 
-        _authServiceMock.Setup(x => x.GenerateJWT(command.Email!, command.Username!))
+        _authServiceMock.Setup(x => x.GenerateJWT(command.Email!, command.Username!, Guid.NewGuid()))
             .Returns("jwt-token");
 
         var userEntity = new User { Email = command.Email, UserName = command.Username, Name = command.Name };

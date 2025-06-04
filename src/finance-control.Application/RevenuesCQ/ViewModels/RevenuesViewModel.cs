@@ -9,6 +9,7 @@ namespace finance_control.Application.RevenuesCQ.ViewModels
 {
     public class RevenuesViewModel
     {
+        public Guid Id { get; set; }
         public bool Active { get; set; }
         public string? Description { get; set; }
 

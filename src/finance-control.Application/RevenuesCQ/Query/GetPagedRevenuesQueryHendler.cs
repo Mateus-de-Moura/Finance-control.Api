@@ -20,7 +20,7 @@ namespace finance_control.Application.RevenuesCQ.Queries
             var queryable =  _context.Revenues
                 .Include(x => x.Category)
                 .AsNoTracking()
-                .Where(x => x.Active).AsQueryable();
+                .Where(x => x.UserId.Equals(request.UserId)).AsQueryable();
 
 
             if (!string.IsNullOrEmpty(request.Description))
