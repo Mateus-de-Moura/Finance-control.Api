@@ -21,7 +21,9 @@ namespace finance_control.Application.NotifyCQ.Query
 
             try
             {
-                var notify = await _contex.Notify.Where(x => x.UserId.Equals(request.UserId)).ToListAsync();
+                var notify = await _contex.Notify.Where(x => x.UserId.Equals(request.UserId))
+                    .Include(x => x.Expenses)
+                    .ToListAsync();
 
                 return ResponseBase<List<Notify>>.Success(notify);
             }
