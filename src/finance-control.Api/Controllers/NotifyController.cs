@@ -12,15 +12,30 @@ namespace finance_control.Api.Controllers
     [ApiController]
     [Authorize]
     public class NotifyController(IMediator mediator) : ControllerBase
-    {    
-        private readonly IMediator _mediator = mediator;            
+    {
+        private readonly IMediator _mediator = mediator;
 
         [HttpGet]
         public async Task<IActionResult> GetNotifyByUserId()
         {
-            var UserId = Guid.Parse(User.FindFirst("UserId")?.Value);        
+            var UserId = Guid.Parse(User.FindFirst("UserId")?.Value);
 
-            var response = await _mediator.Send(new NotifyQuery { UserId = UserId});
+            var response = await _mediator.Send(new NotifyQuery { UserId = UserId });
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpGet("GetNotificationDoesNotRead")]
+        public async Task<IActionResult> GetNotificationDoesNotRead()
+        {
+            var UserId = Guid.Parse(User.FindFirst("UserId")?.Value);
+
+            var response = await _mediator.Send(new GetQuantityNotifyByUser { UserId = UserId });
 
             if (response.ResponseInfo is null)
             {
