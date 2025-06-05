@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250603114748_ADD_TABLE_NOTIFY")]
+    partial class ADD_TABLE_NOTIFY
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,10 +82,6 @@ namespace finance_control.Infra.Data.Migrations
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");

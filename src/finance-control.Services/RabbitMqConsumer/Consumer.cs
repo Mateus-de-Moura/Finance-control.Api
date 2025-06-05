@@ -1,15 +1,19 @@
-﻿using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System;
+﻿using System;
 using System.Text;
+using System.Text.Json;
+using finance_control.Services.SignalR;
+using Microsoft.AspNetCore.SignalR;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 
 namespace finance_control.Services.RabbitMqConsumer
 {
-    public class Consumer
+    public class Consumer(IHubContext<NotificationHub> hub)
     {
         private readonly string _hostName = "localhost";
         private readonly string _queueName = "expenses";
+        private readonly IHubContext<NotificationHub> _hub = hub;
 
         public async Task StartListeningAsync(CancellationToken cancellationToken)
         {
@@ -36,7 +40,8 @@ namespace finance_control.Services.RabbitMqConsumer
 
                     Console.WriteLine($"Mensagem recebida: {message}");
 
-                    ProcessMessage(message);
+                    Task.Run(() => ProcessMessage(message));                 
+
                     return Task.CompletedTask;
                 };
 
@@ -51,15 +56,30 @@ namespace finance_control.Services.RabbitMqConsumer
             {
                 Console.WriteLine("❌ Mensageria parada. Não foi possível iniciar a escuta da fila.");
                 Console.WriteLine($"Detalhes: {ex.Message}");
-            }            
+            }
         }
 
 
-        private void ProcessMessage(string message)
+        private async Task ProcessMessage(string message)
         {
-            Console.WriteLine($"Processando a mensagem: {message}");
-            Thread.Sleep(1000);
-            Console.WriteLine("Mensagem processada com sucesso!");
+            var data = JsonSerializer.Deserialize<NotificationPayload>(message);
+
+            var connectionId = NotificationHub.GetConnectionId(data.UserId);
+            if (connectionId != null)
+            {
+                await _hub.Clients.Client(connectionId)
+                          .SendAsync("ReceiveNotification", data.Text);
+            }
+            else
+            {
+                Console.WriteLine($"⚠️ Usuário {data.UserId} não está conectado.");
+            }
+        }
+
+        private class NotificationPayload
+        {
+            public string UserId { get; set; } = default!;
+            public string Text { get; set; } = default!;
         }
     }
 }

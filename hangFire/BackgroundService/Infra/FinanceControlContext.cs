@@ -1,7 +1,7 @@
-﻿using finance_control.Domain.Entity;
+﻿using BackgroundService.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace finance_control.Infra.Data
+namespace BackgroundService.Infra
 {
     public class FinanceControlContex(DbContextOptions options) : DbContext(options)
     {
@@ -24,4 +24,5 @@ namespace finance_control.Infra.Data
             base.OnModelCreating(modelBuilder);
         }
     }
+
 }

@@ -1,6 +1,6 @@
-﻿using finance_control.Domain.Enum;
+﻿using BackgroundService.Enum;
 
-namespace finance_control.Domain.Entity
+namespace BackgroundService.Entity
 {
     public class Expenses : BaseEntity
     {
@@ -13,7 +13,7 @@ namespace finance_control.Domain.Entity
         public Guid CategoryId { get; set; }
 
         public Guid UserId { get; set; }
-        public string Description { get; set; }
+
         public User User { get; set; }
 
         public Category Category { get; set; }
