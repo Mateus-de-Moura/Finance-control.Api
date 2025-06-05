@@ -4,15 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using finance_control.Application.Response;
+using finance_control.Infra.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.NotifyCQ.Query
 {
-    public class GetQuantityNotifyByUserHandler : IRequestHandler<GetQuantityNotifyByUser, ResponseBase<int>>
+    public class GetQuantityNotifyByUserHandler(FinanceControlContex context) : IRequestHandler<GetQuantityNotifyByUser, ResponseBase<int>>
     {
-        public Task<ResponseBase<int>> Handle(GetQuantityNotifyByUser request, CancellationToken cancellationToken)
+        private readonly FinanceControlContex _contex = context;
+        public async Task<ResponseBase<int>> Handle(GetQuantityNotifyByUser request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var totalNotification = await _contex.Notify.Where(x => !x.WasRead).CountAsync();
+
+            return totalNotification > 0 ?
+                ResponseBase<int>.Success(totalNotification) :
+                ResponseBase<int>.Fail("Erro", "Nenhuma entidade encontrada", 404);
+
         }
     }
 }
