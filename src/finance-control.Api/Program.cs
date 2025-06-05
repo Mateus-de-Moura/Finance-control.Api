@@ -23,14 +23,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy
-          .WithOrigins(["http://localhost:5173", "http://192.168.18.5:8085/"]) 
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-          .AllowCredentials();
+        policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
     });
 });
-
 
 var app = builder.Build();
 
