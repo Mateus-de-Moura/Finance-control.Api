@@ -1,4 +1,5 @@
-﻿using finance_control.Application.NotifyCQ.Query;
+﻿using finance_control.Application.NotifyCQ.Command;
+using finance_control.Application.NotifyCQ.Query;
 using finance_control.Domain.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,19 @@ namespace finance_control.Api.Controllers
             var UserId = Guid.Parse(User.FindFirst("UserId")?.Value);
 
             var response = await _mediator.Send(new GetQuantityNotifyByUser { UserId = UserId });
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateNotificationById(Guid Id)
+        {
+            var response = await _mediator.Send(new UpdateNotifyCommand { Id = Id });
 
             if (response.ResponseInfo is null)
             {

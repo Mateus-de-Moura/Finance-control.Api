@@ -1,16 +1,18 @@
 ﻿
+using System.Text;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Domain.Abstractions;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
+using finance_control.Infra.Data.Repositories;
 using finance_control.Services;
 using finance_control.Services.AuthService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.Extensions.Hosting;
 using finance_control.Services.BackGroundService;
 using finance_control.Services.RabbitMqConsumer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace api_clean_architecture.Api
 {
@@ -91,6 +93,7 @@ namespace api_clean_architecture.Api
         {
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IConvertFormFileToBytes, ConvertFormFileToBytes>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddSingleton<Consumer>();
         }
 
