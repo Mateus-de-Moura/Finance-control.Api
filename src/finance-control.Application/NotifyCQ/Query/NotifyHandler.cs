@@ -14,16 +14,27 @@ namespace finance_control.Application.NotifyCQ.Query
     public class NotifyHandler(FinanceControlContex contex) : IRequestHandler<NotifyQuery, ResponseBase<List<Notify>>>
     {
         private readonly FinanceControlContex _contex = contex;
-        public async  Task<ResponseBase<List<Notify>>> Handle(NotifyQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseBase<List<Notify>>> Handle(NotifyQuery request, CancellationToken cancellationToken)
         {
             if (request.UserId == Guid.Empty)
                 return ResponseBase<List<Notify>>.Fail("Guid Inválido", "Guid vazio ou inválido, tente novamente", 404);
 
             try
             {
-                var notify = await _contex.Notify.Where(x => x.UserId.Equals(request.UserId))
+                var queryable = _contex.Notify
+                    .Where(x => x.UserId.Equals(request.UserId))
                     .Include(x => x.Expenses)
-                    .ToListAsync();
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(request.wasRead))
+                {
+                    if (request.wasRead == "read")
+                        queryable = queryable.Where(x => x.WasRead == true);
+                    else
+                        queryable = queryable.Where(x => x.WasRead == false);
+                }
+
+                var notify = await queryable.ToListAsync();
 
                 return ResponseBase<List<Notify>>.Success(notify);
             }

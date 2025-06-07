@@ -12,5 +12,8 @@ namespace finance_control.Application.NotifyCQ.Query
     public class NotifyQuery : IRequest<ResponseBase<List<Notify>>>
     {
         public Guid UserId { get; set; }
+
+        public string Priority { get; set; } = string.Empty;
+        public string wasRead { get; set; } = string.Empty;
     }
 }

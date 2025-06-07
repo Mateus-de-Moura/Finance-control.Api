@@ -17,11 +17,11 @@ namespace finance_control.Api.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpGet]
-        public async Task<IActionResult> GetNotifyByUserId()
+        public async Task<IActionResult> GetNotifyByUserId(string wasRead)
         {
             var UserId = Guid.Parse(User.FindFirst("UserId")?.Value);
 
-            var response = await _mediator.Send(new NotifyQuery { UserId = UserId });
+            var response = await _mediator.Send(new NotifyQuery { UserId = UserId, wasRead = wasRead });
 
             if (response.ResponseInfo is null)
             {
