@@ -1,4 +1,5 @@
-﻿using finance_control.Application.Common.Models;
+﻿using finance_control.Api.Interfaces;
+using finance_control.Application.Common.Models;
 using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.ExpenseCQ.Query;
 using finance_control.Domain.Enum;
@@ -15,20 +16,20 @@ namespace finance_control.Api.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUserContext _userContext;
 
-        public ExpenseController(IMediator mediator)
+        public ExpenseController(IMediator mediator, IUserContext userContext)
         {
             _mediator = mediator;
+            _userContext = userContext;
         }
 
         [HttpGet("paged")]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequestExpense request)
         {
-            var userId = User.FindFirst("UserId")?.Value;
-
             var result = await _mediator.Send(new GetPagedExpenseQuery
             {
-                UserId = Guid.Parse(userId),
+                UserId = _userContext.UserId,
                 CategoryId = request.CategoryId,
                 EndDate = request.EndDate,
                 StartDate = request.StartDate,
@@ -48,8 +49,7 @@ namespace finance_control.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateExpenseCommand command)
         {
-            var userId = User.FindFirst("UserId")?.Value;
-            command.UserId = Guid.Parse(userId);
+            command.UserId = _userContext.UserId;
 
             var result = await _mediator.Send(command);
 

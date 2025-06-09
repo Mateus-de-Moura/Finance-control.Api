@@ -6,15 +6,15 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 {
     public class ExpenseViewModel
     {
-        public ExpenseViewModel(Guid id, string description, string categoryName, string value, string dueDate, InvoicesStatus status)
-        {
-            Id = id;
-            Description = description;
-            CategoryName = categoryName;
-            Value = value;
-            DueDate = dueDate;
-            Status = status;
-        }
+        //public ExpenseViewModel(Guid id, string description, string categoryName, string value, string dueDate, InvoicesStatus status)
+        //{
+        //    Id = id;
+        //    Description = description;
+        //    CategoryName = categoryName;
+        //    Value = value;
+        //    DueDate = dueDate;
+        //    Status = status;
+        //}
 
         public Guid Id { get; set; }
       
