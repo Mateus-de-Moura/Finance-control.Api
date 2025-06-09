@@ -20,7 +20,8 @@ namespace finance_control.Infra.Data.Repositories
                 return Result.Error("Entidade nao encontrada");
 
             var result = await _contex.Notify.Where(x => x.Id.Equals(Id))
-                .ExecuteUpdateAsync(s => s.SetProperty(x => x.WasRead, true));
+                .ExecuteUpdateAsync(s => s.SetProperty(x => x.WasRead, true)
+                 .SetProperty(x => x.ReadDate, DateTime.Now));
 
             return result > 0 ?
                 Result<bool>.Success(true) :
