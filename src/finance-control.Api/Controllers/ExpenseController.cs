@@ -28,12 +28,14 @@ namespace finance_control.Api.Controllers
 
             var result = await _mediator.Send(new GetPagedExpenseQuery
             {
+                UserId = Guid.Parse(userId),
                 CategoryId = request.CategoryId,
-                UserId = request.UserId,
                 EndDate = request.EndDate,
                 StartDate = request.StartDate,
                 Status = request.Status,
                 Description = request.Description,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
             });
 
             if (result.ResponseInfo is null)
@@ -41,14 +43,6 @@ namespace finance_control.Api.Controllers
                 return Ok(result.Value);
             }
             return BadRequest(result.ResponseInfo);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllExpense(DateTime? startDate, DateTime? endDate, InvoicesStatus? status)
-        {
-            var result = await _mediator.Send(new GetAllExpenseQuery(startDate, endDate, status));
-
-            return Ok(result);
         }
 
         [HttpPost]

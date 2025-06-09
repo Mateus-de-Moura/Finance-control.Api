@@ -27,7 +27,10 @@ namespace finance_control.Application.Mappings
                .ForMember(dest => dest.RoleName, map => map.MapFrom(src => src.Role.Name));
 
 
-            CreateMap<Expenses, ExpenseViewModel>().ReverseMap();
+            CreateMap<Expenses, ExpenseViewModel>()
+                .ForMember(dest => dest.CategoryName, map => map.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.DueDate, map => map.MapFrom(src => src.DueDate.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.Value, map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))));
 
 
             CreateMap<Revenues, RevenuesViewModel>()
