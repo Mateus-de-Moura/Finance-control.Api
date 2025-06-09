@@ -3,7 +3,6 @@ using finance_control.Application.Common.Models;
 using finance_control.Application.ExpenseCQ.ViewModels;
 using finance_control.Application.Extensions;
 using finance_control.Application.Response;
-using finance_control.Domain.Entity;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,27 +14,30 @@ namespace finance_control.Application.ExpenseCQ.Query
         private readonly FinanceControlContex _context = context;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<ResponseBase<PaginatedList<ExpenseViewModel?>>> Handle(GetPagedExpenseQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseBase<PaginatedList<ExpenseViewModel>>> Handle(GetPagedExpenseQuery request, CancellationToken cancellationToken)
         {
             var queryable = _context.Expenses.AsNoTracking()
                 .Include(x => x.Category)
-                .Include(x => x.User)
+                .Where(x => x.UserId.Equals(request.UserId))
                 .AsQueryable();
 
-            if (request.UserId.HasValue)
-                queryable = queryable.Where(x => x.UserId == request.UserId.Value);
+            if (!string.IsNullOrEmpty(request.Description))
+                queryable = queryable.Where(x => x.Description.Contains(request.Description));
 
-            if (request.CategoryId.HasValue)
-                queryable = queryable.Where(x => x.CategoryId == request.CategoryId.Value);
+            if (request.UserId is not null)
+                queryable = queryable.Where(x => x.UserId.Equals(request.UserId));
 
-            if (request.StartDate.HasValue)
-                queryable = queryable.Where(x => x.DueDate >= request.StartDate.Value);
+            if (request.CategoryId is not null)
+                queryable = queryable.Where(x => x.CategoryId .Equals(request.CategoryId));
 
-            if (request.EndDate.HasValue)
-                queryable = queryable.Where(x => x.DueDate <= request.EndDate.Value);
+            if (request.StartDate is not null)
+                queryable = queryable.Where(x => x.DueDate >= request.StartDate);
 
-            if (request.Status.HasValue)
-                queryable = queryable.Where(x => x.Status == request.Status.Value);
+            if (request.EndDate is not null)
+                queryable = queryable.Where(x => x.DueDate <= request.EndDate);
+
+            if (request.Status is not null)
+                queryable = queryable.Where(x => x.Status.Equals(request.Status));
 
             var paginatedList = await queryable
                 .Select(x => _mapper.Map<ExpenseViewModel>(x))
@@ -43,7 +45,7 @@ namespace finance_control.Application.ExpenseCQ.Query
 
             if (paginatedList == null)
             {
-                return new ResponseBase<PaginatedList<ExpenseViewModel?>>
+                return new ResponseBase<PaginatedList<ExpenseViewModel>>
                 {
                     ResponseInfo = new ResponseInfo
                     {
@@ -56,7 +58,7 @@ namespace finance_control.Application.ExpenseCQ.Query
             }
 
 
-            return new ResponseBase<PaginatedList<ExpenseViewModel?>>
+            return new ResponseBase<PaginatedList<ExpenseViewModel>>
             {
                 ResponseInfo = null,
                 Value = paginatedList,

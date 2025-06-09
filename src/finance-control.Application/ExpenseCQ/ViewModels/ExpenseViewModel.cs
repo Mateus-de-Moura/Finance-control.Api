@@ -6,19 +6,25 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 {
     public class ExpenseViewModel
     {
-        public ExpenseViewModel(Guid id, decimal value, DateTime dueDate, InvoicesStatus status)
-        {
-            Id = id;
-            Value = value;
-            DueDate = dueDate;
-            Status = status;
-        }
+        //public ExpenseViewModel(Guid id, string description, string categoryName, string value, string dueDate, InvoicesStatus status)
+        //{
+        //    Id = id;
+        //    Description = description;
+        //    CategoryName = categoryName;
+        //    Value = value;
+        //    DueDate = dueDate;
+        //    Status = status;
+        //}
 
         public Guid Id { get; set; }
       
-        public decimal Value { get; set; }
+        public string Description { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public string CategoryName { get; set; }
+
+        public string Value { get; set; }
+
+        public string DueDate { get; set; }
 
         public InvoicesStatus Status { get; set; }
 
@@ -29,14 +35,14 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
                 if (Status == InvoicesStatus.Pago)
                     return "Pago";
 
-                if (DueDate > DateTime.Now)
-                    return "Vencido";
+                if (DateTime.TryParse(DueDate, out var parsedDueDate))
+                {
+                    if (parsedDueDate.Date < DateTime.Now.Date)
+                        return "Vencido";
+                }
 
                 return "Pendente";
             }
         }
-
-        public static ExpenseViewModel FromEntity(Expenses entity)
-            => new ExpenseViewModel(entity.Id,  entity.Value, entity.DueDate, entity.Status);
     }
 }

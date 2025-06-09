@@ -1,4 +1,5 @@
-﻿using finance_control.Application.Common.Models;
+﻿using finance_control.Api.Interfaces;
+using finance_control.Application.Common.Models;
 using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.ExpenseCQ.Query;
 using finance_control.Domain.Enum;
@@ -15,10 +16,12 @@ namespace finance_control.Api.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUserContext _userContext;
 
-        public ExpenseController(IMediator mediator)
+        public ExpenseController(IMediator mediator, IUserContext userContext)
         {
             _mediator = mediator;
+            _userContext = userContext;
         }
 
         [HttpGet("paged")]
@@ -26,11 +29,14 @@ namespace finance_control.Api.Controllers
         {
             var result = await _mediator.Send(new GetPagedExpenseQuery
             {
+                UserId = _userContext.UserId,
                 CategoryId = request.CategoryId,
-                UserId = request.UserId,
                 EndDate = request.EndDate,
                 StartDate = request.StartDate,
                 Status = request.Status,
+                Description = request.Description,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
             });
 
             if (result.ResponseInfo is null)
@@ -40,17 +46,11 @@ namespace finance_control.Api.Controllers
             return BadRequest(result.ResponseInfo);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllExpense(DateTime? startDate, DateTime? endDate, InvoicesStatus? status)
-        {
-            var result = await _mediator.Send(new GetAllExpenseQuery(startDate, endDate, status));
-
-            return Ok(result);
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateExpenseCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateExpenseCommand command)
         {
+            command.UserId = _userContext.UserId;
+
             var result = await _mediator.Send(command);
 
             if (result.ResponseInfo is null)
@@ -89,7 +89,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut("{id}/Despesas")]
-        public async Task<IActionResult> Payment(Guid id, [FromForm] PaymentExpenseCommand command )
+        public async Task<IActionResult> Payment(Guid id, [FromBody] PaymentExpenseCommand command )
         {
             var result = await _mediator.Send(command);
 
