@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using finance_control.Api.Interfaces;
 using finance_control.Application.Common.Models;
 using finance_control.Application.RevenuesCQ.Commands;
 using finance_control.Application.RevenuesCQ.Queries;
@@ -10,18 +11,17 @@ namespace finance_control.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RevenuesController(IMediator madiator) : ControllerBase
+    public class RevenuesController(IMediator madiator, IUserContext userContext) : ControllerBase
     {
-        private readonly IMediator _mediator = madiator;     
+        private readonly IMediator _mediator = madiator;
+        private readonly IUserContext _userContext = userContext;
 
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
         {
-            var userId = User.FindFirst("UserId")?.Value;       
-
             var response = await _mediator.Send(new GetPagedRevenuesQuery
             {
-                UserId = Guid.Parse(userId),
+                UserId = _userContext.UserId,
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
                 Description = request.Description,
@@ -36,8 +36,7 @@ namespace finance_control.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRevenueCommand command)
         {
-            var userId = User.FindFirst("UserId")?.Value;
-            command.UserId = Guid.Parse(userId);
+            command.UserId = _userContext.UserId;
 
             var response = await _mediator.Send(command);
 
@@ -52,7 +51,7 @@ namespace finance_control.Api.Controllers
         [HttpGet("update/{id}")]
         public async Task<IActionResult> Update(Guid Id)
         {
-            var response = await _mediator.Send(new GetRevenuesByIdQuery { Id = Id});
+            var response = await _mediator.Send(new GetRevenuesByIdQuery { Id = Id });
 
             if (response.ResponseInfo is null)
             {

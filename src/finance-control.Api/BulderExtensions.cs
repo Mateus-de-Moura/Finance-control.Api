@@ -1,5 +1,7 @@
 ﻿
 using System.Text;
+using finance_control.Api.Interfaces;
+using finance_control.Api.Services;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Domain.Abstractions;
 using finance_control.Domain.Interfaces.Repositories;
@@ -62,6 +64,10 @@ namespace api_clean_architecture.Api
             builder.Services.AddMemoryCache();
 
             builder.Services.AddHostedService<RabbitMqConsumerBackgroundService>();
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IUserContext, UserContext>();
+
         }
 
         public static void AddJwtAuth(this WebApplicationBuilder builder)
