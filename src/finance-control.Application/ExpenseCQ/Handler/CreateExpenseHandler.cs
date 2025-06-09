@@ -20,11 +20,13 @@ namespace finance_control.Application.ExpenseCQ.Handler
         {
             var expense = new Expenses
             {
+                Description = request.Description,
+                Active = true,
                 Value = request.Value,
                 DueDate = request.DueDate,
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
-                Status = InvoicesStatus.Pendente
+                Status = InvoicesStatus.Pendente,
             };
 
             await _context.AddAsync(expense);

@@ -14,6 +14,9 @@ namespace finance_control.Application.ExpenseCQ.Validators
             RuleFor(e => e.DueDate)
                   .NotEmpty()
                   .WithMessage("Data de vencimento não pode ser vazia.");
+
+            RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("A descrição é obrigatória.");
         }
     }
 }

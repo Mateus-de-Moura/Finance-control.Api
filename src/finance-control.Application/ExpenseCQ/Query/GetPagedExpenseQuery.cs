@@ -10,6 +10,9 @@ namespace finance_control.Application.ExpenseCQ.Query
     {
         public int PageNumber = 1;
         public int PageSize = 10;
+        
+        public string Description { get; set; }
+
         public Guid? UserId { get; set; } 
 
         public Guid? CategoryId { get; set; }
@@ -19,5 +22,7 @@ namespace finance_control.Application.ExpenseCQ.Query
         public DateTime? EndDate { get; set; } 
 
         public InvoicesStatus? Status { get; set; }
+
+
     }
 }

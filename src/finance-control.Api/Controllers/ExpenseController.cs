@@ -24,6 +24,8 @@ namespace finance_control.Api.Controllers
         [HttpGet("paged")]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequestExpense request)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+
             var result = await _mediator.Send(new GetPagedExpenseQuery
             {
                 CategoryId = request.CategoryId,
@@ -31,6 +33,7 @@ namespace finance_control.Api.Controllers
                 EndDate = request.EndDate,
                 StartDate = request.StartDate,
                 Status = request.Status,
+                Description = request.Description,
             });
 
             if (result.ResponseInfo is null)
@@ -49,8 +52,11 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateExpenseCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateExpenseCommand command)
         {
+            var userId = User.FindFirst("UserId")?.Value;
+            command.UserId = Guid.Parse(userId);
+
             var result = await _mediator.Send(command);
 
             if (result.ResponseInfo is null)
@@ -89,7 +95,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut("{id}/Despesas")]
-        public async Task<IActionResult> Payment(Guid id, [FromForm] PaymentExpenseCommand command )
+        public async Task<IActionResult> Payment(Guid id, [FromBody] PaymentExpenseCommand command )
         {
             var result = await _mediator.Send(command);
 

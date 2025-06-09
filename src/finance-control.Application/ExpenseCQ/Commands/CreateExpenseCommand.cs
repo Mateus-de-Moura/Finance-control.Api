@@ -6,6 +6,10 @@ namespace finance_control.Application.ExpenseCQ.Commands
 {
     public class CreateExpenseCommand : IRequest<ResponseBase<Expenses>>
     {
+        public string Description { get; set; }
+
+        public bool Active { get; set; }
+
         public decimal Value { get; set; }
 
         public DateTime DueDate { get; set; }

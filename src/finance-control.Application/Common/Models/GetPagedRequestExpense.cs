@@ -14,7 +14,8 @@ namespace finance_control.Application.Common.Models
         Guid? CategoryId = null, 
         DateTime? StartDate = null,
         DateTime? EndDate = null,
-        InvoicesStatus? Status = null
+        InvoicesStatus? Status = null,
+        string Description = null
         );
     
 }
