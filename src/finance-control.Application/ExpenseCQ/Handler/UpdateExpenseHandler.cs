@@ -37,9 +37,13 @@ namespace finance_control.Application.ExpenseCQ.Handler
                 };
             }
 
+            expense.Description = request.Description;
+            expense.IsRecurrent = request.Recurrent;
+            expense.Active = request.Active;
             expense.Value = request.Value;
             expense.DueDate = request.DueDate;
             expense.Status = request.Status;
+            expense.CategoryId = request.CategoryId;
          
             _context.Entry(expense).State = EntityState.Modified;
 

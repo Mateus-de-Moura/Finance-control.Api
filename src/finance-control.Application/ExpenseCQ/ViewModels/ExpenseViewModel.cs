@@ -6,18 +6,8 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
 {
     public class ExpenseViewModel
     {
-        //public ExpenseViewModel(Guid id, string description, string categoryName, string value, string dueDate, InvoicesStatus status)
-        //{
-        //    Id = id;
-        //    Description = description;
-        //    CategoryName = categoryName;
-        //    Value = value;
-        //    DueDate = dueDate;
-        //    Status = status;
-        //}
-
         public Guid Id { get; set; }
-      
+
         public string Description { get; set; }
 
         public string CategoryName { get; set; }
@@ -35,10 +25,9 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
                 if (Status == InvoicesStatus.Pago)
                     return "Pago";
 
-                if (DateTime.TryParse(DueDate, out var parsedDueDate))
+                if (Status == InvoicesStatus.Vencido)
                 {
-                    if (parsedDueDate.Date < DateTime.Now.Date)
-                        return "Vencido";
+                    return "Vencido";
                 }
 
                 return "Pendente";

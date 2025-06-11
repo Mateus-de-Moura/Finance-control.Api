@@ -2,7 +2,6 @@
 using finance_control.Application.Common.Models;
 using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.ExpenseCQ.Query;
-using finance_control.Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,8 +61,22 @@ namespace finance_control.Api.Controllers
 
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(UpdateExpenseCommand command)
+        [HttpGet("update/{id}")]
+        public async Task<IActionResult> GetById(Guid Id)
+        {
+            var response = await _mediator.Send(new GetByIdExpenseQuery { Id = Id });
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateExpense([FromBody]UpdateExpenseCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -88,7 +101,7 @@ namespace finance_control.Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/Despesas")]
+        [HttpPut("Despesas/{id}")]
         public async Task<IActionResult> Payment(Guid id, [FromBody] PaymentExpenseCommand command )
         {
             var result = await _mediator.Send(command);

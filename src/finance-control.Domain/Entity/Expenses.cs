@@ -6,6 +6,8 @@ namespace finance_control.Domain.Entity
     {
         public decimal Value { get; set; }
 
+        public bool IsRecurrent { get; set; }
+
         public DateTime DueDate { get; set; }
 
         public InvoicesStatus Status { get; set; }
