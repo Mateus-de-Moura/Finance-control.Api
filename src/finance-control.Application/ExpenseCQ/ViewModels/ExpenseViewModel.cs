@@ -7,7 +7,7 @@ namespace finance_control.Application.ExpenseCQ.ViewModels
     public class ExpenseViewModel
     {
         public Guid Id { get; set; }
-
+        public bool Active { get; set; }
         public string Description { get; set; }
 
         public string CategoryName { get; set; }
