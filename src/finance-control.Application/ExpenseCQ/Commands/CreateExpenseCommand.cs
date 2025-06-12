@@ -1,5 +1,6 @@
 ﻿using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Enum;
 using MediatR;
 
 namespace finance_control.Application.ExpenseCQ.Commands
@@ -17,5 +18,6 @@ namespace finance_control.Application.ExpenseCQ.Commands
         public Guid UserId { get; set; }
 
         public Guid CategoryId { get; set; }
+        public InvoicesStatus Status { get; set; }
     }
 }
