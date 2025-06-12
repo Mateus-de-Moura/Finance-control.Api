@@ -17,15 +17,9 @@ namespace finance_control.Api.Controllers
         private readonly IUserContext _userContext = userContext;
 
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
+        public async Task<IActionResult> GetPaged([FromQuery] GetPagedRevenuesQuery request)
         {
-            var response = await _mediator.Send(new GetPagedRevenuesQuery
-            {
-                UserId = _userContext.UserId,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Description = request.Description,
-            });
+            var response = await _mediator.Send(request);            
 
             if (response.ResponseInfo is null)
                 return Ok(response.Value);
