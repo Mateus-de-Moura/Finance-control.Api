@@ -19,6 +19,7 @@ namespace finance_control.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRevenuesQuery request)
         {
+            request.UserId = _userContext.UserId;
             var response = await _mediator.Send(request);            
 
             if (response.ResponseInfo is null)
