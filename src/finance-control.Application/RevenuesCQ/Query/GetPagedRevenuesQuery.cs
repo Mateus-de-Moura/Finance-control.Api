@@ -18,5 +18,7 @@ namespace finance_control.Application.RevenuesCQ.Queries
         public int PageNumber = 1;
         public int PageSize = 10;
         public string Description = string.Empty;
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }
