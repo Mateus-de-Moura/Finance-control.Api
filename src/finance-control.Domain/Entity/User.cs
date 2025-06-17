@@ -36,6 +36,8 @@ namespace finance_control.Domain.Entity
         public virtual PhotosUsers PhotosUsers { get; set; }
         public virtual AppRole Role { get; set; }
 
-        public List<Expenses> Expenses { get; set; }
+        public List<Expenses>? Expenses { get; set; }
+
+        public List<Category>? Categories { get; set; }
     }
 }

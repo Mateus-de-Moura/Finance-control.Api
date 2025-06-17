@@ -12,6 +12,11 @@ namespace finance_control.Domain.Entity
         public bool Active { get; set; }
 
         public string? Name { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
+
         public string? Type { get; set; }
 
         public List<Expenses> Expenses { get; set; } 

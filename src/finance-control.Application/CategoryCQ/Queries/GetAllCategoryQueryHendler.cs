@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using finance_control.Application.Response;
+﻿using finance_control.Application.Response;
 using finance_control.Domain.Entity;
-using finance_control.Infra.Data;
+using finance_control.Domain.Interfaces.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.CategoryCQ.Queries
 {
-    public class GetAllCategoryQueryHendler(FinanceControlContex context) : IRequestHandler<GetAllCategoryQuery, ResponseBase<List<Category>>>
+    public class GetAllCategoryQueryHendler(ICategoryRepository repository) : IRequestHandler<GetAllCategoryQuery, ResponseBase<List<Category>>>
     {
-        private readonly FinanceControlContex _contex = context;
+        private readonly ICategoryRepository _repository = repository;
 
         public async Task<ResponseBase<List<Category>>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
         {
-            var categories = await _contex.Category.ToListAsync(cancellationToken);
+            var categories = await _repository.GetAllCategory();
 
             return categories is not null ?
                 ResponseBase<List<Category>>.Success(categories) :

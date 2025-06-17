@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250613174742_ADD_COLUMN_USERID_CATEGORIA")]
+    partial class ADD_COLUMN_USERID_CATEGORIA
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
