@@ -15,8 +15,10 @@ namespace finance_control.Application.RevenuesCQ.Queries
     public class GetPagedRevenuesQuery : IRequest<ResponseBase<PaginatedList<RevenuesViewModel>>>
     {
         public Guid UserId { get; set; }
-        public int PageNumber = 1;
-        public int PageSize = 10;
-        public string Description = string.Empty;
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string Description { get; set; } = string.Empty;
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

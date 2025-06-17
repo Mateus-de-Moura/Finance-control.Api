@@ -16,6 +16,17 @@ namespace finance_control.Application.ExpenseCQ.Query
 
         public async Task<ResponseBase<PaginatedList<ExpenseViewModel>>> Handle(GetPagedExpenseQuery request, CancellationToken cancellationToken)
         {
+            //Define sempre o mes atual  caso  não seja filtrado no front
+            if (request.StartDate == null && request.EndDate == null)
+            {
+                var now = DateTime.Now;
+                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                request.StartDate = firstDayOfMonth;
+                request.EndDate = lastDayOfMonth;
+            }
+
             var queryable = _context.Expenses.AsNoTracking()
                 .Include(x => x.Category)
                 .Where(x => x.UserId.Equals(request.UserId))

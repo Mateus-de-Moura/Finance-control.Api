@@ -26,7 +26,7 @@ namespace finance_control.Application.ExpenseCQ.Handler
                 DueDate = request.DueDate,
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
-                Status = InvoicesStatus.Pendente,
+                Status = request.Status,
             };
 
             await _context.AddAsync(expense);

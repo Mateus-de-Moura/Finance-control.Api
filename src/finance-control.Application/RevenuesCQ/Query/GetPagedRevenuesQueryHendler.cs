@@ -17,16 +17,35 @@ namespace finance_control.Application.RevenuesCQ.Queries
         public async Task<ResponseBase<PaginatedList<RevenuesViewModel>>> Handle(GetPagedRevenuesQuery request, CancellationToken cancellationToken)
         {
 
+            if (request.StartDate == null && request.EndDate == null)
+            {
+                var now = DateTime.Now;
+                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                request.StartDate = firstDayOfMonth;
+                request.EndDate = lastDayOfMonth;
+            }
+
             var queryable =  _context.Revenues
                 .Include(x => x.Category)
                 .AsNoTracking()
                 .Where(x => x.UserId.Equals(request.UserId)).AsQueryable();
 
-
             if (!string.IsNullOrEmpty(request.Description))
             {
                 queryable = queryable.Where(x => x.Description.Contains(request.Description));
             };
+
+            if (request.StartDate != null)
+            {
+                queryable = queryable.Where(x => x.Date >= request.StartDate);
+            }
+
+            if (request.EndDate != null)
+            {
+                queryable = queryable.Where(x => x.Date <= request.EndDate);
+            }
 
             var response = await  queryable
                 .Select(x => _mapper.Map<RevenuesViewModel>(x))
