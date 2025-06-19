@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 using finance_control.Application.LocationDataCQ.Command;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.LocationDataCQ.Hendler
 {
-    public class AddLocationDataCommandHendler(FinanceControlContex context) : IRequestHandler<AddLocationDataCommand, ResponseBase<LoginLocationData>>
+    public class AddLocationDataHandler(FinanceControlContex context, ILoginLocationDataRepository loginLocationData) : IRequestHandler<AddLocationDataCommand, ResponseBase<LoginLocationData>>
     {
         private readonly FinanceControlContex _contex = context;
+        private readonly ILoginLocationDataRepository _loginLocationDataRepository = loginLocationData;
         public async Task<ResponseBase<LoginLocationData>> Handle(AddLocationDataCommand request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Email))
@@ -25,7 +27,6 @@ namespace finance_control.Application.LocationDataCQ.Hendler
             if (user == null)
                 return ResponseBase<LoginLocationData>.Fail("Usuário inexistente", "Não foi encontrado nenhum usuário com o e-mail informado", 404);
 
-
             var loginLocationData = new LoginLocationData
             {
                 AccessDate = DateTime.Now,
@@ -33,14 +34,17 @@ namespace finance_control.Application.LocationDataCQ.Hendler
                 Latitude = request.Latitude,
                 Longitude = request.Longitude,
                 Ip = request.Ip,
+                Platform = request.Platform,
+                Browser = request.Browser,
+                Os = request.Os,
                 UserId = user.Id,
             };
 
             await _contex.LoginLocationData.AddAsync(loginLocationData);
 
-            var rowsAffected = await _contex.SaveChangesAsync();
+            var result = await _loginLocationDataRepository.Create(loginLocationData);
 
-            return rowsAffected > 0 ?
+            return result.IsSuccess  ?
                 ResponseBase<LoginLocationData>.Success(loginLocationData) :
                 ResponseBase<LoginLocationData>.Fail("Erro ao salvar", "Tente novamente", 400);
         }

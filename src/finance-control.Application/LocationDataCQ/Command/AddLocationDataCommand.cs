@@ -15,5 +15,8 @@ namespace finance_control.Application.LocationDataCQ.Command
         public string Longitude { get; set; }
         public string Ip { get; set; }
         public string Email { get; set; }
+        public string Platform { get; set; }
+        public string Browser { get; set; }
+        public string Os { get; set; }
     }
 }
