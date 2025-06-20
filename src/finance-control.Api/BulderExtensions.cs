@@ -100,7 +100,11 @@ namespace api_clean_architecture.Api
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IConvertFormFileToBytes, ConvertFormFileToBytes>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+<<<<<<< HEAD
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+=======
+            builder.Services.AddScoped<ILoginLocationDataRepository, LoginLocationDataRepository>();
+>>>>>>> main
             builder.Services.AddSingleton<Consumer>();
         }
 

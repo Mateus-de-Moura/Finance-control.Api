@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using finance_control.Api.Interfaces;
 using finance_control.Application.Common.Models;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.Queries;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace finance_control.Api.Controllers
 {
@@ -15,10 +17,11 @@ namespace finance_control.Api.Controllers
     [ApiController]
     [Authorize]
 
-    public class UserController(IMediator madiator, IMemoryCache cache) : ControllerBase
+    public class UserController(IMediator madiator, IMemoryCache cache, IUserContext userContext) : ControllerBase
     {
         private readonly IMediator _mediator = madiator;
         private readonly IMemoryCache _cache = cache;
+        private readonly IUserContext _userContext = userContext;
 
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedRequest request)
@@ -98,5 +101,17 @@ namespace finance_control.Api.Controllers
             return BadRequest(response.ResponseInfo);
 
         }
+        [HttpPut("RecoveryPassword")]
+        public async Task<IActionResult> RecoveryPassword(string passWord,string newPassword)
+        {
+            var response = await _mediator.Send(new RecoveryPasswordCommand { UserId = _userContext.UserId, Password = passWord, NewPassword = newPassword });
+
+            if (response.ResponseInfo is null)
+                return Ok();
+
+            return BadRequest(response.ResponseInfo);
+
+        }
+
     }
 }

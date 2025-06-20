@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250619013347_ADJUSTING_LOGINLOCATIONDATA")]
+    partial class ADJUSTING_LOGINLOCATIONDATA
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,12 +66,7 @@ namespace finance_control.Infra.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Category", (string)null);
                 });
@@ -187,10 +185,6 @@ namespace finance_control.Infra.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Os")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -372,17 +366,6 @@ namespace finance_control.Infra.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("finance_control.Domain.Entity.Category", b =>
-                {
-                    b.HasOne("finance_control.Domain.Entity.User", "User")
-                        .WithMany("Categories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("finance_control.Domain.Entity.Expenses", b =>
                 {
                     b.HasOne("finance_control.Domain.Entity.Category", "Category")
@@ -496,8 +479,6 @@ namespace finance_control.Infra.Data.Migrations
 
             modelBuilder.Entity("finance_control.Domain.Entity.User", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Expenses");
 
                     b.Navigation("PhotosUsers")
