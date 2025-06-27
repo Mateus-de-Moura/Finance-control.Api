@@ -24,6 +24,7 @@ namespace finance_control.Api.Controllers
 
             var response = await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
                 var responseDb = await _mediator.Send(new GetAllCategoryQuery());
                 return responseDb;
             });
@@ -40,6 +41,7 @@ namespace finance_control.Api.Controllers
             command.UserId = _userContext.UserId;
 
             var result = await _mediator.Send(command);
+            _cache.Remove("category");
 
             if (result.ResponseInfo is null)
             {
@@ -47,14 +49,13 @@ namespace finance_control.Api.Controllers
             }
 
             return BadRequest(result.ResponseInfo);
-
-
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
         {
             var result = await _mediator.Send(command);
+            _cache.Remove("category");
 
             if (result.ResponseInfo is null)
             {
