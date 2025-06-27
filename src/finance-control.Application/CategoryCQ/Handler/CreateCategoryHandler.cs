@@ -16,7 +16,7 @@ namespace finance_control.Application.CategoryCQ.Handler
             {
                 Name = request.Name,
                 Type = request.Type,
-                Active = true,
+                Active = request.Active,
                 UserId = request.UserId,
             };
 
