@@ -8,6 +8,7 @@ namespace finance_control.Domain.Entity
 {
     public class LoginLocationData : BaseEntity
     {
+        public bool IsSuccess { get; set; }      
         public string EmailRequest { get; set; }
         public DateTime AccessDate { get; set; }
         public string Latitude { get; set; }
