@@ -103,6 +103,7 @@ namespace api_clean_architecture.Api
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ILoginLocationDataRepository, LoginLocationDataRepository>();
             builder.Services.AddSingleton<Consumer>();
+            builder.Services.AddScoped<IRevenuesRepository, RevenuesRepository>();
         }
 
         public static void AddDatabase(this WebApplicationBuilder builder)

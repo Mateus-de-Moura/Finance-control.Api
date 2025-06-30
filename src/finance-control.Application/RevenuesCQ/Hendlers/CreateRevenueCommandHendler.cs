@@ -8,17 +8,18 @@ using finance_control.Application.RevenuesCQ.Commands;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using MediatR;
 
 namespace finance_control.Application.RevenuesCQ.Hendlers
 {
-    public class CreateRevenueCommandHendler(FinanceControlContex context) : IRequestHandler<CreateRevenueCommand, ResponseBase<Revenues?>>
+    public class CreateRevenueCommandHendler(IRevenuesRepository revenuesRepository) : IRequestHandler<CreateRevenueCommand, ResponseBase<Revenues?>>
     {
-        private readonly FinanceControlContex _context = context;
-        public async Task<ResponseBase<Revenues?>> Handle(CreateRevenueCommand request, CancellationToken cancellationToken)
+        private readonly IRevenuesRepository _revenues = revenuesRepository;
+        public async Task<ResponseBase<Revenues>> Handle(CreateRevenueCommand request, CancellationToken cancellationToken)
         {
-            var revenue = new Revenues
+            var result = await _revenues.CreateRevenue(new Revenues
             {
                 Active = true,
                 Description = request.Description,
@@ -26,31 +27,11 @@ namespace finance_control.Application.RevenuesCQ.Hendlers
                 Date = request.Date,
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
-            };
+            });
 
-            await _context.AddAsync(revenue);
-
-            var rowsAffected = await _context.SaveChangesAsync();
-
-            return rowsAffected > 0 ?
-                new ResponseBase<Revenues?>
-                {
-                    ResponseInfo = null,
-                    Value = revenue
-                } :
-
-                new ResponseBase<Revenues?>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Erro ao cadastrar Receita",
-                        ErrorDescription = "Ocorreu um erro ao salvar os dados, tente novamente.",
-                        HttpStatus = 404
-                    },
-                    Value = null
-                };
-
-
+            return result.IsSuccess ?
+                 ResponseBase<Revenues>.Success(result.Value) :
+                 ResponseBase<Revenues>.Fail("Erro ao cadastrar Receita", "Ocorreu um erro ao salvar os dados, tente novamente.", 400);
         }
     }
 }
