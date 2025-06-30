@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using finance_control.Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace finance_control.Domain.Entity
@@ -17,7 +18,7 @@ namespace finance_control.Domain.Entity
 
         public User User { get; set; }
 
-        public string? Type { get; set; }
+        public CategoryType Type { get; set; }
 
         public List<Expenses> Expenses { get; set; } 
     }

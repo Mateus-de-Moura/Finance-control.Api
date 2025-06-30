@@ -5,6 +5,8 @@ using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
 using finance_control.Application.ExpenseCQ.ViewModels;
+using finance_control.Application.CategoryCQ.ViewModels;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace finance_control.Application.Mappings
 {
@@ -38,6 +40,7 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.Date, map => map.MapFrom(src => src.Date.HasValue ? src.Date.Value.ToString("dd/MM/yyyy") : string.Empty))
                 .ForMember(dest => dest.Value,map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))));
 
+            CreateMap<Category, CategoryViewModel>();
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }

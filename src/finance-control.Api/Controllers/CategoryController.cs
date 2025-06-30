@@ -1,4 +1,5 @@
-﻿using finance_control.Api.Interfaces;
+﻿using Azure;
+using finance_control.Api.Interfaces;
 using finance_control.Application.CategoryCQ.Commands;
 using finance_control.Application.CategoryCQ.Queries;
 using MediatR;
@@ -33,6 +34,17 @@ namespace finance_control.Api.Controllers
                 return Ok(response.Value);
 
             return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagedCategory([FromQuery] GetPagedCategoryQuery request)
+        {
+            var result = await _mediator.Send(request);
+
+            if (result.ResponseInfo is null)
+                return Ok(result.Value);
+
+            return BadRequest(result.ResponseInfo);
         }
 
         [HttpPost]

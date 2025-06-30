@@ -17,6 +17,11 @@ namespace finance_control.Infra.Data.Repositories
             return categories;
         }
 
+        public IQueryable<Category> GetCategoryFilter()
+        {
+            return _context.Category.AsQueryable();
+        }
+
         public async Task<Result<Category>> CreateCategory(Category category)
         {
             await _context.Category.AddAsync(category);

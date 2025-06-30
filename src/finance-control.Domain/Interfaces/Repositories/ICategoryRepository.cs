@@ -7,6 +7,8 @@ namespace finance_control.Domain.Interfaces.Repositories
     {
         public Task<List<Category>> GetAllCategory();
 
+        public IQueryable<Category> GetCategoryFilter();
+
         public Task<Result<Category>> CreateCategory(Category category);
 
         public Task<Result<Category>> UpdateCategory(Category updateCategory);
