@@ -21,10 +21,6 @@ namespace finance_control.Infra.Data.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.Property(c => c.Type)
-               .HasMaxLength(50)
-               .IsRequired();
-
             builder.HasOne(x => x.User)
                .WithMany(u => u.Categories)
                .HasForeignKey(x => x.UserId)

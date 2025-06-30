@@ -12,7 +12,7 @@ namespace finance_control.Application.CategoryCQ.Queries
     public class GetPagedCategoryHandler(CategoryRepository repository, IMapper mapper) : IRequestHandler<GetPagedCategoryQuery, ResponseBase<PaginatedList<CategoryViewModel>>>
     {
         private readonly CategoryRepository _repository = repository;
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper = mapper;
         public async Task<ResponseBase<PaginatedList<CategoryViewModel>>> Handle(GetPagedCategoryQuery request, CancellationToken cancellationToken)
         {
             var result = _repository.GetCategoryFilter();
