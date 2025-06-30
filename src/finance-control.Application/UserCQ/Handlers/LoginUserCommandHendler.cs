@@ -50,7 +50,7 @@ namespace finance_control.Application.UserCQ.Handlers
                 return ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);
             }
             else
-                return ResponseBase<RefreshTokenViewModel>.Fail("Senha incorreta", "A senha informada está incorreta.", 404);
+                return ResponseBase<RefreshTokenViewModel>.Fail("Dados incoretos", "Login ou senha incorretos.", 404);
         }
     }
 }

@@ -23,10 +23,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://192.168.18.5:8085", "http://localhost:8085", "http://localhost:5173")
                .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
     });
 });
 

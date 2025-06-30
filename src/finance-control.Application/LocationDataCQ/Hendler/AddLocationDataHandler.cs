@@ -29,6 +29,7 @@ namespace finance_control.Application.LocationDataCQ.Hendler
 
             var loginLocationData = new LoginLocationData
             {
+                IsSuccess = request.IsSuccess,
                 AccessDate = DateTime.Now,
                 EmailRequest = request.Email,
                 Latitude = request.Latitude,

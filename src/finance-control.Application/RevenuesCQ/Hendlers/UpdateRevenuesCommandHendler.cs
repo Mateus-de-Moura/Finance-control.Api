@@ -6,51 +6,38 @@ using System.Threading.Tasks;
 using finance_control.Application.Response;
 using finance_control.Application.RevenuesCQ.Commands;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.RevenuesCQ.Hendlers
 {
-    public class UpdateRevenuesCommandHendler(FinanceControlContex context) : IRequestHandler<UpdateRevenueCommand , ResponseBase<Revenues>>
+    public class UpdateRevenuesCommandHendler(FinanceControlContex context,IRevenuesRepository revenuesRepository ) : IRequestHandler<UpdateRevenueCommand , ResponseBase<Revenues>>
     {     
         private readonly FinanceControlContex _context = context;
+        private readonly IRevenuesRepository _revenuesRepository = revenuesRepository;
 
         public async Task<ResponseBase<Revenues>> Handle(UpdateRevenueCommand request, CancellationToken cancellationToken)
         {
-            var revenue = await _context.Revenues.Where(x => x.Id.Equals(request.Id)).FirstOrDefaultAsync();
+            if (request == null)
+                ResponseBase<Revenues>.Fail("Erro ao atualizar", "Preencha todos os campos e tente novamente", 400);
 
-            if (revenue == null)
+            var result = await _revenuesRepository.UpdateRevenue(new Revenues
             {
-                return new ResponseBase<Revenues>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Nenhum registro encontrado.",
-                        ErrorDescription = "não foi possivel localizar um registro com o Id informado, tente novamente",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                Id = request.Id,
+                Active = request.Active,
+                IsRecurrent = request.Recurrent,
+                Description = request.Description,
+                Value = request.Value,
+                Date = request.Date,
+                CategoryId = request.CategoryId,
+            });
 
-            revenue.Active = request.Active;
-            revenue.IsRecurrent = request.Recurrent;
-            revenue.Description = request.Description;
-            revenue.Value = request.Value;
-            revenue.Date = request.Date;
-            revenue.CategoryId = request.CategoryId;
 
-            _context.Entry(revenue).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return new ResponseBase<Revenues>
-            {
-                ResponseInfo = null,
-                Value = revenue,
-            };
-
+            return result.IsSuccess ?
+                ResponseBase<Revenues>.Success(result.Value) :
+                ResponseBase<Revenues>.Fail("Erro ao atualizar", "tente novamente", 400);       
         }
     }
 }

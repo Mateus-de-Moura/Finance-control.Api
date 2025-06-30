@@ -11,6 +11,7 @@ namespace finance_control.Application.LocationDataCQ.Command
 {
     public class AddLocationDataCommand : IRequest<ResponseBase<LoginLocationData>>
     {
+        public bool IsSuccess { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Ip { get; set; }

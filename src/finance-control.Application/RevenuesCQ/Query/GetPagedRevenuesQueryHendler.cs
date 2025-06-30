@@ -27,7 +27,7 @@ namespace finance_control.Application.RevenuesCQ.Queries
                 request.EndDate = lastDayOfMonth;
             }
 
-            var queryable =  _context.Revenues
+            var queryable = _context.Revenues
                 .Include(x => x.Category)
                 .AsNoTracking()
                 .Where(x => x.UserId.Equals(request.UserId)).AsQueryable();
@@ -35,7 +35,8 @@ namespace finance_control.Application.RevenuesCQ.Queries
             if (!string.IsNullOrEmpty(request.Description))
             {
                 queryable = queryable.Where(x => x.Description.Contains(request.Description));
-            };
+            }
+            ;
 
             if (request.StartDate != null)
             {
@@ -47,32 +48,14 @@ namespace finance_control.Application.RevenuesCQ.Queries
                 queryable = queryable.Where(x => x.Date <= request.EndDate);
             }
 
-            var response = await  queryable
+            var response = await queryable
                 .Select(x => _mapper.Map<RevenuesViewModel>(x))
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
 
-
             if (response == null)
-            {
-                return new ResponseBase<PaginatedList<RevenuesViewModel>>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Falha ao buscar dados",
-                        ErrorDescription = "Nenhum item localizado",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<PaginatedList<RevenuesViewModel>>.Fail("Falha ao buscar dados", "Nenhum item localizado", 404);
 
-
-            return new ResponseBase<PaginatedList<RevenuesViewModel>>
-            {
-                ResponseInfo = null,
-                Value = response
-            };
-
+            return ResponseBase<PaginatedList<RevenuesViewModel>>.Success(response);
         }
     }
 }

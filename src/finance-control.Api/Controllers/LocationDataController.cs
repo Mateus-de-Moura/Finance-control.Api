@@ -18,6 +18,7 @@ namespace finance_control.Api.Controllers
         private readonly IMediator _mediator = mediator;
         private readonly IUserContext _userContext = userContext;
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddLocation(AddLocationDataCommand command)
         {
@@ -38,7 +39,7 @@ namespace finance_control.Api.Controllers
             var response = await _mediator.Send(new GetLocationDataByUserQuery { UserId = _userContext.UserId});
 
             if (response.ResponseInfo is null)
-                return Created(string.Empty, response.Value);
+                return Ok(response.Value);
 
             return BadRequest(response.ResponseInfo);
         }
