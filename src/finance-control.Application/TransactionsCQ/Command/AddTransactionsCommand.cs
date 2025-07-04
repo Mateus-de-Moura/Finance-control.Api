@@ -12,6 +12,7 @@ namespace finance_control.Application.TransactionsCQ.Command
 {
     public class AddTransactionsCommand : IRequest<ResponseBase<Transactions>>
     {
+        public bool Active { get; set; }
         public DateTime TransactionDate { get; set; }
         public int Type { get; set; }
         public Guid CategoryId { get; set; }

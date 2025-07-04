@@ -41,6 +41,9 @@ namespace finance_control.Api.Controllers
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Description = request.Description,
                 UserId = _userContext.UserId
             });
 

@@ -12,11 +12,13 @@ namespace finance_control.Application.TransactionsCQ.ViewModels
         public bool Active { get; set; }
         public string TransactionDate { get; set; }
         public string Type { get; set; }
+        public string Category { get; set; }
         public Guid CategoryId { get; set; }
         public string Description { get; set; }
-        public decimal Value { get; set; }
+        public string Value { get; set; }
         public string PaymentMethod { get; set; }
         public string Status { get; set; }
         public string Observation { get; set; }
+        public string TransactionType { get; set; }
     }
 }

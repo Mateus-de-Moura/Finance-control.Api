@@ -21,6 +21,7 @@ namespace finance_control.Application.TransactionsCQ.Handler
 
             var result = await _transactionsRepository.AddTransaction(new Transactions
             {
+                Active = request.Active,
                 TransactionDate = request.TransactionDate,
                 Type = request.Type,
                 CategoryId = request.CategoryId,

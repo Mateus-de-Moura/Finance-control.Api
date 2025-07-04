@@ -44,6 +44,9 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.Type, map => map.MapFrom(src => TypesEnum.FromValue(src.Type).Name))
                 .ForMember(dest => dest.PaymentMethod, map => map.MapFrom(src => PaymentMethodEnum.FromValue(src.PaymentMethod).Name))
                 .ForMember(dest => dest.Status, map => map.MapFrom(src => StatusPaymentEnum.FromValue(src.Status).Name))
+                .ForMember(dest => dest.Category, map => map.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.TransactionType, map => map.MapFrom(src => src.Category.Type))
+                .ForMember(dest => dest.Value, map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))))
                 .ForMember(dest => dest.TransactionDate, map => map.MapFrom(src => src.TransactionDate.ToString("dd/MM/yyyy")));
 
         }
