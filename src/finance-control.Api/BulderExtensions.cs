@@ -104,6 +104,8 @@ namespace api_clean_architecture.Api
             builder.Services.AddScoped<ILoginLocationDataRepository, LoginLocationDataRepository>();
             builder.Services.AddSingleton<Consumer>();
             builder.Services.AddScoped<IRevenuesRepository, RevenuesRepository>();
+            builder.Services.AddScoped<ITransactionsRepository, TransactionRepository>();
+
         }
 
         public static void AddDatabase(this WebApplicationBuilder builder)
