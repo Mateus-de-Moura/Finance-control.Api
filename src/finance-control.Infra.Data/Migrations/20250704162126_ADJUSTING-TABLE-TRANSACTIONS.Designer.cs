@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using finance_control.Infra.Data;
 
@@ -11,9 +12,11 @@ using finance_control.Infra.Data;
 namespace finance_control.Infra.Data.Migrations
 {
     [DbContext(typeof(FinanceControlContex))]
-    partial class FinanceControlContexModelSnapshot : ModelSnapshot
+    [Migration("20250704162126_ADJUSTING-TABLE-TRANSACTIONS")]
+    partial class ADJUSTINGTABLETRANSACTIONS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,7 +353,8 @@ namespace finance_control.Infra.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });
@@ -531,8 +535,8 @@ namespace finance_control.Infra.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("finance_control.Domain.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne()
+                        .HasForeignKey("finance_control.Domain.Entity.Transactions", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
