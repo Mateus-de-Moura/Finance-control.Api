@@ -19,8 +19,7 @@ namespace finance_control.Infra.Data.Configurations
                 .HasPrecision(18, 2);
 
             builder.HasOne(x => x.User)
-                .WithOne()
-                .HasForeignKey<Transactions>(x => x.UserId);
+                .WithMany();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
@@ -19,6 +20,7 @@ namespace finance_control.Application.TransactionsCQ.Command
         public int PaymentMethod { get; set; }
         public int Status { get; set; }
         public string? Observation { get; set; }
+        [JsonIgnore]
         public Guid UserId { get; set; }
     }
 }
