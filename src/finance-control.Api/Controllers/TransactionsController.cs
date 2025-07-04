@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.Core;
+using finance_control.Api.Commom.ViewModels;
 using finance_control.Api.Interfaces;
 using finance_control.Application.TransactionsCQ.Command;
 using finance_control.Application.TransactionsCQ.Query;
@@ -34,10 +35,14 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] GetPagedTransactionsQuey request)
-        {
-            request.UserId = _userContext.UserId;
-            var response = await _mediator.Send(request);
+        public async Task<IActionResult> GetPaged([FromQuery] GetPagedTransactionsViewModel request)
+        {         
+            var response = await _mediator.Send(new GetPagedTransactionsQuey
+            {
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                UserId = _userContext.UserId
+            });
 
             if (response.ResponseInfo is null)
                 return Ok(response.Value);
