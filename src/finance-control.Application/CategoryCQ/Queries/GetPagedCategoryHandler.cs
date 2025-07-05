@@ -4,14 +4,14 @@ using finance_control.Application.Common.Models;
 using finance_control.Application.Extensions;
 using finance_control.Application.Response;
 using finance_control.Domain.Enum;
-using finance_control.Infra.Data.Repositories;
+using finance_control.Domain.Interfaces.Repositories;
 using MediatR;
 
 namespace finance_control.Application.CategoryCQ.Queries
 {
-    public class GetPagedCategoryHandler(CategoryRepository repository, IMapper mapper) : IRequestHandler<GetPagedCategoryQuery, ResponseBase<PaginatedList<CategoryViewModel>>>
+    public class GetPagedCategoryHandler(ICategoryRepository repository, IMapper mapper) : IRequestHandler<GetPagedCategoryQuery, ResponseBase<PaginatedList<CategoryViewModel>>>
     {
-        private readonly CategoryRepository _repository = repository;
+        private readonly ICategoryRepository _repository = repository;
         private readonly IMapper _mapper = mapper;
         public async Task<ResponseBase<PaginatedList<CategoryViewModel>>> Handle(GetPagedCategoryQuery request, CancellationToken cancellationToken)
         {
@@ -22,10 +22,9 @@ namespace finance_control.Application.CategoryCQ.Queries
                 result = result.Where(r => r.Name.Contains(request.Name));
             }
 
-            if (Enum.TryParse<CategoryType>(request.Type, true, out var parsedType) &&
-                Enum.IsDefined(typeof(CategoryType), parsedType))
+            if (Enum.TryParse<CategoryType>(request.Type, true, out var categoryType))
             {
-                result = result.Where(r => r.Type == parsedType);
+                result = result.Where(r => r.Type == categoryType);
             }
 
             var paginatedList = await result

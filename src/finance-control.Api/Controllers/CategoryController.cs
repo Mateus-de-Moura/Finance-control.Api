@@ -47,6 +47,19 @@ namespace finance_control.Api.Controllers
             return BadRequest(result.ResponseInfo);
         }
 
+        [HttpGet("update/{id}")]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var response = await _mediator.Send(new GetByIdCategoryQuery { Id = id });
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
         {

@@ -4,6 +4,7 @@ using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.ExpenseCQ.Handler
@@ -44,6 +45,9 @@ namespace finance_control.Application.ExpenseCQ.Handler
             expense.DueDate = request.DueDate;
             expense.Status = request.Status;
             expense.CategoryId = request.CategoryId;
+            expense.ProofPath = request.Status == InvoicesStatus.Pago && request.ProofFile != null
+                     ? await ConvertToBytes(request.ProofFile)
+                     : null;
          
             _context.Entry(expense).State = EntityState.Modified;
 
@@ -69,6 +73,15 @@ namespace finance_control.Application.ExpenseCQ.Handler
                     Value = null
                 };
 
+            }
+        }
+
+        private async Task<byte[]> ConvertToBytes(IFormFile file)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
             }
         }
     }

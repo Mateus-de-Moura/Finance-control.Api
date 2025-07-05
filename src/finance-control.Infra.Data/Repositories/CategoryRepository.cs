@@ -1,5 +1,4 @@
 ﻿using Ardalis.Result;
-using Azure.Core;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +30,17 @@ namespace finance_control.Infra.Data.Repositories
             return rowsAffected > 0
                 ? Result.Success(category)
                 : Result.Error("Erro ao criar categoria.");
+        }
+
+        public async Task<Result<Category>> GetByIdCategory(Guid categoryId)
+        {
+            var category = await _context.Category
+                .Where(c => c.Id.Equals(categoryId))
+                .FirstOrDefaultAsync();
+
+            return category != null ?
+                Result.Success(category) :
+                Result.Error();
         }
 
         public async Task<Result<Category>> UpdateCategory(Category updateCategory)
