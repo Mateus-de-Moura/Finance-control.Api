@@ -20,7 +20,7 @@ namespace finance_control.Application.TransactionsCQ.Command
         public decimal Value { get; set; }
         public int PaymentMethod { get; set; }
         public int Status { get; set; }
-        public string? Observation { get; set; }
+        public string Observation { get; set; }
         [JsonIgnore]
         public Guid UserId { get; set; }
     }
