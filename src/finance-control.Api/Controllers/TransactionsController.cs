@@ -2,6 +2,7 @@
 using Azure.Core;
 using finance_control.Api.Commom.ViewModels;
 using finance_control.Api.Interfaces;
+using finance_control.Application.CategoryCQ.Queries;
 using finance_control.Application.TransactionsCQ.Command;
 using finance_control.Application.TransactionsCQ.Query;
 using MediatR;
@@ -36,7 +37,7 @@ namespace finance_control.Api.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetPagedTransactionsViewModel request)
-        {         
+        {
             var response = await _mediator.Send(new GetPagedTransactionsQuey
             {
                 PageNumber = request.PageNumber,
@@ -51,6 +52,25 @@ namespace finance_control.Api.Controllers
                 return Ok(response.Value);
 
             return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpGet("update/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var response = await _mediator.Send(new GetTransactionByIdQuery { Id = id });
+
+            if (response.ResponseInfo is null)
+            {
+                return Ok(response.Value);
+            }
+
+            return BadRequest(response.ResponseInfo);
+        }
+
+        [HttpPut]
+        public IActionResult Update(object teste)
+        {
+            return Ok();
         }
     }
 }

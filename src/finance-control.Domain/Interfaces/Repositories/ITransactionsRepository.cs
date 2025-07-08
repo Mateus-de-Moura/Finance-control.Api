@@ -11,5 +11,7 @@ namespace finance_control.Domain.Interfaces.Repositories
     public interface ITransactionsRepository
     {
         Task<Result<Transactions>> AddTransaction(Transactions transaction);
+        Task<Result<Transactions>> UpdateTransaction(Transactions transaction);
+        Task<Result<Transactions>> GetById(Guid Id);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ardalis.Result;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Infra.Data.Repositories
 {
@@ -24,6 +25,20 @@ namespace finance_control.Infra.Data.Repositories
             return rowsAffected > 0 ?
                 Result.Success(transaction) :
                 Result.Error("");
+        }
+
+        public async Task<Result<Transactions>> GetById(Guid Id)
+        {
+            var transaction = await _contex.Transactions.Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
+
+            return transaction != null ?
+                Result.Success(transaction) :
+                Result.Error("");   
+        }
+
+        public Task<Result<Transactions>> UpdateTransaction(Transactions transaction)
+        {
+            throw new NotImplementedException();
         }
     }
 }
