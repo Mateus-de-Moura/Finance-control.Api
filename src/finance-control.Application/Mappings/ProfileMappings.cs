@@ -52,13 +52,8 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.TransactionType, map => map.MapFrom(src => src.Category.Type))
                 .ForMember(dest => dest.Value, map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))))
                 .ForMember(dest => dest.TransactionDate, map => map.MapFrom(src => src.TransactionDate.ToString("dd/MM/yyyy")));
-
-
-            CreateMap<Transactions, TransactionsViewModel>();
+    
             CreateMap<UpdateTransactionCommand, Transactions>();
-
-
-
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }
