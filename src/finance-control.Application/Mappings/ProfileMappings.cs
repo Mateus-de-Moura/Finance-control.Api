@@ -7,6 +7,7 @@ using finance_control.Application.TransactionsCQ.ViewModels;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
+using finance_control.Application.CategoryCQ.ViewModels;
 using finance_control.Domain.Enum;
 
 namespace finance_control.Application.Mappings
@@ -40,6 +41,8 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.Category, map => map.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.Date, map => map.MapFrom(src => src.Date.HasValue ? src.Date.Value.ToString("dd/MM/yyyy") : string.Empty))
                 .ForMember(dest => dest.Value,map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))));
+           
+            CreateMap<Category, CategoryViewModel>();
 
             CreateMap<Transactions, TransactionsViewModel>()
                 .ForMember(dest => dest.Type, map => map.MapFrom(src => TypesEnum.FromValue(src.Type).Name))
@@ -50,8 +53,10 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.Value, map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))))
                 .ForMember(dest => dest.TransactionDate, map => map.MapFrom(src => src.TransactionDate.ToString("dd/MM/yyyy")));
 
+
             CreateMap<Transactions, TransactionsViewModel>();
             CreateMap<UpdateTransactionCommand, Transactions>();
+
 
 
         }

@@ -1,9 +1,11 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.Response;
+using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.ExpenseCQ.Handler
@@ -11,10 +13,12 @@ namespace finance_control.Application.ExpenseCQ.Handler
     public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseCommand, ResponseBase<Expenses>>
     {
         private readonly FinanceControlContex _context;
+        private readonly IConvertFormFileToBytes _convert;
 
-        public UpdateExpenseHandler(FinanceControlContex context)
+        public UpdateExpenseHandler(FinanceControlContex context, IConvertFormFileToBytes convert)
         {
             _context = context;
+            _convert = convert;
         }
 
         public async Task<ResponseBase<Expenses>> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
@@ -44,6 +48,9 @@ namespace finance_control.Application.ExpenseCQ.Handler
             expense.DueDate = request.DueDate;
             expense.Status = request.Status;
             expense.CategoryId = request.CategoryId;
+            expense.ProofPath = request.Status == InvoicesStatus.Pago && request.ProofFile != null
+                     ? await _convert.ConvertToBytes(request.ProofFile)
+                     : null;
          
             _context.Entry(expense).State = EntityState.Modified;
 
@@ -71,5 +78,6 @@ namespace finance_control.Application.ExpenseCQ.Handler
 
             }
         }
+    
     }
 }

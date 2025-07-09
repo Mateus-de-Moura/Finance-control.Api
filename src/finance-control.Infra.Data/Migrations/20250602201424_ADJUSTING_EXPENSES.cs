@@ -10,19 +10,19 @@ namespace finance_control.Infra.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.AddColumn<bool>(
-            //   name: "Active",
-            //   table: "Expenses",
-            //   nullable: false,
-            //   defaultValue: true);
+            migrationBuilder.AddColumn<bool>(
+               name: "active",
+               table: "expenses",
+               nullable: false
+               );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.DropColumn(
-            //   name: "Active",
-            //   table: "Expenses");
+            migrationBuilder.DropColumn(
+               name: "Active",
+               table: "Expenses");
         }
     }
 }
