@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
 using AutoMapper;
+using finance_control.Application.ExpenseCQ.ViewModels;
 using finance_control.Application.RevenuesCQ.ViewModels;
+using finance_control.Application.TransactionsCQ.Command;
+using finance_control.Application.TransactionsCQ.ViewModels;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
-using finance_control.Application.ExpenseCQ.ViewModels;
-using finance_control.Application.TransactionsCQ.ViewModels;
 using finance_control.Domain.Enum;
 
 namespace finance_control.Application.Mappings
@@ -48,6 +49,10 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.TransactionType, map => map.MapFrom(src => src.Category.Type))
                 .ForMember(dest => dest.Value, map => map.MapFrom(src => src.Value.ToString("C", new CultureInfo("pt-BR"))))
                 .ForMember(dest => dest.TransactionDate, map => map.MapFrom(src => src.TransactionDate.ToString("dd/MM/yyyy")));
+
+            CreateMap<Transactions, TransactionsViewModel>();
+            CreateMap<UpdateTransactionCommand, Transactions>();
+
 
         }
 

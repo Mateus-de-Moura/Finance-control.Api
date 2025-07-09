@@ -12,15 +12,15 @@ namespace finance_control.Infra.Data.Repositories
 {
     public class TransactionRepository(FinanceControlContex context) : ITransactionsRepository
     {
-        private readonly FinanceControlContex _contex = context;
+        private readonly FinanceControlContex _context = context;
         public async Task<Result<Transactions>> AddTransaction(Transactions transaction)
         {
             if (transaction == null)
                 return Result.Error("Preencha todos os campos e tente novamente");
 
-            await _contex.AddAsync(transaction);
+            await _context.AddAsync(transaction);
 
-            var rowsAffected = await _contex.SaveChangesAsync();
+            var rowsAffected = await _context.SaveChangesAsync();
 
             return rowsAffected > 0 ?
                 Result.Success(transaction) :
@@ -29,16 +29,28 @@ namespace finance_control.Infra.Data.Repositories
 
         public async Task<Result<Transactions>> GetById(Guid Id)
         {
-            var transaction = await _contex.Transactions.Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
+            var transaction = await _context.Transactions.Where(x => x.Id.Equals(Id)).FirstOrDefaultAsync();
 
             return transaction != null ?
                 Result.Success(transaction) :
                 Result.Error("");   
         }
 
-        public Task<Result<Transactions>> UpdateTransaction(Transactions transaction)
+        public async Task<Result<Transactions>> UpdateTransaction(Transactions transaction)
         {
-            throw new NotImplementedException();
+            var result = await _context.Transactions.FirstOrDefaultAsync(x => x.Id.Equals(transaction.Id));
+
+            if (result == null)
+                return Result.Error("Nenhum registro localizado");
+
+            _context.Entry(result).CurrentValues.SetValues(transaction);
+            _context.Entry(result).State = EntityState.Modified;
+
+            var rowsAffected = await _context.SaveChangesAsync();
+
+            return rowsAffected > 0 ?
+               Result.Success(transaction) :
+               Result.Error("");
         }
     }
 }
