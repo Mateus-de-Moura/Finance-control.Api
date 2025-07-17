@@ -1,9 +1,11 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.ExpenseCQ.Handler;
+using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace tests.Expense
 {
@@ -11,14 +13,17 @@ namespace tests.Expense
     {
         private readonly FinanceControlContex _context;
         private readonly UpdateExpenseHandler _handler;
+        private readonly Mock<IConvertFormFileToBytes> _convertMock;
         public UpdateExpenseHandlerTest()
         {
             var options = new DbContextOptionsBuilder<FinanceControlContex>()
            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
            .Options;
 
+            _convertMock = new Mock<IConvertFormFileToBytes>();
+
             _context = new FinanceControlContex(options);
-            _handler = new UpdateExpenseHandler(_context);
+            _handler = new UpdateExpenseHandler(_context, _convertMock.Object);
         }
 
         [Fact]
