@@ -33,7 +33,11 @@ namespace finance_control.Infra.Data.Repositories
             if(UserId == Guid.Empty)
                 return Result<List<LoginLocationData>>.Error();
 
-            var result = await _context.LoginLocationData.Where(x => x.UserId.Equals(UserId)).ToListAsync();
+            var result = await _context.LoginLocationData
+                .Where(x => x.UserId.Equals(UserId))
+                .Take(10)
+                .OrderByDescending(x => x.AccessDate)
+                .ToListAsync();
 
             return result != null ? 
                 Result<List<LoginLocationData>>.Success(result) : 
