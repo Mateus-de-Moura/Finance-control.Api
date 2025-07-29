@@ -35,8 +35,8 @@ namespace finance_control.Infra.Data.Repositories
 
             var result = await _context.LoginLocationData
                 .Where(x => x.UserId.Equals(UserId))
-                .Take(10)
                 .OrderByDescending(x => x.AccessDate)
+                .Take(10)
                 .ToListAsync();
 
             return result != null ? 
