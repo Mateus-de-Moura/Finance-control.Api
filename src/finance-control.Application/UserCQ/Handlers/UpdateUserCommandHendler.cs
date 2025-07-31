@@ -3,45 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using finance_control.Application.Response;
 using finance_control.Application.UserCQ.Commands;
 using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.UserCQ.Handlers
 {
-    public class UpdateUserCommandHendler(FinanceControlContex contex, IConvertFormFileToBytes convert) : IRequestHandler<UpdateUserCommand, ResponseBase<User>>
+    public class UpdateUserCommandHendler(IMapper mapper, IConvertFormFileToBytes convert,
+        IUserRepository UserRepository) : IRequestHandler<UpdateUserCommand, ResponseBase<User>>
     {
-        private readonly FinanceControlContex _context = contex;
-        private readonly IConvertFormFileToBytes _convert = convert;    
+        private readonly IMapper _mapper = mapper;
+        private readonly IConvertFormFileToBytes _convert = convert;
+        private readonly IUserRepository _userRepository = UserRepository;
         public async Task<ResponseBase<User>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            if(request.Id == Guid.Empty)            
-                return ResponseBase<User>.Fail("Id inválido", "Informe um id válido", 400);         
-            
-            var user = await _context.Users.Where(x => x.Id.Equals(request.Id)).FirstOrDefaultAsync();
+            if (request.Id == Guid.Empty)
+                return ResponseBase<User>.Fail("Id inválido", "Informe um id válido", 400);
 
-            if (user == null)            
-                return ResponseBase<User>.Fail("Usuário não encontrado", "Nenhum usuário com esse ID", 404);            
+            var user = _mapper.Map<User>(request);
 
-            user.Name = request.Name ?? user.Name;
-            user.Surname = request.Surname ?? user.Surname;
-            user.Email = request.Email ?? user.Email;
-            user.UserName = request.Username ?? user.UserName;
-            user.Active = request.Active;
-            user.AppRoleId = request.RoleId;
+            if (user == null)
+               return ResponseBase<User>.Fail("Erro", "Erro ao atualizar usuário", 400);
 
             if (request.Photo != null)
-            {                
-                user.PhotosUsers.PhotoUser = await _convert.ConvertToBytes(request.Photo);                
-            }
+                user.PhotosUsers.PhotoUser = await _convert.ConvertToBytes(request.Photo);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            var result = await _userRepository.Update(user);
 
-            return ResponseBase<User>.Success(user);
+            return result.IsSuccess ?
+                ResponseBase<User>.Success(user) :
+                ResponseBase<User>.Fail("Erro", "Erro ao atualizar usuário", 400);
         }
     }
 }

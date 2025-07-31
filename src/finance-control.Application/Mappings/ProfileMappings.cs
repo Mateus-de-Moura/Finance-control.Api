@@ -54,6 +54,9 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.TransactionDate, map => map.MapFrom(src => src.TransactionDate.ToString("dd/MM/yyyy")));
     
             CreateMap<UpdateTransactionCommand, Transactions>();
+
+            CreateMap<UpdateUserCommand, User>()
+                .ForMember(dest => dest.AppRoleId, map => map.MapFrom(src => src.RoleId));
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }
