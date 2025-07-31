@@ -68,9 +68,18 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(object teste)
+        public async Task<IActionResult> UpdateTransaction(UpdateTransactionCommand transaction)
         {
-            return Ok();
+            transaction.UserId = _userContext.UserId;
+            if (transaction == null)
+                return BadRequest();
+
+            var response = await _mediator.Send(transaction);
+
+            if (response.ResponseInfo is null)
+                return Ok(response.Value);
+
+            return BadRequest(response.ResponseInfo);
         }
     }
 }

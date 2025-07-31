@@ -18,7 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace api_clean_architecture.Api
 {
-    public static class BulderExtensions
+    public static class BuilderExtensions
     {
         public static void AddServices(this WebApplicationBuilder builder)
         {
@@ -67,6 +67,7 @@ namespace api_clean_architecture.Api
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserContext, UserContext>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         }
 
