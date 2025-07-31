@@ -9,14 +9,14 @@ using finance_control.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-public class CreateUserCommandHandlerTests
+public class CreateUserCommandHandlerTest
 {
     private readonly Mock<IAuthService> _authServiceMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly CreateUserCommandHendler _handler;
     private readonly FinanceControlContex _context;
 
-    public CreateUserCommandHandlerTests()
+    public CreateUserCommandHandlerTest()
     {
         _authServiceMock = new Mock<IAuthService>();
         _mapperMock = new Mock<IMapper>();
