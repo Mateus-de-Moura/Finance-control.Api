@@ -1,4 +1,6 @@
 ﻿
+using System.Configuration;
+using System.Data;
 using System.Text;
 using finance_control.Api.Interfaces;
 using finance_control.Api.Services;
@@ -15,6 +17,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
+using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
 
 namespace api_clean_architecture.Api
 {
@@ -22,6 +28,9 @@ namespace api_clean_architecture.Api
     {
         public static void AddServices(this WebApplicationBuilder builder)
         {
+            var configuration = builder.Configuration;
+            string connection = configuration.GetConnectionString("DefaultConnection");
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 
@@ -60,6 +69,48 @@ namespace api_clean_architecture.Api
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
             });
+
+            //Serilog
+            var options = new MSSqlServerSinkOptions
+            {
+                TableName = "Logs",
+                AutoCreateSqlTable = false
+            };
+
+            var columnOptions = new ColumnOptions();
+
+            columnOptions.Store.Add(StandardColumn.LogEvent);
+            columnOptions.Store.Remove(StandardColumn.Properties);
+            columnOptions.LogEvent.DataLength = 2048;
+            columnOptions.Id.DataType = SqlDbType.BigInt;
+
+            builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+            {
+                loggerConfiguration
+                    // A. Define o nível mínimo padrão para SEUS logs. 
+                    // "Information" é um bom começo para logs manuais.
+                    .MinimumLevel.Information()
+
+                    // B. Regra CRÍTICA: Silencia os logs automáticos do .NET e EF Core.
+                    // Isso define que logs das fontes "Microsoft" e "System" só serão registrados
+                    // se forem "Warning" ou mais graves. É a forma correta de filtrar.
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    .MinimumLevel.Override("System", LogEventLevel.Warning)
+
+                    // C. Adiciona contexto aos logs (útil para rastreamento)
+                    .Enrich.FromLogContext()
+                    //.Enrich.WithMachineName()
+                    //.Enrich.WithThreadId()
+
+                    // D. Configura as saídas (Sinks)
+                    .WriteTo.Console(outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm} [{Level}] {Message}{NewLine}{Exception}")
+                    .WriteTo.MSSqlServer(
+                        connectionString: connection,
+                        sinkOptions: options,
+                        columnOptions: columnOptions
+                    );
+            });
+
 
             builder.Services.AddMemoryCache();
 

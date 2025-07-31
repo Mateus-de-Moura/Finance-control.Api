@@ -11,10 +11,11 @@ namespace finance_control.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(IMediator madiator, IMapper mapper) : ControllerBase
+    public class AuthController(IMediator madiator, IMapper mapper,  ILogger<AuthController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = madiator;
         private readonly IMapper _mapper = mapper;
+        private readonly ILogger<AuthController> _logger = logger;
 
         [HttpPost("Login")]
         public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> Login(LoginUserCommand command)
@@ -26,7 +27,8 @@ namespace finance_control.Api.Controllers
                 var userInfo = request.Value;
 
                 if (userInfo is not null)
-                {                 
+                {
+                    _logger.LogInformation("Operação de login do usuário {Name} foi realizada com sucesso", command.Email);
                     return Ok(_mapper.Map<UserInfoViewModel>(request.Value));
                 }
             }

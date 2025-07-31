@@ -1,6 +1,7 @@
 using api_clean_architecture.Api;
 using finance_control.Services.SignalR;
 using Microsoft.AspNetCore.Builder;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
