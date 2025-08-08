@@ -86,23 +86,13 @@ namespace api_clean_architecture.Api
 
             builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             {
-                loggerConfiguration
-                    // A. Define o nível mínimo padrão para SEUS logs. 
-                    // "Information" é um bom começo para logs manuais.
+                loggerConfiguration                   
                     .MinimumLevel.Information()
-
-                    // B. Regra CRÍTICA: Silencia os logs automáticos do .NET e EF Core.
-                    // Isso define que logs das fontes "Microsoft" e "System" só serão registrados
-                    // se forem "Warning" ou mais graves. É a forma correta de filtrar.
                     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                     .MinimumLevel.Override("System", LogEventLevel.Warning)
-
-                    // C. Adiciona contexto aos logs (útil para rastreamento)
                     .Enrich.FromLogContext()
                     //.Enrich.WithMachineName()
                     //.Enrich.WithThreadId()
-
-                    // D. Configura as saídas (Sinks)
                     .WriteTo.Console(outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm} [{Level}] {Message}{NewLine}{Exception}")
                     .WriteTo.MSSqlServer(
                         connectionString: connection,
