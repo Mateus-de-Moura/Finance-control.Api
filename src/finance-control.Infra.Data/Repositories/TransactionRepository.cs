@@ -36,6 +36,18 @@ namespace finance_control.Infra.Data.Repositories
                 Result.Error("");   
         }
 
+        public async Task<Result<List<Transactions>>> GetRecentTransactions()
+        {
+            var transactions = await _context.Transactions
+                .AsNoTracking()
+                .Include(x => x.Category)
+                .OrderByDescending(x => x.TransactionDate)
+                .Take(5)
+                .ToListAsync();
+
+            return Result.Success(transactions);
+        }
+
         public async Task<Result<Transactions>> UpdateTransaction(Transactions transaction)
         {
             var result = await _context.Transactions.FirstOrDefaultAsync(x => x.Id.Equals(transaction.Id));

@@ -13,5 +13,6 @@ namespace finance_control.Domain.Interfaces.Repositories
         Task<Result<Transactions>> AddTransaction(Transactions transaction);
         Task<Result<Transactions>> UpdateTransaction(Transactions transaction);
         Task<Result<Transactions>> GetById(Guid Id);
+        Task<Result<List<Transactions>>> GetRecentTransactions();
     }
 }

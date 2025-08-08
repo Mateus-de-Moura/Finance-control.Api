@@ -1,6 +1,7 @@
 ﻿using finance_control.Application.CategoryCQ.Commands;
 using finance_control.Application.Response;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Enum;
 using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using MediatR;
@@ -25,7 +26,7 @@ namespace finance_control.Application.CategoryCQ.Handler
                 Id = request.Id, 
                 Name = request.Name,
                 Active = request.Active,
-                Type = request.Type,
+                Type = (CategoryType)request.Type,
             };
 
             var result = await _repository.UpdateCategory(category);

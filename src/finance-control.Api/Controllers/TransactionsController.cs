@@ -81,5 +81,16 @@ namespace finance_control.Api.Controllers
 
             return BadRequest(response.ResponseInfo);
         }
+
+        [HttpGet("RecentTransactions")]
+        public async Task<IActionResult> RecentTransactions()
+        {
+           var result = await _mediator.Send(new GetRecentTransactionsQuery());
+            if (result.ResponseInfo is null)
+            {
+                return Ok(result.Value);
+            }
+            return BadRequest(result.ResponseInfo);
+        }
     }
 }

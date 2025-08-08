@@ -25,7 +25,7 @@ namespace finance_control.Api.Controllers
 
             var response = await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
                 var responseDb = await _mediator.Send(new GetAllCategoryQuery());
                 return responseDb;
             });

@@ -10,6 +10,6 @@ namespace finance_control.Application.CategoryCQ.Commands
         public Guid Id { get; set; }
         public bool Active { get; set; }
         public string Name { get; set; }
-        public CategoryType Type { get; set; }
+        public int Type { get; set; }
     }
 }
