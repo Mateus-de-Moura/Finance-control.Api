@@ -46,7 +46,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateExpenseCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateExpenseCommand command)
         {
             command.UserId = _userContext.UserId;
 
@@ -76,7 +76,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateExpense([FromForm]UpdateExpenseCommand command)
+        public async Task<IActionResult> UpdateExpense([FromBody]UpdateExpenseCommand command)
         {
             var result = await _mediator.Send(command);
 

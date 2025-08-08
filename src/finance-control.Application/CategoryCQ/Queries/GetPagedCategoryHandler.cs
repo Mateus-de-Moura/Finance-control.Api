@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using finance_control.Application.CategoryCQ.ViewModels;
 using finance_control.Application.Common.Models;
 using finance_control.Application.Extensions;
@@ -17,9 +18,29 @@ namespace finance_control.Application.CategoryCQ.Queries
         {
             var result = _repository.GetCategoryFilter();
 
+            if (request.StartDate == null && request.EndDate == null)
+            {
+                var now = DateTime.Now;
+                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                request.StartDate = firstDayOfMonth;
+                request.EndDate = lastDayOfMonth;
+            }
+
             if (!string.IsNullOrEmpty(request.Name))
             {
                 result = result.Where(r => r.Name.Contains(request.Name));
+            }           
+
+            if (request.StartDate != null)
+            {
+                result = result.Where(x => x.CreatedAt >= request.StartDate);
+            }
+
+            if (request.EndDate != null)
+            {
+                result = result.Where(x => x.CreatedAt <= request.EndDate);
             }
 
             if (Enum.TryParse<CategoryType>(request.Type, true, out var categoryType))

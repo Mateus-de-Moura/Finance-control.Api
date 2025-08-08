@@ -21,5 +21,7 @@ namespace finance_control.Domain.Entity
         public CategoryType Type { get; set; }
 
         public List<Expenses> Expenses { get; set; } 
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }
