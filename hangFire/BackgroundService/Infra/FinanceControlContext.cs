@@ -14,6 +14,7 @@ namespace BackgroundService.Infra
         public DbSet<Expenses> Expenses { get; set; }
         public DbSet<LoginLocationData> LoginLocationData { get; set; }
         public DbSet<Notify> Notify { get; set; }
+        public DbSet<JobExecutionLog> JobExecutionLog { get; set; }
 
 
 

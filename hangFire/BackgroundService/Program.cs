@@ -24,9 +24,15 @@ app.MapGet("/", () => Results.Redirect("/hangfire"));
 app.UseHangfireDashboard();
 
 RecurringJob.AddOrUpdate<ExpensesService>(
-    "job-expenses",
+    "job-notify",
     service => service.CheckExpensesAndNotify(),
     "0 */3 * * *"
+);
+
+RecurringJob.AddOrUpdate<ExpensesService>(
+    "job-expenses",
+    service => service.registerExpensesIsRecurrent(),
+    "0 0 30 * *"
 );
 
 app.Run();
