@@ -1,5 +1,6 @@
 using BackgroundService.Infra;
 using BackgroundService.Services;
+using BackgroundService.Services.Mail;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ builder.Services.AddHangfire(config => config
 
 
 builder.Services.AddScoped<ExpensesService>();
+builder.Services.AddScoped<MailSender>();
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
@@ -31,7 +33,7 @@ RecurringJob.AddOrUpdate<ExpensesService>(
 
 RecurringJob.AddOrUpdate<ExpensesService>(
     "job-expenses",
-    service => service.registerExpensesIsRecurrent(),
+    service => service.RegisterExpensesIsRecurrent(),
     "0 0 30 * *"
 );
 
