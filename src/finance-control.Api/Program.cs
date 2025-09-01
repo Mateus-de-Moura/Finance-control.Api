@@ -24,10 +24,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://172.18.160.1:8085", "http://localhost:8085")
+        policy.AllowAnyOrigin()
                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                .AllowAnyMethod();
+                
     });
 });
 

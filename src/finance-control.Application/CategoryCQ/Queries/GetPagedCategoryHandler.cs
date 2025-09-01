@@ -17,31 +17,10 @@ namespace finance_control.Application.CategoryCQ.Queries
         public async Task<ResponseBase<PaginatedList<CategoryViewModel>>> Handle(GetPagedCategoryQuery request, CancellationToken cancellationToken)
         {
             var result = _repository.GetCategoryFilter();
+         
 
-            if (request.StartDate == null && request.EndDate == null)
-            {
-                var now = DateTime.Now;
-                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-                request.StartDate = firstDayOfMonth;
-                request.EndDate = lastDayOfMonth;
-            }
-
-            if (!string.IsNullOrEmpty(request.Name))
-            {
-                result = result.Where(r => r.Name.Contains(request.Name));
-            }           
-
-            if (request.StartDate != null)
-            {
-                result = result.Where(x => x.CreatedAt >= request.StartDate);
-            }
-
-            if (request.EndDate != null)
-            {
-                result = result.Where(x => x.CreatedAt <= request.EndDate);
-            }
+            if (!string.IsNullOrEmpty(request.Name))            
+                result = result.Where(r => r.Name.Contains(request.Name));                    
 
             if (Enum.TryParse<CategoryType>(request.Type, true, out var categoryType))
             {
