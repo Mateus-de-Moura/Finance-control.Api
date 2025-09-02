@@ -11,7 +11,7 @@ namespace finance_control.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(IMediator madiator, IMapper mapper,  ILogger<AuthController> logger) : ControllerBase
+    public class AuthController(IMediator madiator, IMapper mapper, ILogger<AuthController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = madiator;
         private readonly IMapper _mapper = mapper;
@@ -19,7 +19,7 @@ namespace finance_control.Api.Controllers
 
         [HttpPost("Login")]
         public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> Login(LoginUserCommand command)
-        {          
+        {
             var request = await _mediator.Send(command);
 
             if (request.ResponseInfo is null)
@@ -46,6 +46,18 @@ namespace finance_control.Api.Controllers
             });
 
             return Ok(request);
-        }     
+        }
+
+        [HttpPost("LoginGithub")]
+        public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> LoginGithub([FromBody] LoginGithubCommand command)
+        {
+            var response = await _mediator.Send(command);
+
+            if (response.ResponseInfo != null)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
     }
 }

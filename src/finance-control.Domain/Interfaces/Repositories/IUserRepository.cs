@@ -11,5 +11,6 @@ namespace finance_control.Domain.Interfaces.Repositories
     public interface IUserRepository
     {
         Task<Result<User>> Update(User user);
+        Task<Result<User>> GetUserByEmailOrName(string emailOrName);
     }
 }

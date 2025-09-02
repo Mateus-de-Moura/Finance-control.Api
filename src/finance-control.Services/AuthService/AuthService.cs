@@ -1,13 +1,14 @@
-﻿using finance_control.Domain.Abstractions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using finance_control.Domain.Abstractions;
+using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace finance_control.Services.AuthService
 {
@@ -31,6 +32,30 @@ namespace finance_control.Services.AuthService
                 new("EmailIdentifier", email.Split("@").ToString()!),
                 new("CurrenTime", DateTime.Now.ToString()),
                 new("UserId", UserId.ToString())
+            };
+
+            var token = new JwtSecurityToken(issuer: issuer, audience: audience,
+                claims: claims, expires: DateTime.Now.AddDays(7), signingCredentials: credentials);
+
+            var tokenHendler = new JwtSecurityTokenHandler();
+
+            return tokenHendler.WriteToken(token);
+        }
+
+        public string GenerateJWTGithub(string email)
+        {
+            var issuer = _configuration["JWT:Issuer"];
+            var audience = _configuration["JWT:Audience"];
+            var key = _configuration["JWT:key"];
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new("Email", email),             
+                new("EmailIdentifier", email.Split("@").ToString()!),
+                new("CurrenTime", DateTime.Now.ToString()),               
             };
 
             var token = new JwtSecurityToken(issuer: issuer, audience: audience,

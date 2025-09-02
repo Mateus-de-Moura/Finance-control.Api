@@ -110,6 +110,8 @@ namespace api_clean_architecture.Api
             builder.Services.AddScoped<IUserContext, UserContext>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+            builder.Services.AddHttpClient();
+
         }
 
         public static void AddJwtAuth(this WebApplicationBuilder builder)

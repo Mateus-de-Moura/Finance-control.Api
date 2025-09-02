@@ -16,6 +16,17 @@ namespace finance_control.Infra.Data.Repositories
     {
         private readonly FinanceControlContex _context = context;
         private readonly IConvertFormFileToBytes _convertFormFileToBytes = convertFormFileToBytes;
+
+        public async Task<Result<User>> GetUserByEmailOrName(string emailOrName)
+        {
+            var existingUser = await _context.Users
+                .Where(x => x.Email.Equals(emailOrName) 
+                || x.Name.Equals(emailOrName))
+                .FirstOrDefaultAsync();
+
+            return existingUser != null ? Result.Success(existingUser) : Result.Error();
+        }
+
         public async Task<Result<User>> Update(User user)
         {
             var existingUser = await _context.Users.Where(x => x.Id.Equals(user.Id)).FirstOrDefaultAsync();
