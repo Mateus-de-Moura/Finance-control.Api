@@ -76,7 +76,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateExpense([FromBody]UpdateExpenseCommand command)
+        public async Task<IActionResult> UpdateExpense([FromForm]UpdateExpenseCommand command)
         {
             var result = await _mediator.Send(command);
 
