@@ -10,6 +10,9 @@ namespace finance_control.Infra.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(e => e.Value)
+                .HasPrecision(18, 2);
+
             builder.HasOne(e => e.Category)
                    .WithMany(c => c.Expenses)
                    .HasForeignKey(e => e.CategoryId)
@@ -19,6 +22,11 @@ namespace finance_control.Infra.Data.Configurations
                    .WithMany(u => u.Expenses)
                    .HasForeignKey(e => e.UserId)
                    .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(e => e.ExpensesComprovant)
+                .WithOne()
+                .HasForeignKey<Expenses>(e => e.ExpensesComprovantId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

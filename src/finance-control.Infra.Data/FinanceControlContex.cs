@@ -15,6 +15,7 @@ namespace finance_control.Infra.Data
         public DbSet<LoginLocationData> LoginLocationData { get; set; }
         public DbSet<Notify> Notify { get; set; }
         public DbSet<Transactions> Transactions { get; set; }
+        public DbSet<ExpensesComprovant> ExpensesComprovant { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

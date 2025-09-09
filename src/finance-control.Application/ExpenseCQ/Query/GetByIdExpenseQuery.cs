@@ -1,10 +1,11 @@
 ﻿using finance_control.Application.Response;
+using finance_control.Domain.Dtos;
 using finance_control.Domain.Entity;
 using MediatR;
 
 namespace finance_control.Application.ExpenseCQ.Query
 {
-    public class GetByIdExpenseQuery : IRequest<ResponseBase<Expenses>>
+    public class GetByIdExpenseQuery : IRequest<ResponseBase<ExpensesDto>>
     {
        public Guid Id { get; set; }
     }

@@ -9,6 +9,7 @@ using finance_control.Application.UserCQ.ViewModels;
 using finance_control.Domain.Entity;
 using finance_control.Application.CategoryCQ.ViewModels;
 using finance_control.Domain.Enum;
+using finance_control.Domain.Dtos;
 
 namespace finance_control.Application.Mappings
 {
@@ -57,6 +58,11 @@ namespace finance_control.Application.Mappings
 
             CreateMap<UpdateUserCommand, User>()
                 .ForMember(dest => dest.AppRoleId, map => map.MapFrom(src => src.RoleId));
+
+            CreateMap<Expenses, ExpensesDto>()
+                .ForMember(dest => dest.File, map => map.MapFrom(src => Convert.ToBase64String(src.ExpensesComprovant.FileData)))
+                .ForMember(dest => dest.FileType, map => map.MapFrom(src => src.ExpensesComprovant.FileType));
+
         }
 
         private static DateTime AddTenDays() { return DateTime.Now.AddDays(10); }

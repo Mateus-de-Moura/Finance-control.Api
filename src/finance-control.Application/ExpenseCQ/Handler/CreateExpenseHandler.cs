@@ -1,5 +1,6 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.Response;
+using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
@@ -11,10 +12,12 @@ namespace finance_control.Application.ExpenseCQ.Handler
     public class CreateExpenseHandler : IRequestHandler<CreateExpenseCommand, ResponseBase<Expenses>>
     {
         private readonly FinanceControlContex _context;
+        private readonly IConvertFormFileToBytes _convert;
 
-        public CreateExpenseHandler(FinanceControlContex context)
+        public CreateExpenseHandler(FinanceControlContex context, IConvertFormFileToBytes convert)
         {
             _context = context;
+            _convert = convert;
         }
 
         public async Task<ResponseBase<Expenses>> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
@@ -28,8 +31,11 @@ namespace finance_control.Application.ExpenseCQ.Handler
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
                 Status = request.Status,
-                ProofPath = request.Status == InvoicesStatus.Pago && request.ProofFile != null
-                     ? await ConvertToBytes(request.ProofFile)
+                ExpensesComprovant = request.Status == InvoicesStatus.Pago && request.ProofFile != null
+                     ?  new ExpensesComprovant{
+                            FileName = request.ProofFile.FileName,
+                            FileType = request.ProofFile.ContentType,   
+                            FileData = await _convert.ConvertToBytes(request.ProofFile) }
                      : null,
             };
 
@@ -38,31 +44,8 @@ namespace finance_control.Application.ExpenseCQ.Handler
             var rowsAffected = await _context.SaveChangesAsync();
 
             return rowsAffected > 0 ?
-                new ResponseBase<Expenses>
-                {
-                    ResponseInfo = null,
-                    Value = expense
-                } :
-
-                new ResponseBase<Expenses>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Erro ao cadastrar despesa",
-                        ErrorDescription = "Ocorreu um erro ao salvar os dados, tente novamente.",
-                        HttpStatus = 404
-                    },
-                    Value = null
-                };
-        }
-
-        private async Task<byte[]> ConvertToBytes(IFormFile file)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
+                ResponseBase<Expenses>.Success(expense) :
+                ResponseBase<Expenses>.Fail("Erro ao cadastrar despesa", "Ocorreu um erro ao salvar os dados, tente novamente.", 404);
+        }     
     }
 }

@@ -46,7 +46,7 @@ namespace finance_control.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateExpenseCommand command)
+        public async Task<IActionResult> Create([FromForm] CreateExpenseCommand command)
         {
             command.UserId = _userContext.UserId;
 

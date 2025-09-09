@@ -1,5 +1,6 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.Response;
+using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using MediatR;
@@ -38,7 +39,10 @@ namespace finance_control.Application.ExpenseCQ.Handler
 
             if (request.ProofFile is not null)
             {
-                expense.ProofPath = await ConvertToBytes(request.ProofFile);
+                expense.ExpensesComprovant = new ExpensesComprovant{
+                    FileName = request.ProofFile.FileName,
+                    FileType = request.ProofFile.ContentType,
+                    FileData = await ConvertToBytes(request.ProofFile) };
             }
 
             await _context.SaveChangesAsync();

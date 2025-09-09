@@ -24,22 +24,12 @@ namespace finance_control.Application.ExpenseCQ.Handler
         public async Task<ResponseBase<Expenses>> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
             var expense = await _context.Expenses
+                .Include(e => e.ExpensesComprovant)
                 .Where(e => e.Id.Equals(request.IdExpense))
                 .FirstOrDefaultAsync();
 
             if (expense == null)
-            {
-                return new ResponseBase<Expenses>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Nenhuma despesa encontrada.",
-                        ErrorDescription = "não foi possivel localizar um registro com o Id informado, tente novamente",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<Expenses>.Fail("Nenhuma despesa encontrada.", "não foi possivel localizar um registro com o Id informado, tente novamente", 404);
 
             expense.Description = request.Description;
             expense.IsRecurrent = request.Recurrent;
@@ -48,36 +38,37 @@ namespace finance_control.Application.ExpenseCQ.Handler
             expense.DueDate = request.DueDate;
             expense.Status = request.Status;
             expense.CategoryId = request.CategoryId;
-            expense.ProofPath = request.Status == InvoicesStatus.Pago && request.ProofFile != null
-                     ? await _convert.ConvertToBytes(request.ProofFile)
-                     : null;
-         
-            _context.Entry(expense).State = EntityState.Modified;
+
+            if (request.Status == InvoicesStatus.Pago && request.ProofFile != null)
+            {
+                if (expense.ExpensesComprovant != null)
+                {
+                    expense.ExpensesComprovant.FileName = request.ProofFile.FileName;
+                    expense.ExpensesComprovant.FileType = request.ProofFile.ContentType;
+                    expense.ExpensesComprovant.FileData = await _convert.ConvertToBytes(request.ProofFile);
+                }
+                else
+                {
+                    var comprovant = new ExpensesComprovant
+                    {
+                        FileName = request.ProofFile.FileName,
+                        FileType = request.ProofFile.ContentType,
+                        FileData = await _convert.ConvertToBytes(request.ProofFile)
+                    };
+
+                    expense.ExpensesComprovant = comprovant;
+                    _context.ExpensesComprovant.Add(comprovant);
+                }
+            }
+            else
+                expense.ExpensesComprovant = null;
 
             var rowsAffected = await _context.SaveChangesAsync();
 
-            if (rowsAffected > 0)
+            return rowsAffected > 0 ?
+                ResponseBase<Expenses>.Success(expense) :
+                ResponseBase<Expenses>.Fail("Falha na atualização.", "Nenhuma linha foi afetada. A operação não pôde ser concluída.", 400);
 
-                return new ResponseBase<Expenses>
-                {
-                    ResponseInfo = null,
-                    Value = expense,
-                };
-            else
-            {
-                return new ResponseBase<Expenses>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Falha na atualização.",
-                        ErrorDescription = "Nenhuma linha foi afetada. A operação não pôde ser concluída.",
-                        HttpStatus = 400
-                    },
-                    Value = null
-                };
-
-            }
         }
-    
     }
 }
