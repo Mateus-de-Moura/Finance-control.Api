@@ -36,9 +36,10 @@ namespace finance_control.Infra.Data.Repositories
                 Result.Error("");   
         }
 
-        public async Task<Result<List<Transactions>>> GetRecentTransactions()
+        public async Task<Result<List<Transactions>>> GetRecentTransactions(Guid userId)
         {
             var transactions = await _context.Transactions
+                .Where(x => x.UserId.Equals(userId))
                 .AsNoTracking()
                 .Include(x => x.Category)
                 .OrderByDescending(x => x.TransactionDate)

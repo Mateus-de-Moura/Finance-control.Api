@@ -6,5 +6,6 @@ namespace finance_control.Application.TransactionsCQ.Query
 {
     public class GetRecentTransactionsQuery : IRequest<ResponseBase<List<Transactions>>>
     {
+        public Guid UserId { get; set; }
     }
 }

@@ -85,7 +85,9 @@ namespace finance_control.Api.Controllers
         [HttpGet("RecentTransactions")]
         public async Task<IActionResult> RecentTransactions()
         {
-           var result = await _mediator.Send(new GetRecentTransactionsQuery());
+            var userId = User.FindFirst("UserId")?.Value;
+            var result = await _mediator.Send(new GetRecentTransactionsQuery { UserId = Guid.Parse( userId )});
+
             if (result.ResponseInfo is null)
             {
                 return Ok(result.Value);

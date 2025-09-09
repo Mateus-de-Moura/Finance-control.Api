@@ -34,12 +34,23 @@ namespace finance_control.Application.DashBoardCQ.Query
                     .Where(x => x.UserId.Equals(request.UserId) && x.DueDate.Month == DateTime.Now.Month &&
                      x.DueDate.Year == DateTime.Now.Year && x.Active).ToListAsync();
 
+                var transactions = await _contex.Transactions.Where(x => x.UserId.Equals(request.UserId) 
+                     && x.TransactionDate.Month == DateTime.Now.Month &&
+                     x.TransactionDate.Year == DateTime.Now.Year && x.Active).ToListAsync();
+
+                var totalTransactiosRevenues = transactions.Where(x => x.Type == TypesEnum.Receitas).ToList().Sum(x => x.Value);
+                var totalTransactiosExpenses = transactions.Where(x => x.Type == TypesEnum.Despesas).ToList().Sum(x => x.Value);
+
+                var totalRevenues = totalTransactiosRevenues + totalRevenuesToMonth.Sum(x => x.Value);
+                var totalExpenses = totalTransactiosExpenses + expensesToMonth.Sum(x => x.Value);
+                var totalExpensesPaid = expensesToMonth.Where(x => x.Status == InvoicesStatus.Pago).Sum(x => x.Value);
+
                 var dashboard = new DashboardViewModel
                 {
-                    Revenues = totalRevenuesToMonth.Sum(x => x.Value).ToString("C", cultureInfo),
-                    Expenses = expensesToMonth.Sum(x => x.Value).ToString("C", cultureInfo),
+                    Revenues = totalRevenues.ToString("C", cultureInfo),
+                    Expenses = totalExpenses.ToString("C", cultureInfo),
                     ExpensesOpen = expensesToMonth.Where(x => x.Status != InvoicesStatus.Pago).Sum(x => x.Value).ToString("C", cultureInfo),
-                    Wallet = (totalRevenuesToMonth.Sum(x => x.Value) - expensesToMonth.Where(x => x.Status == InvoicesStatus.Pago).Sum(x => x.Value)).ToString("C", cultureInfo),
+                    Wallet = (totalRevenues - totalExpensesPaid).ToString("C", cultureInfo)
                 };
 
                 dashboard.MonthlySummary = new List<MonthlyDataViewModel>();

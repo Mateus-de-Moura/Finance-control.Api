@@ -12,11 +12,12 @@ using Microsoft.AspNetCore.Http;
 namespace finance_control.Application.UserCQ.Handlers
 {
     public class CreateUserCommandHendler(FinanceControlContex context, IMapper mapper,
-        IAuthService authService) : IRequestHandler<CreateUserCommand, ResponseBase<RefreshTokenViewModel?>>
+        IAuthService authService,  IConvertFormFileToBytes convert) : IRequestHandler<CreateUserCommand, ResponseBase<RefreshTokenViewModel?>>
     {
         private readonly FinanceControlContex _context = context;
         private readonly IMapper _mapper = mapper;
         private readonly IAuthService _authService = authService;
+        private readonly IConvertFormFileToBytes _convert = convert;
 
         public async Task<ResponseBase<RefreshTokenViewModel>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
@@ -45,9 +46,8 @@ namespace finance_control.Application.UserCQ.Handlers
             if (request.Photo is not null)
                 user.PhotosUsers = new PhotosUsers
                 {
-                    PhotoUser = await ConvertToBytes(request.Photo!)
+                    PhotoUser = await _convert.ConvertToBytes(request.Photo!)
                 };
-
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -56,15 +56,6 @@ namespace finance_control.Application.UserCQ.Handlers
             refreshTokenVM.TokenJwt = _authService.GenerateJWT(user.Email!, user.UserName!, user.Id);
 
             return  ResponseBase<RefreshTokenViewModel>.Success(refreshTokenVM);          
-        }
-
-        private async Task<byte[]> ConvertToBytes(IFormFile file)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
+        }     
     }
 }

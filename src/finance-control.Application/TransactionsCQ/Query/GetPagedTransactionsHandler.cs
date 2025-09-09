@@ -39,22 +39,14 @@ namespace finance_control.Application.TransactionsCQ.Query
                 .Include(x => x.Category)
                 .Where(x => x.UserId.Equals(request.UserId)).AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.Description))
-            {
-                queryable = queryable.Where(x => x.Description.Contains(request.Description));
-            }
-            ;
+            if (!string.IsNullOrEmpty(request.Description))            
+                queryable = queryable.Where(x => x.Description.Contains(request.Description));           
+            
+            if (request.StartDate != null)            
+                queryable = queryable.Where(x => x.TransactionDate >= request.StartDate);           
 
-            if (request.StartDate != null)
-            {
-                queryable = queryable.Where(x => x.TransactionDate >= request.StartDate);
-            }
-
-            if (request.EndDate != null)
-            {
-                queryable = queryable.Where(x => x.TransactionDate <= request.EndDate);
-            }
-
+            if (request.EndDate != null)            
+                queryable = queryable.Where(x => x.TransactionDate <= request.EndDate);            
 
             var response = await queryable
                .Select(x => _mapper.Map<TransactionsViewModel>(x))

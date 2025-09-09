@@ -15,7 +15,7 @@ namespace finance_control.Application.TransactionsCQ.Query
         private readonly ITransactionsRepository _transactions = transactions;
         public async Task<ResponseBase<List<Transactions>>> Handle(GetRecentTransactionsQuery request, CancellationToken cancellationToken)
         {          
-            var recentTransactions = await _transactions.GetRecentTransactions();
+            var recentTransactions = await _transactions.GetRecentTransactions(request.UserId);
             return ResponseBase<List<Transactions>>.Success(recentTransactions.Value);
            
         }
