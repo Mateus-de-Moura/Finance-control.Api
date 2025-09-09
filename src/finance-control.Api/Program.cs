@@ -22,14 +22,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:8085")
-               .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-                
-    });
+    options.AddPolicy("CorsPolicy",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 var app = builder.Build();
