@@ -39,7 +39,7 @@ namespace finance_control.Application.ExpenseCQ.Query
                 queryable = queryable.Where(x => x.UserId.Equals(request.UserId));
 
             if (request.CategoryId is not null)
-                queryable = queryable.Where(x => x.CategoryId .Equals(request.CategoryId));
+                queryable = queryable.Where(x => x.CategoryId.Equals(request.CategoryId));
 
             if (request.StartDate is not null)
                 queryable = queryable.Where(x => x.DueDate >= request.StartDate);
@@ -55,25 +55,9 @@ namespace finance_control.Application.ExpenseCQ.Query
                .PaginatedListAsync(request.PageNumber, request.PageSize);
 
             if (paginatedList == null)
-            {
-                return new ResponseBase<PaginatedList<ExpenseViewModel>>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Falha ao buscar dados",
-                        ErrorDescription = "Nenhum item localizado",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
+                return ResponseBase<PaginatedList<ExpenseViewModel>>.Fail("Falha ao buscar dados", "Nenhum item localizado", 404);
 
-
-            return new ResponseBase<PaginatedList<ExpenseViewModel>>
-            {
-                ResponseInfo = null,
-                Value = paginatedList,
-            };
+            return ResponseBase<PaginatedList<ExpenseViewModel>>.Success(paginatedList);            
         }
     }
 }
