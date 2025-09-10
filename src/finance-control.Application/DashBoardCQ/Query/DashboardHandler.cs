@@ -43,14 +43,18 @@ namespace finance_control.Application.DashBoardCQ.Query
 
                 var totalRevenues = totalTransactiosRevenues + totalRevenuesToMonth.Sum(x => x.Value);
                 var totalExpenses = totalTransactiosExpenses + expensesToMonth.Sum(x => x.Value);
-                var totalExpensesPaid = expensesToMonth.Where(x => x.Status == InvoicesStatus.Pago).Sum(x => x.Value);
+                var totalExpensesPaid = expensesToMonth.Where(x => x.Status == InvoicesStatus.Pago).Sum(x => x.Value) +
+                    transactions
+                    .Where(x => x.Type == TypesEnum.Despesas && x.Status == StatusPaymentEnum.Confirmado)
+                    .ToList()
+                    .Sum(x => x.Value);
 
                 var dashboard = new DashboardViewModel
                 {
                     Revenues = totalRevenues.ToString("C", cultureInfo),
                     Expenses = totalExpenses.ToString("C", cultureInfo),
                     ExpensesOpen = expensesToMonth.Where(x => x.Status != InvoicesStatus.Pago).Sum(x => x.Value).ToString("C", cultureInfo),
-                    Wallet = (totalExpenses - totalExpensesPaid).ToString("C", cultureInfo)
+                    Wallet = (totalRevenues - totalExpensesPaid).ToString("C", cultureInfo)
                 };
 
                 dashboard.MonthlySummary = new List<MonthlyDataViewModel>();
