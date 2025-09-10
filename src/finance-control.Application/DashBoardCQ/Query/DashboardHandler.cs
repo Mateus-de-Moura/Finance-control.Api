@@ -24,19 +24,20 @@ namespace finance_control.Application.DashBoardCQ.Query
 
             try
             {
-                var currentYear = DateTime.Now.Year;
+                int currentYear = DateTime.Now.Year;
+                int currentMonth = DateTime.Now.Month;
 
                 var totalRevenuesToMonth = await _contex.Revenues
-                .Where(x => x.UserId.Equals(request.UserId) && x.Date.Value.Month == DateTime.Now.Month &&
-                 x.Date.Value.Year == DateTime.Now.Year && x.Active).ToListAsync();
+                .Where(x => x.UserId.Equals(request.UserId) && x.Date.Value.Month == currentMonth &&
+                 x.Date.Value.Year == currentYear && x.Active).ToListAsync();
 
                 var expensesToMonth = await _contex.Expenses
-                    .Where(x => x.UserId.Equals(request.UserId) && x.DueDate.Month == DateTime.Now.Month &&
-                     x.DueDate.Year == DateTime.Now.Year && x.Active).ToListAsync();
+                    .Where(x => x.UserId.Equals(request.UserId) && x.DueDate.Month == currentMonth &&
+                     x.DueDate.Year == currentYear && x.Active).ToListAsync();
 
                 var transactions = await _contex.Transactions.Where(x => x.UserId.Equals(request.UserId) 
-                     && x.TransactionDate.Month == DateTime.Now.Month &&
-                     x.TransactionDate.Year == DateTime.Now.Year && x.Active).ToListAsync();
+                     && x.TransactionDate.Month == currentMonth &&
+                     x.TransactionDate.Year == currentYear && x.Active).ToListAsync();
 
                 var totalTransactiosRevenues = transactions.Where(x => x.Type == TypesEnum.Receitas).ToList().Sum(x => x.Value);
                 var totalTransactiosExpenses = transactions.Where(x => x.Type == TypesEnum.Despesas).ToList().Sum(x => x.Value);
@@ -65,18 +66,18 @@ namespace finance_control.Application.DashBoardCQ.Query
                         .Where(x => x.UserId == request.UserId &&
                                     x.Date.HasValue &&
                                     x.Date.Value.Month == month &&
-                                    x.Date.Value.Year == DateTime.Now.Year &&
+                                    x.Date.Value.Year == currentYear &&
                                     x.Active)
                         .SumAsync(x => (decimal?)x.Value) ?? 0;
 
                     var monthExpenses = await _contex.Expenses
                         .Where(x => x.UserId == request.UserId &&
                                     x.DueDate.Month == month &&
-                                    x.DueDate.Year == DateTime.Now.Year &&
+                                    x.DueDate.Year == currentYear &&
                                     x.Active)
                         .SumAsync(x => (decimal?)x.Value) ?? 0;
 
-                    var monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM", cultureInfo);
+                    var monthName = new DateTime(currentYear, month, 1).ToString("MMMM", cultureInfo);
 
                     dashboard.MonthlySummary.Add(new MonthlyDataViewModel
                     {
