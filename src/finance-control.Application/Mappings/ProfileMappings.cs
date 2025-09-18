@@ -60,8 +60,12 @@ namespace finance_control.Application.Mappings
                 .ForMember(dest => dest.AppRoleId, map => map.MapFrom(src => src.RoleId));
 
             CreateMap<Expenses, ExpensesDto>()
-                .ForMember(dest => dest.File, map => map.MapFrom(src => Convert.ToBase64String(src.ExpensesComprovant.FileData)))
-                .ForMember(dest => dest.FileType, map => map.MapFrom(src => src.ExpensesComprovant.FileType));
+    .ForMember(dest => dest.File, map => map.MapFrom(src =>
+        src.ExpensesComprovant.FileData != null
+            ? Convert.ToBase64String(src.ExpensesComprovant.FileData)
+            : null))
+    .ForMember(dest => dest.FileType, map => map.MapFrom(src =>
+        src.ExpensesComprovant.FileType));
 
         }
 
