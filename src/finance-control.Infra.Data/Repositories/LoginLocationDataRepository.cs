@@ -19,6 +19,12 @@ namespace finance_control.Infra.Data.Repositories
             if (loginLocationData == null)
                 return Result<LoginLocationData>.Error();
 
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email!.Equals(loginLocationData.EmailRequest));
+
+            if (user == null)
+                return Result<LoginLocationData>.Error("Não foi encontrado nenhum usuário com o e-mail informado");
+
+            loginLocationData.UserId = user.Id;
             await _context.LoginLocationData.AddAsync(loginLocationData);
 
             var rowsAffected = await _context.SaveChangesAsync();

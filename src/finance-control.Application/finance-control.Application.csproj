@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DashBoardCQ\Command\**" />
+    <Compile Remove="DashBoardCQ\Handler\**" />
+    <EmbeddedResource Remove="DashBoardCQ\Command\**" />
+    <EmbeddedResource Remove="DashBoardCQ\Handler\**" />
+    <None Remove="DashBoardCQ\Command\**" />
+    <None Remove="DashBoardCQ\Handler\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.Result" Version="10.1.0" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -19,11 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\finance-control.Domain\finance-control.Domain.csproj" />
     <ProjectReference Include="..\finance-control.Infra.Data\finance-control.Infra.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DashBoardCQ\Command\" />
-    <Folder Include="DashBoardCQ\Handler\" />
   </ItemGroup>
 
 </Project>

@@ -88,8 +88,6 @@ namespace finance_control.Application.DashBoardCQ.Query
                 }
 
                 return new ResponseBase<DashboardViewModel> { ResponseInfo = null, Value = dashboard };
-
-
             }
             catch (Exception ex)
             {
