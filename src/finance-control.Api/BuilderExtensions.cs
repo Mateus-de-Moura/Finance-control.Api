@@ -141,14 +141,16 @@ namespace api_clean_architecture.Api
 
         public static void AddInjection(this WebApplicationBuilder builder)
         {
+            builder.Services.AddSingleton<Consumer>();
+
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IConvertFormFileToBytes, ConvertFormFileToBytes>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ILoginLocationDataRepository, LoginLocationDataRepository>();
-            builder.Services.AddSingleton<Consumer>();
             builder.Services.AddScoped<IRevenuesRepository, RevenuesRepository>();
             builder.Services.AddScoped<ITransactionsRepository, TransactionRepository>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
         }
 
