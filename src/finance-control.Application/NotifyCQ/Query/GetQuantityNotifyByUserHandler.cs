@@ -11,11 +11,10 @@ using Microsoft.EntityFrameworkCore;
 namespace finance_control.Application.NotifyCQ.Query
 {
     public class GetQuantityNotifyByUserHandler(FinanceControlContex context) : IRequestHandler<GetQuantityNotifyByUser, ResponseBase<int>>
-    {
-        private readonly FinanceControlContex _contex = context;
+    {        
         public async Task<ResponseBase<int>> Handle(GetQuantityNotifyByUser request, CancellationToken cancellationToken)
         {
-            var totalNotification = await _contex.Notify.Where(x => !x.WasRead).CountAsync();
+            var totalNotification = await context.Notify.Where(x => !x.WasRead).CountAsync();
 
             return totalNotification > 0 ?
                 ResponseBase<int>.Success(totalNotification) :

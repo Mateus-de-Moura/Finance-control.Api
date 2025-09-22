@@ -12,8 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace finance_control.Application.NotifyCQ.Query
 {
     public class NotifyHandler(FinanceControlContex contex) : IRequestHandler<NotifyQuery, ResponseBase<List<Notify>>>
-    {
-        private readonly FinanceControlContex _contex = contex;
+    {        
         public async Task<ResponseBase<List<Notify>>> Handle(NotifyQuery request, CancellationToken cancellationToken)
         {
             if (request.UserId == Guid.Empty)
@@ -21,7 +20,7 @@ namespace finance_control.Application.NotifyCQ.Query
 
             try
             {
-                var queryable = _contex.Notify
+                var queryable = contex.Notify
                     .Where(x => x.UserId.Equals(request.UserId))
                     .Include(x => x.Expenses)
                     .AsQueryable();

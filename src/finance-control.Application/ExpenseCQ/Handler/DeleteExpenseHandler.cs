@@ -7,43 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.ExpenseCQ.Handler
 {
-    public class DeleteExpenseHandler : IRequestHandler<DeleteExpenseCommand, ResponseBase<Expenses>>
-    {
-        private readonly FinanceControlContex _context;
-
-        public DeleteExpenseHandler(FinanceControlContex context)
-        {
-            _context = context;
-        }
+    public class DeleteExpenseHandler(FinanceControlContex context) : IRequestHandler<DeleteExpenseCommand, ResponseBase<Expenses>>
+    {           
         public async Task<ResponseBase<Expenses>> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
         {
-            var expense = await _context.Expenses
-                .Where(e => e.Id.Equals(request.Id))
-                .FirstOrDefaultAsync();
+            var rowsAffected = await context.Expenses.Where(e => e.Id.Equals(request.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(e => e.Active, false)
+                .SetProperty(e => e.IsDeleted, true));
 
-            if (expense == null)
-            {
-                return new ResponseBase<Expenses>
-                {
-                    ResponseInfo = new ResponseInfo
-                    {
-                        Title = "Nenhuma despesa encontrada.",
-                        ErrorDescription = "não foi possivel localizar um registro com o Id informado, tente novamente",
-                        HttpStatus = 404
-                    },
-                    Value = null,
-                };
-            }
-            
-            expense.IsDeleted = true;
-            _context.Entry(expense).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return new ResponseBase<Expenses>
-            {
-                ResponseInfo = null,
-                Value = expense,
-            };
+            return rowsAffected > 0 ? 
+                ResponseBase<Expenses>.Success(new Expenses()) :
+                ResponseBase<Expenses>.Fail("Nenhuma despesa encontrada.", 
+                "não foi possivel localizar um registro com o Id informado, tente novamente", 404);
         }
     }
 }

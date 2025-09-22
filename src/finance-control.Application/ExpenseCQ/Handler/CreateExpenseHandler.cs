@@ -11,9 +11,7 @@ using Microsoft.AspNetCore.Http;
 namespace finance_control.Application.ExpenseCQ.Handler
 {
     public class CreateExpenseHandler(IExpenseRepository repository, IConvertFormFileToBytes convert) : IRequestHandler<CreateExpenseCommand, ResponseBase<Expenses>>
-    {
-        private readonly IExpenseRepository _repository = repository;
-        private readonly IConvertFormFileToBytes _convert = convert;
+    {        
         public async Task<ResponseBase<Expenses>> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
         {
             var expense = new Expenses
@@ -30,12 +28,12 @@ namespace finance_control.Application.ExpenseCQ.Handler
                      {
                          FileName = request.ProofFile.FileName,
                          FileType = request.ProofFile.ContentType,
-                         FileData = await _convert.ConvertToBytes(request.ProofFile)
+                         FileData = await convert.ConvertToBytes(request.ProofFile)
                      }
                      : null,
             };
 
-            var result = await _repository.Create(expense);
+            var result = await repository.Create(expense);
 
             return result.IsSuccess ?
                 ResponseBase<Expenses>.Success(expense) :

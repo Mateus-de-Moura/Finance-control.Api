@@ -6,12 +6,10 @@ using MediatR;
 namespace finance_control.Application.CategoryCQ.Queries
 {
     public class GetAllCategoryQueryHendler(ICategoryRepository repository) : IRequestHandler<GetAllCategoryQuery, ResponseBase<List<Category>>>
-    {
-        private readonly ICategoryRepository _repository = repository;
-
+    {       
         public async Task<ResponseBase<List<Category>>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
         {
-            var categories = await _repository.GetAllCategory();
+            var categories = await repository.GetAllCategory();
 
             return categories is not null ?
                 ResponseBase<List<Category>>.Success(categories) :

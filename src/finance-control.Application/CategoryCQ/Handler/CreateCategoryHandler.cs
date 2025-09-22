@@ -9,8 +9,7 @@ using MediatR;
 namespace finance_control.Application.CategoryCQ.Handler
 {
     public class CreateCategoryHandler(ICategoryRepository repository) : IRequestHandler<CreateCategoryCommand, ResponseBase<Category>>
-    {
-        private readonly ICategoryRepository _repository = repository;
+    {        
         public async Task<ResponseBase<Category>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = new Category
@@ -21,8 +20,7 @@ namespace finance_control.Application.CategoryCQ.Handler
                 UserId = request.UserId,
             };
 
-            var result = await _repository.CreateCategory(category);
-
+            var result = await repository.CreateCategory(category);
 
             return result.IsSuccess ?
                 ResponseBase<Category>.Success(result.Value) :

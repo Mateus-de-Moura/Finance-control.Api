@@ -10,20 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.ExpenseCQ.Handler
 {
-    public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseCommand, ResponseBase<Expenses>>
+    public class UpdateExpenseHandler(FinanceControlContex context, IConvertFormFileToBytes convert) : IRequestHandler<UpdateExpenseCommand, ResponseBase<Expenses>>
     {
-        private readonly FinanceControlContex _context;
-        private readonly IConvertFormFileToBytes _convert;
-
-        public UpdateExpenseHandler(FinanceControlContex context, IConvertFormFileToBytes convert)
-        {
-            _context = context;
-            _convert = convert;
-        }
-
         public async Task<ResponseBase<Expenses>> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
-            var expense = await _context.Expenses
+            var expense = await context.Expenses
                 .Include(e => e.ExpensesComprovant)
                 .Where(e => e.Id.Equals(request.IdExpense))
                 .FirstOrDefaultAsync();
@@ -45,7 +36,7 @@ namespace finance_control.Application.ExpenseCQ.Handler
                 {
                     expense.ExpensesComprovant.FileName = request.ProofFile.FileName;
                     expense.ExpensesComprovant.FileType = request.ProofFile.ContentType;
-                    expense.ExpensesComprovant.FileData = await _convert.ConvertToBytes(request.ProofFile);
+                    expense.ExpensesComprovant.FileData = await convert.ConvertToBytes(request.ProofFile);
                 }
                 else
                 {
@@ -53,17 +44,17 @@ namespace finance_control.Application.ExpenseCQ.Handler
                     {
                         FileName = request.ProofFile.FileName,
                         FileType = request.ProofFile.ContentType,
-                        FileData = await _convert.ConvertToBytes(request.ProofFile)
+                        FileData = await convert.ConvertToBytes(request.ProofFile)
                     };
 
                     expense.ExpensesComprovant = comprovant;
-                    _context.ExpensesComprovant.Add(comprovant);
+                    context.ExpensesComprovant.Add(comprovant);
                 }
             }
             else
                 expense.ExpensesComprovant = null;
 
-            var rowsAffected = await _context.SaveChangesAsync();
+            var rowsAffected = await context.SaveChangesAsync();
 
             return rowsAffected > 0 ?
                 ResponseBase<Expenses>.Success(expense) :

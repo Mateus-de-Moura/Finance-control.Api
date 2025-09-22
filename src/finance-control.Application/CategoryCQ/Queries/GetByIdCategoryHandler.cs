@@ -6,8 +6,7 @@ using MediatR;
 namespace finance_control.Application.CategoryCQ.Queries
 {
     public class GetByIdCategoryHandler(ICategoryRepository categoryRepository) : IRequestHandler<GetByIdCategoryQuery, ResponseBase<Category>>
-    {
-        private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    {     
         public async Task<ResponseBase<Category>> Handle(GetByIdCategoryQuery request, CancellationToken cancellationToken)
         {
             if (request.Id == Guid.Empty)
@@ -15,7 +14,7 @@ namespace finance_control.Application.CategoryCQ.Queries
                 return ResponseBase<Category>.Fail("Id inválido", "Informe um Id válido", 400);
             }
 
-            var result = await _categoryRepository.GetByIdCategory(request.Id);
+            var result = await categoryRepository.GetByIdCategory(request.Id);
 
             return result.IsSuccess ?
                 ResponseBase<Category>.Success(result.Value) :

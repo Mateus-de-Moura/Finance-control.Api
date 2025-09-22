@@ -13,9 +13,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace finance_control.Application.LocationDataCQ.Hendler
 {
-    public class AddLocationDataHandler( ILoginLocationDataRepository loginLocationData) : IRequestHandler<AddLocationDataCommand, ResponseBase<LoginLocationData>>
-    {      
-        private readonly ILoginLocationDataRepository _loginLocationDataRepository = loginLocationData;
+    public class AddLocationDataHandler( ILoginLocationDataRepository loginLocationDataRepository) : IRequestHandler<AddLocationDataCommand, ResponseBase<LoginLocationData>>
+    {           
         public async Task<ResponseBase<LoginLocationData>> Handle(AddLocationDataCommand request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Email))
@@ -34,7 +33,7 @@ namespace finance_control.Application.LocationDataCQ.Hendler
                 Os = request.Os,                
             };        
 
-            var result = await _loginLocationDataRepository.Create(loginLocationData);
+            var result = await loginLocationDataRepository.Create(loginLocationData);
 
             return result.IsSuccess  ?
                 ResponseBase<LoginLocationData>.Success(loginLocationData) :

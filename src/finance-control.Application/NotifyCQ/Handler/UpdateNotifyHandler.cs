@@ -12,13 +12,12 @@ namespace finance_control.Application.NotifyCQ.Handler
 {
     public class UpdateNotifyHandler(INotificationRepository notification) : IRequestHandler<UpdateNotifyCommand, ResponseBase<bool>>
     {
-        private readonly INotificationRepository _notificationRepository = notification;
         public async Task<ResponseBase<bool>> Handle(UpdateNotifyCommand request, CancellationToken cancellationToken)
         {
             if (request.Id == Guid.Empty)
                 return ResponseBase<bool>.Fail("Erro", "Informe um Id válido", 400);
 
-            var response = await _notificationRepository.UpdateNotification(request.Id);
+            var response = await notification.UpdateNotification(request.Id);
 
             return response.IsSuccess ?
                 ResponseBase<bool>.Success(response.Value) :

@@ -15,11 +15,10 @@ using MediatR;
 namespace finance_control.Application.RevenuesCQ.Hendlers
 {
     public class CreateRevenueCommandHendler(IRevenuesRepository revenuesRepository) : IRequestHandler<CreateRevenueCommand, ResponseBase<Revenues?>>
-    {
-        private readonly IRevenuesRepository _revenues = revenuesRepository;
+    {  
         public async Task<ResponseBase<Revenues>> Handle(CreateRevenueCommand request, CancellationToken cancellationToken)
         {
-            var result = await _revenues.CreateRevenue(new Revenues
+            var result = await revenuesRepository.CreateRevenue(new Revenues
             {
                 Active = true,
                 Description = request.Description,
