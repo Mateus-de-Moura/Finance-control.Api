@@ -8,6 +8,7 @@ variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
   outputFolder: '$(Agent.WorkFolder)/_build_output'
+  connectionString: 'Server=MEU_SERVIDOR;Database=MEU_BANCO;User Id=USUARIO;Password=SENHA;'  # Ajuste aqui sua connection string
 
 steps:
 - task: UseDotNet@2
@@ -16,6 +17,23 @@ steps:
     packageType: 'sdk'
     version: '9.0.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- powershell: |
+    # Procura o appsettings.json no repositório
+    $appSettingsPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "appsettings.json" -Recurse | Select-Object -First 1 | Select-Object -ExpandProperty FullName
+
+    if (-not $appSettingsPath) {
+      throw "Arquivo appsettings.json não encontrado no repositório."
+    }
+
+    Write-Host "Atualizando connection string no $appSettingsPath"
+    $json = Get-Content $appSettingsPath | ConvertFrom-Json
+
+    # Altere o nome da connection string conforme seu JSON
+    $json.ConnectionStrings.DefaultConnection = '$(connectionString)'
+
+    $json | ConvertTo-Json -Depth 10 | Set-Content -Path $appSettingsPath -Encoding UTF8
+  displayName: 'Atualizar appsettings.json com connection string'
 
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
@@ -43,13 +61,6 @@ steps:
     PathtoPublish: '$(outputFolder)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publicar API no IIS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
 
 - powershell: |
     $source = "$(outputFolder)"
