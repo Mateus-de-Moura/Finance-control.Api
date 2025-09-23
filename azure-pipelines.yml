@@ -5,10 +5,10 @@ pool:
   name: default
 
 variables:
-  solution: '**/*.sln'
   buildConfiguration: 'Release'
-  outputFolder: '$(Agent.WorkFolder)/_build_output'
-  connectionString: 'Server=MEU_SERVIDOR;Database=MEU_BANCO;User Id=USUARIO;Password=SENHA;'  # Ajuste aqui sua connection string
+  projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
+  outputFolder: '$(Build.ArtifactStagingDirectory)/publish'
+  publishDestination: 'C:\Users\Mateus\Desktop\Publish'
 
 steps:
 - task: UseDotNet@2
@@ -18,59 +18,39 @@ steps:
     version: '9.0.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- powershell: |
-    # Procura o appsettings.json no repositório
-    $appSettingsPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "appsettings.json" -Recurse | Select-Object -First 1 | Select-Object -ExpandProperty FullName
-
-    if (-not $appSettingsPath) {
-      throw "Arquivo appsettings.json não encontrado no repositório."
-    }
-
-    Write-Host "Atualizando connection string no $appSettingsPath"
-    $json = Get-Content $appSettingsPath | ConvertFrom-Json
-
-    # Altere o nome da connection string conforme seu JSON
-    $json.ConnectionStrings.DefaultConnection = '$(connectionString)'
-
-    $json | ConvertTo-Json -Depth 10 | Set-Content -Path $appSettingsPath -Encoding UTF8
-  displayName: 'Atualizar appsettings.json com connection string'
-
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
   inputs:
     command: 'restore'
-    projects: '$(solution)'
+    projects: '$(projectPath)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Compilar API (.NET 9)'
+  displayName: 'Build API (.NET 9)'
   inputs:
     command: 'build'
-    projects: '$(solution)'
+    projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9)'
   inputs:
     command: 'publish'
-    projects: '$(solution)'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicar Artefatos'
-  inputs:
-    PathtoPublish: '$(outputFolder)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    publishWebProjects: false
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder) --no-self-contained'
+    zipAfterPublish: false
 
 - powershell: |
     $source = "$(outputFolder)"
-    $destination = "C:\Users\Mateus\Desktop\Publish"
+    $destination = "$(publishDestination)"
 
-    if (!(Test-Path -Path $destination)) {
-      New-Item -ItemType Directory -Path $destination | Out-Null
-    }
+    Write-Host "Limpando destino: $destination"
+    Get-ChildItem -Path $destination -Recurse | Where-Object {
+        $_.FullName -notlike "*aspnet_client*"
+    } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
+    Write-Host "Copiando arquivos de $source para $destination"
     Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
 
-    Write-Host "Publicação concluída com sucesso em: $destination"
-  displayName: 'Copiar arquivos para C:\Users\Mateus\Desktop\Publish'
+    Write-Host "Publicação concluída com sucesso."
+  displayName: 'Copiar build para IIS'
