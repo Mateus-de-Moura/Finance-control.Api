@@ -8,6 +8,8 @@ variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
   outputFolder: '$(Agent.WorkFolder)/_build_output'
+  appSettingsFile: 'appsettings.Production.json'
+  connectionString: 'Server=MEU_SERVIDOR;Database=MINHA_DB;User Id=USUARIO;Password=SENHA;'  # ajuste aqui sua connection string
 
 steps:
 - task: UseDotNet@2
@@ -30,6 +32,18 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)'
 
+# Passo extra: sobrescreve appsettings.Production.json com connection string correta antes do publish
+- powershell: |
+    $appSettingsPath = "$(Build.SourcesDirectory)/$(appSettingsFile)"
+    Write-Host "Atualizando connection string no $appSettingsPath"
+    $json = Get-Content $appSettingsPath | ConvertFrom-Json
+
+    # Ajuste o caminho para connection string conforme seu arquivo json
+    $json.ConnectionStrings.DefaultConnection = '$(connectionString)'
+
+    $json | ConvertTo-Json -Depth 10 | Set-Content -Path $appSettingsPath -Encoding UTF8
+  displayName: 'Atualizar appsettings.Production.json com connection string'
+
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9)'
   inputs:
@@ -44,13 +58,6 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publicar API no IIS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
-
 - powershell: |
     $source = "$(outputFolder)"
     $destination = "C:\Users\Mateus\Desktop\Publish"
@@ -59,7 +66,12 @@ steps:
       New-Item -ItemType Directory -Path $destination | Out-Null
     }
 
+    # Copia todo conteúdo do build para pasta de deploy IIS
     Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
 
     Write-Host "Publicação concluída com sucesso em: $destination"
+
+    # Opcional: Exemplo para configurar variável de ambiente no IIS (ajuste conforme necessário)
+    # $envName = "ConnectionStrings__DefaultConnection"
+    # [Environment]::SetEnvironmentVariable($envName, '$(connectionString)', 'Machine')
   displayName: 'Copiar arquivos para C:\Users\Mateus\Desktop\Publish'
