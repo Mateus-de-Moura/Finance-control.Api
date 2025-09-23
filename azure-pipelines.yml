@@ -6,8 +6,6 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  # Alterado para apontar para a solução
-  solutionPath: 'finance-control.sln' # <-- ASSUMINDO O NOME E LOCALIZAÇÃO
   projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
   publishDestination: 'C:\Users\Mateus\Desktop\Publish'
 
@@ -22,24 +20,25 @@ steps:
   displayName: 'Restaurar pacotes'
   inputs:
     command: 'restore'
-    projects: '$(solutionPath)' # Restaurar para a solução inteira
+    projects: '$(projectPath)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build Solução'
+  displayName: 'Build API (.NET 9)'
   inputs:
     command: 'build'
-    projects: '$(solutionPath)' # Buildar a solução inteira
+    projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
-# ETAPA MODIFICADA - A SOLUÇÃO DEFINITIVA
+# ETAPA FINAL CORRIGIDA
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9) diretamente no destino'
   inputs:
     command: 'publish'
-    # IMPORTANTE: Mantenha publishWebProjects como false
-    publishWebProjects: false
-    # Aponte para o projeto que você quer publicar
-    projects: '$(projectPath)'
+    # 1. Diga à tarefa que estamos publicando um projeto web.
+    publishWebProjects: true
+    # 2. Desative explicitamente a criação do zip.
+    zipAfterPublish: false
+    # 3. Use os argumentos para especificar o destino.
     arguments: '--configuration $(buildConfiguration) --output "$(publishDestination)"'
-    # IMPORTANTE: Desmarque a opção de criar uma pasta com o nome do projeto
-    modifyOutputPath: false # <-- ESTA É A OPÇÃO MÁGICA!
+    # 4. (Opcional, mas bom manter) Não adicione o nome do projeto ao caminho.
+    modifyOutputPath: false
