@@ -6,9 +6,9 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  outputFolder: '$(Agent.WorkFolder)/_build_output'
-  apiProject: 'src/finance-control.Api/finance-control.Api.csproj'
-  destinationFolder: 'C:\Users\Mateus\Desktop\Publish'
+  projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
+  outputFolder: '$(Build.ArtifactStagingDirectory)/publish'
+  publishDestination: 'C:\Users\Mateus\Desktop\Publish'
 
 steps:
 - task: UseDotNet@2
@@ -18,47 +18,39 @@ steps:
     version: '9.0.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Restaurar pacotes
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
   inputs:
     command: 'restore'
-    projects: '$(apiProject)'
+    projects: '$(projectPath)'
 
-# Compilar o projeto da API
 - task: DotNetCoreCLI@2
-  displayName: 'Compilar API (.NET 9)'
+  displayName: 'Build API (.NET 9)'
   inputs:
     command: 'build'
-    projects: '$(apiProject)'
+    projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
-# Publicar o projeto da API
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9)'
   inputs:
     command: 'publish'
-    projects: '$(apiProject)'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+    publishWebProjects: false
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder) --no-self-contained'
+    zipAfterPublish: false
 
-# Copiar os arquivos para a pasta onde o IIS serve
 - powershell: |
     $source = "$(outputFolder)"
-    $destination = "$(destinationFolder)"
+    $destination = "$(publishDestination)"
 
-    if (!(Test-Path -Path $destination)) {
-      New-Item -ItemType Directory -Path $destination | Out-Null
-    }
-
-    Write-Host "Removendo arquivos antigos em $destination (exceto aspnet_client)..."
+    Write-Host "Limpando destino: $destination"
     Get-ChildItem -Path $destination -Recurse | Where-Object {
         $_.FullName -notlike "*aspnet_client*"
-    } | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+    } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
-    Write-Host "Copiando novos arquivos de $source para $destination..."
+    Write-Host "Copiando arquivos de $source para $destination"
     Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
 
     Write-Host "Publicação concluída com sucesso."
-  displayName: 'Copiar e sobrescrever arquivos da API no IIS'
-
-
+  displayName: 'Copiar build para IIS'
