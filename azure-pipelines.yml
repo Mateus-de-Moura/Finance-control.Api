@@ -1,5 +1,5 @@
 trigger:
-- FEAT/Category
+- main
 
 pool:
   name: default
@@ -11,7 +11,6 @@ variables:
 
 steps:
 
-# Instalar .NET 9 SDK (caso o agente não tenha)
 - task: UseDotNet@2
   displayName: 'Instalar .NET 9 SDK'
   inputs:
@@ -19,14 +18,12 @@ steps:
     version: '9.0.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Restaurar pacotes NuGet
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
   inputs:
     command: 'restore'
     projects: '$(solution)'
 
-# Compilar o projeto
 - task: DotNetCoreCLI@2
   displayName: 'Compilar API (.NET 9)'
   inputs:
@@ -34,7 +31,6 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)'
 
-# Publicar o projeto para pasta temporária
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API'
   inputs:
@@ -42,7 +38,6 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
 
-# Copiar arquivos publicados para a pasta na área de trabalho
 - powershell: |
     $source = "$(outputFolder)"
     $destination = "C:\Users\Mateus\Desktop\Publish"
