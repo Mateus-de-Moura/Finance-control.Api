@@ -45,12 +45,15 @@ steps:
     $destination = "$(publishDestination)"
 
     Write-Host "Limpando destino: $destination"
+    # Sua lógica de limpeza está boa, pode manter.
     Get-ChildItem -Path $destination -Recurse | Where-Object {
         $_.FullName -notlike "*aspnet_client*"
     } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
     Write-Host "Copiando arquivos de $source para $destination"
-    Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+    # O comando Copy-Item com -Recurse já deve fazer o trabalho se o destino existir.
+    # Vamos garantir que ele copie tudo de dentro da origem para o destino.
+    Copy-Item -Path "$source\." -Destination $destination -Recurse -Force
 
     Write-Host "Publicação concluída com sucesso."
   displayName: 'Copiar build para IIS'
