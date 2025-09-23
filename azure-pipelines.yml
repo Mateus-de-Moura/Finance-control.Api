@@ -7,7 +7,6 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
-  outputFolder: '$(Build.ArtifactStagingDirectory)/publish'
   publishDestination: 'C:\Users\Mateus\Desktop\Publish'
 
 steps:
@@ -32,28 +31,11 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publicar API (.NET 9)'
+  displayName: 'Publicar API (.NET 9) diretamente no destino'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: '$(projectPath)'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder) --no-self-contained'
+    arguments: '--configuration $(buildConfiguration) --output "$(publishDestination)" --no-self-contained'
     zipAfterPublish: false
 
-- powershell: |
-    $source = "$(outputFolder)"
-    $destination = "$(publishDestination)"
-
-    Write-Host "Limpando destino: $destination"
-    # Sua lógica de limpeza está boa, pode manter.
-    Get-ChildItem -Path $destination -Recurse | Where-Object {
-        $_.FullName -notlike "*aspnet_client*"
-    } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-
-    Write-Host "Copiando arquivos de $source para $destination"
-    # O comando Copy-Item com -Recurse já deve fazer o trabalho se o destino existir.
-    # Vamos garantir que ele copie tudo de dentro da origem para o destino.
-    Copy-Item -Path "$source\." -Destination $destination -Recurse -Force
-
-    Write-Host "Publicação concluída com sucesso."
-  displayName: 'Copiar build para IIS'
