@@ -5,10 +5,10 @@ pool:
   name: default
 
 variables:
-  solution: '**/*.sln'
   buildConfiguration: 'Release'
   outputFolder: '$(Agent.WorkFolder)/_build_output'
-  connectionString: 'Server=MEU_SERVIDOR;Database=MEU_BANCO;User Id=USUARIO;Password=SENHA;'  # Ajuste aqui sua connection string
+  apiProject: 'src/finance-control.Api/finance-control.Api.csproj'
+  destinationFolder: 'C:\Users\Mateus\Desktop\Publish'
 
 steps:
 - task: UseDotNet@2
@@ -18,53 +18,33 @@ steps:
     version: '9.0.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- powershell: |
-    # Procura o appsettings.json no repositório
-    $appSettingsPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "appsettings.json" -Recurse | Select-Object -First 1 | Select-Object -ExpandProperty FullName
-
-    if (-not $appSettingsPath) {
-      throw "Arquivo appsettings.json não encontrado no repositório."
-    }
-
-    Write-Host "Atualizando connection string no $appSettingsPath"
-    $json = Get-Content $appSettingsPath | ConvertFrom-Json
-
-    # Altere o nome da connection string conforme seu JSON
-    $json.ConnectionStrings.DefaultConnection = '$(connectionString)'
-
-    $json | ConvertTo-Json -Depth 10 | Set-Content -Path $appSettingsPath -Encoding UTF8
-  displayName: 'Atualizar appsettings.json com connection string'
-
+# Restaurar pacotes
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
   inputs:
     command: 'restore'
-    projects: '$(solution)'
+    projects: '$(apiProject)'
 
+# Compilar o projeto da API
 - task: DotNetCoreCLI@2
   displayName: 'Compilar API (.NET 9)'
   inputs:
     command: 'build'
-    projects: '$(solution)'
+    projects: '$(apiProject)'
     arguments: '--configuration $(buildConfiguration)'
 
+# Publicar o projeto da API
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9)'
   inputs:
     command: 'publish'
-    projects: '$(solution)'
+    projects: '$(apiProject)'
     arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicar Artefatos'
-  inputs:
-    PathtoPublish: '$(outputFolder)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
+# Copiar os arquivos para a pasta onde o IIS serve
 - powershell: |
     $source = "$(outputFolder)"
-    $destination = "C:\Users\Mateus\Desktop\Publish"
+    $destination = "$(destinationFolder)"
 
     if (!(Test-Path -Path $destination)) {
       New-Item -ItemType Directory -Path $destination | Out-Null
@@ -72,5 +52,5 @@ steps:
 
     Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
 
-    Write-Host "Publicação concluída com sucesso em: $destination"
-  displayName: 'Copiar arquivos para C:\Users\Mateus\Desktop\Publish'
+    Write-Host "Publicação da API concluída com sucesso em: $destination"
+  displayName: 'Copiar arquivos da API para IIS'
