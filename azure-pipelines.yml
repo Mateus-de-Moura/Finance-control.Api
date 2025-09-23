@@ -1,19 +1,57 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- FEAT/Category
 
 pool:
   name: default
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  outputFolder: '$(Agent.WorkFolder)/_build_output'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+steps:
+
+# Instalar .NET 9 SDK (caso o agente não tenha)
+- task: UseDotNet@2
+  displayName: 'Instalar .NET 9 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+# Restaurar pacotes NuGet
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar pacotes'
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+
+# Compilar o projeto
+- task: DotNetCoreCLI@2
+  displayName: 'Compilar API (.NET 9)'
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+
+# Publicar o projeto para pasta temporária
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar API'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+
+# Copiar arquivos publicados para a pasta na área de trabalho
+- powershell: |
+    $source = "$(outputFolder)"
+    $destination = "C:\Users\Mateus\Desktop\Publish"
+
+    if (!(Test-Path -Path $destination)) {
+      New-Item -ItemType Directory -Path $destination | Out-Null
+    }
+
+    Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+
+    Write-Host "Publicação concluída com sucesso em: $destination"
+  displayName: 'Copiar arquivos para C:\Users\Mateus\Desktop\Publish'
