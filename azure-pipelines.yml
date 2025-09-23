@@ -8,8 +8,8 @@ variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
   outputFolder: '$(Agent.WorkFolder)/_build_output'
-  appSettingsFile: 'appsettings.Production.json'
-  connectionString: 'Server=MEU_SERVIDOR;Database=MINHA_DB;User Id=USUARIO;Password=SENHA;'  # ajuste aqui sua connection string
+  appSettingsFile: 'appsettings.json'
+  connectionString: 'Server=MEU_SERVIDOR;Database=MINHA_DB;User Id=USUARIO;Password=SENHA;' 
 
 steps:
 - task: UseDotNet@2
