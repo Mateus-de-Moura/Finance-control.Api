@@ -10,7 +10,6 @@ variables:
   outputFolder: '$(Agent.WorkFolder)/_build_output'
 
 steps:
-
 - task: UseDotNet@2
   displayName: 'Instalar .NET 9 SDK'
   inputs:
@@ -32,7 +31,21 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publicar API'
+  displayName: 'Publicar API (.NET 9)'
+  inputs:
+    command: 'publish'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicar Artefatos'
+  inputs:
+    PathtoPublish: '$(outputFolder)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar API no IIS'
   inputs:
     command: 'publish'
     publishWebProjects: true
