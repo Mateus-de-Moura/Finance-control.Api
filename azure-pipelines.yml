@@ -43,3 +43,23 @@ steps:
     PathtoPublish: '$(outputFolder)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar API no IIS'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+
+- powershell: |
+    $source = "$(outputFolder)"
+    $destination = "C:\Users\Mateus\Desktop\Publish"
+
+    if (!(Test-Path -Path $destination)) {
+      New-Item -ItemType Directory -Path $destination | Out-Null
+    }
+
+    Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+
+    Write-Host "Publicação concluída com sucesso em: $destination"
+  displayName: 'Copiar arquivos para C:\Users\Mateus\Desktop\Publish'
