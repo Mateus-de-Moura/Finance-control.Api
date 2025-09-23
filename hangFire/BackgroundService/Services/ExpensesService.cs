@@ -73,8 +73,7 @@ namespace BackgroundService.Services
                         Status = expense.Status,
                         CategoryId = expense.CategoryId,
                         UserId = expense.UserId,
-                        Description = expense.Description,
-                        ProofPath = expense.ProofPath,
+                        Description = expense.Description,                      
                         DueDate = expense.DueDate.AddMonths(1),
                     };
                 }).ToList();

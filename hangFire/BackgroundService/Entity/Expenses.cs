@@ -22,6 +22,7 @@ namespace BackgroundService.Entity
 
         public bool IsDeleted { get; set; }
 
-        public byte[]? ProofPath { get; set; }
+        public Guid? ExpensesComprovantId { get; set; }
+        public ExpensesComprovant? ExpensesComprovant { get; set; }
     }
 }

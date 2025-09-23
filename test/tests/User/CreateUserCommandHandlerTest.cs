@@ -15,6 +15,7 @@ public class CreateUserCommandHandlerTest
     private readonly Mock<IMapper> _mapperMock;
     private readonly CreateUserCommandHendler _handler;
     private readonly FinanceControlContex _context;
+    private readonly Mock<IConvertFormFileToBytes> _convertMock;
 
     public CreateUserCommandHandlerTest()
     {
@@ -26,8 +27,9 @@ public class CreateUserCommandHandlerTest
             .Options;
 
         _context = new FinanceControlContex(options);
+        _convertMock = new Mock<IConvertFormFileToBytes>();
 
-        _handler = new CreateUserCommandHendler(_context, _mapperMock.Object, _authServiceMock.Object);
+        _handler = new CreateUserCommandHendler(_context, _mapperMock.Object, _authServiceMock.Object, _convertMock.Object);
     }
 
     [Fact]

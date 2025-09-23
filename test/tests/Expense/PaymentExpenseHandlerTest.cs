@@ -1,9 +1,11 @@
 ﻿using finance_control.Application.ExpenseCQ.Commands;
 using finance_control.Application.ExpenseCQ.Handler;
+using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
 using finance_control.Domain.Enum;
 using finance_control.Infra.Data;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace tests.Expense
 {
@@ -12,6 +14,7 @@ namespace tests.Expense
 
         private readonly FinanceControlContex _context;
         private readonly PaymentExpenseHandler _handler;
+        private readonly Mock<IConvertFormFileToBytes> _convertMock;
         public PaymentExpenseHandlerTest()
         {
             var options = new DbContextOptionsBuilder<FinanceControlContex>()
@@ -19,7 +22,8 @@ namespace tests.Expense
            .Options;
 
             _context = new FinanceControlContex(options);
-            _handler = new PaymentExpenseHandler(_context);
+            _convertMock = new Mock<IConvertFormFileToBytes>();
+            _handler = new PaymentExpenseHandler(_context, _convertMock.Object);
         }
         [Fact]
         public async Task PaymentItsOk_Payment_Success()

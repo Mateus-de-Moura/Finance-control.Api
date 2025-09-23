@@ -2,6 +2,7 @@
 using finance_control.Application.ExpenseCQ.Handler;
 using finance_control.Domain.Abstractions;
 using finance_control.Domain.Entity;
+using finance_control.Domain.Interfaces.Repositories;
 using finance_control.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -13,6 +14,7 @@ namespace tests.Expense
         private readonly FinanceControlContex _context;
         private readonly CreateExpenseHandler _handler;
         private readonly Mock<IConvertFormFileToBytes> _convertMock;
+        private readonly Mock<IExpenseRepository> _expenseRepository;
         public CreateExpenseHandlerTest()
         {
             var options = new DbContextOptionsBuilder<FinanceControlContex>()
@@ -21,8 +23,9 @@ namespace tests.Expense
 
             _context = new FinanceControlContex(options);
             _convertMock = new Mock<IConvertFormFileToBytes>();
+            _expenseRepository = new Mock<IExpenseRepository>();
 
-            _handler = new CreateExpenseHandler(_context, _convertMock.Object);
+            _handler = new CreateExpenseHandler(_expenseRepository.Object, _convertMock.Object);
         }
 
         [Fact]
