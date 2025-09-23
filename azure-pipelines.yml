@@ -29,16 +29,11 @@ steps:
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
-# ETAPA FINAL CORRIGIDA
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9) diretamente no destino'
   inputs:
     command: 'publish'
-    # 1. Diga à tarefa que estamos publicando um projeto web.
     publishWebProjects: true
-    # 2. Desative explicitamente a criação do zip.
     zipAfterPublish: false
-    # 3. Use os argumentos para especificar o destino.
     arguments: '--configuration $(buildConfiguration) --output "$(publishDestination)"'
-    # 4. (Opcional, mas bom manter) Não adicione o nome do projeto ao caminho.
     modifyOutputPath: false
