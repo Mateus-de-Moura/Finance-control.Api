@@ -35,7 +35,7 @@ public class CreateUserCommandHandlerTest
     [Fact]
     public async Task Handle_ShouldCreateUser_WhenDataIsValid()
     {
-        // Arrange teste
+        // Arrange
         var command = new CreateUserCommand
         {
             Name = "test",
