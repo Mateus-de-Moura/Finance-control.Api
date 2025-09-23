@@ -7,7 +7,6 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
-  outputFolder: '$(Build.ArtifactStagingDirectory)/publish'
   publishDestination: 'C:\Users\Mateus\Desktop\Publish'
 
 steps:
@@ -16,7 +15,6 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '9.0.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: DotNetCoreCLI@2
   displayName: 'Restaurar pacotes'
@@ -32,25 +30,10 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publicar API (.NET 9)'
+  displayName: 'Publicar API (.NET 9) diretamente no destino'
   inputs:
     command: 'publish'
-    publishWebProjects: false
-    projects: '$(projectPath)'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder) --no-self-contained'
+    publishWebProjects: true
     zipAfterPublish: false
-
-- powershell: |
-    $source = "$(outputFolder)"
-    $destination = "$(publishDestination)"
-
-    Write-Host "Limpando destino: $destination"
-    Get-ChildItem -Path $destination -Recurse | Where-Object {
-        $_.FullName -notlike "*aspnet_client*"
-    } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-
-    Write-Host "Copiando arquivos de $source para $destination"
-    Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
-
-    Write-Host "Publicação concluída com sucesso."
-  displayName: 'Copiar build para IIS'
+    arguments: '--configuration $(buildConfiguration) --output "$(publishDestination)"'
+    modifyOutputPath: false
