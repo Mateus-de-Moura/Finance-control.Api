@@ -50,7 +50,12 @@ steps:
       New-Item -ItemType Directory -Path $destination | Out-Null
     }
 
+    Write-Host "Removendo arquivos antigos em $destination..."
+    Get-ChildItem -Path $destination -Recurse | Remove-Item -Force -Recurse
+
+    Write-Host "Copiando novos arquivos de $source para $destination..."
     Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
 
-    Write-Host "Publicação da API concluída com sucesso em: $destination"
-  displayName: 'Copiar arquivos da API para IIS'
+    Write-Host "Publicação concluída com sucesso."
+  displayName: 'Copiar e sobrescrever arquivos da API no IIS'
+
