@@ -1,5 +1,5 @@
 trigger:
-- FEAT/Category
+- main
 
 pool:
   name: default
