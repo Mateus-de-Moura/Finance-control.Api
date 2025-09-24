@@ -54,6 +54,8 @@ namespace finance_control.Application.ExpenseCQ.Handler
             else
                 expense.ExpensesComprovant = null;
 
+            context.Entry(expense).State = EntityState.Modified;
+
             var rowsAffected = await context.SaveChangesAsync();
 
             return rowsAffected > 0 ?
