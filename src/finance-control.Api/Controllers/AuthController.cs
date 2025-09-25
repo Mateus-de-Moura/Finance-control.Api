@@ -52,7 +52,7 @@ namespace finance_control.Api.Controllers
             return BadRequest(request);
         }
 
-        [HttpPost("RefreshToken")]
+        [HttpPost("Refresh-Token")]
         public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> RefreshToken(RefreshTokenCommand comand)
         {
             if (string.IsNullOrEmpty(comand.Username) || string.IsNullOrEmpty(comand.RefreshToken))
