@@ -1,11 +1,14 @@
-﻿using finance_control.Application.Response;
-using finance_control.Application.UserCQ.Commands;
-using finance_control.Application.UserCQ.ViewModels;
-using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Net;
+using AutoMapper;
+using Azure;
+using finance_control.Application.Response;
+using finance_control.Application.UserCQ.Commands;
+using finance_control.Application.UserCQ.Query;
+using finance_control.Application.UserCQ.ViewModels;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace finance_control.Api.Controllers
 {
@@ -28,6 +31,19 @@ namespace finance_control.Api.Controllers
 
                 if (userInfo is not null)
                 {
+
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTime.UtcNow.AddHours(1)
+                    };
+
+                    Response.Cookies.Append("AuthToken", request.Value.TokenJwt!, cookieOptions);
+                    request.Value.TokenJwt = string.Empty;
+
+
                     _logger.LogInformation("Operação de login do usuário {Name} foi realizada com sucesso", command.Email);
                     return Ok(_mapper.Map<UserInfoViewModel>(request.Value));
                 }
@@ -39,13 +55,61 @@ namespace finance_control.Api.Controllers
         [HttpPost("RefreshToken")]
         public async Task<ActionResult<ResponseBase<UserInfoViewModel>>> RefreshToken(RefreshTokenCommand comand)
         {
-            var request = await _mediator.Send(new RefreshTokenCommand
+            if (string.IsNullOrEmpty(comand.Username) || string.IsNullOrEmpty(comand.RefreshToken))
+                return BadRequest(new { message = "Usuário ou token inválidos" });
+
+            var response = await _mediator.Send(new RefreshTokenCommand
             {
                 Username = comand.Username,
                 RefreshToken = comand.RefreshToken
             });
 
-            return Ok(request);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+            Response.Cookies.Append("AuthToken", response.Value.TokenJwt!, cookieOptions);
+            response.Value.TokenJwt = string.Empty;
+
+            return Ok(response);
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(-1)
+            };
+
+            Response.Cookies.Append("AuthToken", string.Empty, cookieOptions);
+
+            return Ok(new { message = "Logout realizado com sucesso" });
+        }
+
+        [HttpGet("user-info")]
+        [Authorize]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            if (HttpContext.User.Identity?.IsAuthenticated == true)
+            {
+                var username = HttpContext.User.Claims.First();
+
+                var response = await _mediator.Send(new GetUserAuthQuery { UserNameOrEmailAddress = username.Value });
+
+                var user = response.ResponseInfo is null ? response.Value : null;
+
+                return Ok(new { authenticated = true, user = user });
+            }
+
+            return Unauthorized();
         }
 
         [HttpPost("LoginGithub")]
