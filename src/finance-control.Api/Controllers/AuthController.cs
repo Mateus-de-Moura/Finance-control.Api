@@ -31,7 +31,6 @@ namespace finance_control.Api.Controllers
 
                 if (userInfo is not null)
                 {
-
                     var cookieOptions = new CookieOptions
                     {
                         HttpOnly = true,
@@ -40,9 +39,8 @@ namespace finance_control.Api.Controllers
                         Expires = DateTime.UtcNow.AddHours(1)
                     };
 
-                    Response.Cookies.Append("AuthToken", request.Value.TokenJwt!, cookieOptions);
+                    Response.Cookies.Append("AuthToken", request.Value.TokenJwt!, cookieOptions);                      
                     request.Value.TokenJwt = string.Empty;
-
 
                     _logger.LogInformation("Operação de login do usuário {Name} foi realizada com sucesso", command.Email);
                     return Ok(_mapper.Map<UserInfoViewModel>(request.Value));
@@ -67,11 +65,15 @@ namespace finance_control.Api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddHours(1)
+                Secure = false, 
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
+                Expires = DateTime.UtcNow.AddHours(1),             
             };
-            Response.Cookies.Append("AuthToken", response.Value.TokenJwt!, cookieOptions);
+
+            Response.Cookies.Append("AuthToken", response.Value.TokenJwt!, cookieOptions);            
+        
+            _logger.LogInformation("Cookie AuthToken renovado para usuário {Username}", comand.Username);
             response.Value.TokenJwt = string.Empty;
 
             return Ok(response);
@@ -86,7 +88,8 @@ namespace finance_control.Api.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(-1)
+                Expires = DateTime.UtcNow.AddDays(-1),
+                MaxAge = TimeSpan.FromHours(1)
             };
 
             Response.Cookies.Append("AuthToken", string.Empty, cookieOptions);
@@ -97,10 +100,11 @@ namespace finance_control.Api.Controllers
         [HttpGet("user-info")]
         [Authorize]
         public async Task<IActionResult> GetUserInfo()
-        {
+        {         
             if (HttpContext.User.Identity?.IsAuthenticated == true)
             {
                 var username = HttpContext.User.Claims.First();
+                _logger.LogInformation("Usuário autenticado: {Username}", username.Value);
 
                 var response = await _mediator.Send(new GetUserAuthQuery { UserNameOrEmailAddress = username.Value });
 
@@ -109,6 +113,7 @@ namespace finance_control.Api.Controllers
                 return Ok(new { authenticated = true, user = user });
             }
 
+            _logger.LogWarning("Usuário não autenticado - retornando 401");
             return Unauthorized();
         }
 
@@ -121,7 +126,6 @@ namespace finance_control.Api.Controllers
                 return BadRequest(response);
 
             return Ok(response);
-        }
-
+        }  
     }
 }
