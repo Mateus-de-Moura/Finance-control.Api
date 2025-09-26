@@ -65,10 +65,8 @@ namespace finance_control.Api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, 
-                SameSite = SameSiteMode.Lax,
-                Path = "/",
-                Expires = DateTime.UtcNow.AddHours(1),             
+                Secure = true,                            
+                MaxAge = TimeSpan.FromDays(1)
             };
 
             Response.Cookies.Append("AuthToken", response.Value.TokenJwt!, cookieOptions);            
