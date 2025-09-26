@@ -85,8 +85,7 @@ namespace finance_control.Api.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(-1),
+                SameSite = SameSiteMode.None,          
                 MaxAge = TimeSpan.FromHours(1)
             };
 
