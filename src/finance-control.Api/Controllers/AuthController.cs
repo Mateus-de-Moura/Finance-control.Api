@@ -36,7 +36,8 @@ namespace finance_control.Api.Controllers
                         HttpOnly = true,
                         Secure = true,
                         SameSite = SameSiteMode.None,
-                        Expires = DateTime.UtcNow.AddHours(1)
+                        Expires = DateTime.UtcNow.AddHours(1),
+                        Path = "/"
                     };
 
                     Response.Cookies.Append("AuthToken", request.Value.TokenJwt!, cookieOptions);                      
@@ -65,8 +66,10 @@ namespace finance_control.Api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,                            
-                MaxAge = TimeSpan.FromDays(1)
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                MaxAge = TimeSpan.FromDays(1),
+                Path = "/"
             };
 
             Response.Cookies.Append("AuthToken", response.Value.TokenJwt!, cookieOptions);            
@@ -80,24 +83,43 @@ namespace finance_control.Api.Controllers
         [HttpPost("logout")]
         [Authorize]
         public IActionResult Logout()
-        {
+        {            
+            var username = HttpContext.User.Identity?.Name ?? "Unknown";
+            _logger.LogInformation("Iniciando logout para usuário: {Username}", username);
+            
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.None,          
-                MaxAge = TimeSpan.FromHours(1)
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(-1),
+                Path = "/" 
             };
+            
+            Response.Cookies.Append("AuthToken", "", cookieOptions);
+       
+            Response.Cookies.Delete("AuthToken", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            });
 
-            Response.Cookies.Append("AuthToken", string.Empty, cookieOptions);
-
+            _logger.LogInformation("Logout realizado com sucesso - cookie AuthToken removido para usuário: {Username}", username);
             return Ok(new { message = "Logout realizado com sucesso" });
         }
 
         [HttpGet("user-info")]
         [Authorize]
         public async Task<IActionResult> GetUserInfo()
-        {         
+        {           
+            var hasCookie = Request.Cookies.ContainsKey("AuthToken");
+            var cookieValue = Request.Cookies["AuthToken"];
+            
+            _logger.LogInformation("Verificando autenticação - Cookie presente: {HasCookie}, Valor: {CookieValue}", 
+                hasCookie, string.IsNullOrEmpty(cookieValue) ? "VAZIO" : "PRESENTE");
+
             if (HttpContext.User.Identity?.IsAuthenticated == true)
             {
                 var username = HttpContext.User.Claims.First();
@@ -110,7 +132,7 @@ namespace finance_control.Api.Controllers
                 return Ok(new { authenticated = true, user = user });
             }
 
-            _logger.LogWarning("Usuário não autenticado - retornando 401");
+            _logger.LogWarning("Usuário não autenticado - retornando 401. Cookie presente: {HasCookie}", hasCookie);
             return Unauthorized();
         }
 
@@ -125,16 +147,5 @@ namespace finance_control.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("test-telemetry")]
-        [AllowAnonymous]
-        public IActionResult TestTelemetry()
-        {
-            _logger.LogInformation("Teste de telemetria executado");
-            return Ok(new { 
-                message = "Teste de telemetria", 
-                timestamp = DateTime.UtcNow,
-                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-            });
-        }
     }
 }
