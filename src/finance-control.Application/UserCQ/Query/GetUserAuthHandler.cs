@@ -17,8 +17,13 @@ namespace finance_control.Application.UserCQ.Query
         {
             var result = await userRepository.GetUserByEmailOrName(request.UserNameOrEmailAddress);
 
+            var userMapped = mapper.Map<RefreshTokenViewModel>(result.Value);
+
+            if (result.Value.PhotosUsers is not null)
+                userMapped.Photo = Convert.ToBase64String(result.Value.PhotosUsers.PhotoUser);
+
             return result.IsSuccess ?
-                ResponseBase<RefreshTokenViewModel>.Success(mapper.Map<RefreshTokenViewModel>(result.Value)) :
+                ResponseBase<RefreshTokenViewModel>.Success(userMapped) :
                 ResponseBase<RefreshTokenViewModel>.Fail("Erro", "Usuario nao foi localizado", 404);
         }
     }

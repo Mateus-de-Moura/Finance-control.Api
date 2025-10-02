@@ -20,8 +20,9 @@ namespace finance_control.Infra.Data.Repositories
         public async Task<Result<User>> GetUserByEmailOrName(string emailOrName)
         {
             var existingUser = await _context.Users
-                .Where(x => x.Email.Equals(emailOrName) 
-                || x.Name.Equals(emailOrName))
+                .Include(x => x.PhotosUsers)
+                .Where(x => x.Email!.Equals(emailOrName) 
+                || x.Name!.Equals(emailOrName))
                 .FirstOrDefaultAsync();
 
             return existingUser != null ? Result.Success(existingUser) : Result.Error();
@@ -34,7 +35,7 @@ namespace finance_control.Infra.Data.Repositories
             if (user == null)
                 return Result.Error("Usuário nao foi localizado.");
 
-            existingUser.Name = user.Name ?? existingUser.Name;
+            existingUser!.Name = user.Name ?? existingUser.Name;
             existingUser.Surname = user.Surname ?? existingUser.Surname;
             existingUser.Email = user.Email ?? existingUser.Email;
             existingUser.UserName = user.UserName ?? existingUser.UserName;
