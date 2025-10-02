@@ -14,6 +14,7 @@ builder.AddDatabase();
 builder.AddJwtAuth();
 builder.AddMapper();
 builder.AddInjection();
+builder.AddObservability();
 
 builder.Services.AddSignalR();
 

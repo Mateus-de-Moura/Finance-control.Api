@@ -17,6 +17,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
@@ -171,6 +174,40 @@ namespace api_clean_architecture.Api
         public static void AddMapper(this WebApplicationBuilder builder)
         {
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        }
+
+        public static void AddObservability(this WebApplicationBuilder builder)
+        {
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+               .AddService("MinhaApi", serviceVersion: "1.0.0");
+
+            builder.Services.AddOpenTelemetry()
+             .WithTracing(tracerProviderBuilder =>
+             {
+                 tracerProviderBuilder
+                     .SetResourceBuilder(resourceBuilder)
+                     .AddAspNetCoreInstrumentation()
+                     .AddHttpClientInstrumentation()
+                     .AddSqlClientInstrumentation()
+                     .AddOtlpExporter(options =>
+                     {
+                         // Exemplo: enviar para o collector local
+                         options.Endpoint = new Uri("http://localhost:4317");
+                     })
+                     .AddConsoleExporter(); // opcional: loga no console
+             })
+             .WithMetrics(metricsProviderBuilder =>
+             {
+                 metricsProviderBuilder
+                     .SetResourceBuilder(resourceBuilder)
+                     .AddAspNetCoreInstrumentation()
+                     .AddHttpClientInstrumentation()
+                     .AddRuntimeInstrumentation()
+                     .AddProcessInstrumentation()
+                     .AddOtlpExporter()
+                     .AddConsoleExporter();
+             });
+            
         }
     }
 }
