@@ -181,6 +181,7 @@ namespace api_clean_architecture.Api
             var resourceBuilder = ResourceBuilder.CreateDefault()
                .AddService("MinhaApi", serviceVersion: "1.0.0");
 
+
             builder.Services.AddOpenTelemetry()
              .WithTracing(tracerProviderBuilder =>
              {
@@ -191,10 +192,10 @@ namespace api_clean_architecture.Api
                      .AddSqlClientInstrumentation()
                      .AddOtlpExporter(options =>
                      {
-                         // Exemplo: enviar para o collector local
-                         options.Endpoint = new Uri("http://localhost:4317");
+                         options.Endpoint = new Uri("http://localhost:4318");
+                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
                      })
-                     .AddConsoleExporter(); // opcional: loga no console
+                     .AddConsoleExporter(); 
              })
              .WithMetrics(metricsProviderBuilder =>
              {
