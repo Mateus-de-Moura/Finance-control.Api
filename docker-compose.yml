@@ -4,8 +4,8 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
-      - "16686:16686"   # UI Web do Jaeger
-      - "4317:4317"     # OTLP gRPC (OpenTelemetry Collector envia aqui)
+      - "16686:16686"   # UI Web do Jaeger (http://localhost:16686)
+      - "4317:4317"     # OTLP gRPC (opcional, alguns casos usam direto no Jaeger)
     networks:
       - observabilidade
 
@@ -15,7 +15,7 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
-      - "4317:4317"     # Porta que sua API vai usar para enviar dados OTLP
+       - "5555:4317"
     depends_on:
       - jaeger
     networks:
