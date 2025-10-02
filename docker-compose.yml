@@ -1,10 +1,26 @@
-version: '3'
+version: '3.8'
+
 services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
-      - "16686:16686" # UI Jaeger
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP (opcional)
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
+      - "16686:16686"   # UI Web do Jaeger
+      - "4317:4317"     # OTLP gRPC (OpenTelemetry Collector envia aqui)
+    networks:
+      - observabilidade
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"     # Porta que sua API vai usar para enviar dados OTLP
+    depends_on:
+      - jaeger
+    networks:
+      - observabilidade
+
+networks:
+  observabilidade:
+    driver: bridge

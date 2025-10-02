@@ -178,69 +178,37 @@ namespace api_clean_architecture.Api
 
         public static void AddObservability(this WebApplicationBuilder builder)
         {
-            // Verifica se o OpenTelemetry está habilitado via configuração
-            var enableTelemetry = builder.Configuration.GetValue<bool>("OpenTelemetry:Enabled", false);
-            var otlpEndpoint = builder.Configuration.GetValue<string>("OpenTelemetry:OtlpEndpoint", "http://localhost:4318");
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+               .AddService("MinhaApi", serviceVersion: "1.0.0");
+
+
+            builder.Services.AddOpenTelemetry()
+             .WithTracing(tracerProviderBuilder =>
+             {
+                 tracerProviderBuilder
+                     .SetResourceBuilder(resourceBuilder)
+                     .AddAspNetCoreInstrumentation()
+                     .AddHttpClientInstrumentation()
+                     .AddSqlClientInstrumentation()
+                     .AddOtlpExporter(options =>
+                     {
+                         options.Endpoint = new Uri("http://localhost:4318");
+                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+                     })
+                     .AddConsoleExporter(); 
+             })
+             .WithMetrics(metricsProviderBuilder =>
+             {
+                 metricsProviderBuilder
+                     .SetResourceBuilder(resourceBuilder)
+                     .AddAspNetCoreInstrumentation()
+                     .AddHttpClientInstrumentation()
+                     .AddRuntimeInstrumentation()
+                     .AddProcessInstrumentation()
+                     .AddOtlpExporter()
+                     .AddConsoleExporter();
+             });
             
-            if (!enableTelemetry)
-            {
-                Console.WriteLine("OpenTelemetry desabilitado via configuração");
-                return;
-            }
-
-            try
-            {
-                var resourceBuilder = ResourceBuilder.CreateDefault()
-                   .AddService("MinhaApi", serviceVersion: "1.0.0");
-
-                builder.Services.AddOpenTelemetry()
-                 .WithTracing(tracerProviderBuilder =>
-                 {
-                     tracerProviderBuilder
-                         .SetResourceBuilder(resourceBuilder)
-                         .AddAspNetCoreInstrumentation()
-                         .AddHttpClientInstrumentation()
-                         .AddSqlClientInstrumentation();
-                         
-                     // Só adiciona OTLP se o endpoint estiver configurado
-                     if (!string.IsNullOrEmpty(otlpEndpoint))
-                     {
-                         tracerProviderBuilder.AddOtlpExporter(options =>
-                         {
-                             options.Endpoint = new Uri(otlpEndpoint);
-                             options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                         });
-                     }
-                     
-                     // Console exporter sempre disponível para debug
-                     tracerProviderBuilder.AddConsoleExporter(); 
-                 })
-                 .WithMetrics(metricsProviderBuilder =>
-                 {
-                     metricsProviderBuilder
-                         .SetResourceBuilder(resourceBuilder)
-                         .AddAspNetCoreInstrumentation()
-                         .AddHttpClientInstrumentation()
-                         .AddRuntimeInstrumentation()
-                         .AddProcessInstrumentation();
-                         
-                     // Só adiciona OTLP se o endpoint estiver configurado
-                     if (!string.IsNullOrEmpty(otlpEndpoint))
-                     {
-                         metricsProviderBuilder.AddOtlpExporter();
-                     }
-                     
-                     // Console exporter sempre disponível para debug
-                     metricsProviderBuilder.AddConsoleExporter();
-                 });
-                 
-                Console.WriteLine($"OpenTelemetry configurado com endpoint: {otlpEndpoint}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao configurar OpenTelemetry: {ex.Message}");
-                // Não falha a aplicação se o OpenTelemetry der erro
-            }
         }
     }
 }
