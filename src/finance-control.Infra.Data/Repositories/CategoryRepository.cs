@@ -11,7 +11,7 @@ namespace finance_control.Infra.Data.Repositories
 
         public async Task<List<Category>> GetAllCategory()
         {
-            var categories = await _context.Category.ToListAsync();
+            var categories = await _context.Category.OrderBy(x => x.Name).ToListAsync();
 
             return categories;
         }
