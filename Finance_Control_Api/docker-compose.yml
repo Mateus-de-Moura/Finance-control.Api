@@ -1,46 +1,16 @@
-version: '3.8'
 services:
-  # OpenTelemetry Collector - recebe dados da sua API
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    container_name: finance-control-otel-collector
-    command: ["--config=/etc/otel-collector-config.yml"]
-    volumes:
-      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
-    ports:
-      - "4317:4317"    # OTLP gRPC receiver (para sua API)
-      - "4318:4318"    # OTLP HTTP receiver (para sua API)
-      - "8889:8889"    # Prometheus metrics endpoint
-    depends_on:
-      - jaeger
-    networks:
-      - jaeger-network
-    restart: unless-stopped
-
-  # Jaeger - armazena e visualiza os traces
+  # Jaeger - recebe dados OTLP diretamente da sua API
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: finance-control-jaeger
     ports:
       - "16686:16686"  # Jaeger UI (interface web)
-      - "14268:14268"  # HTTP collector (para o collector enviar)
-      - "14250:14250"  # gRPC collector (para o collector enviar)
+      - "4317:4317"    # OTLP gRPC receiver (para sua API)
+      - "4318:4318"    # OTLP HTTP receiver (para sua API)
+      - "192.168.18.198:16686:16686"  # Jaeger UI (acesso externo)
+      - "192.168.18.198:4317:4317"    # OTLP gRPC receiver (acesso externo)
+      - "192.168.18.198:4318:4318"    # OTLP HTTP receiver (acesso externo)
     environment:
       - COLLECTOR_OTLP_ENABLED=true
-      - SPAN_STORAGE_TYPE=badger
-      - BADGER_EPHEMERAL=false
-      - BADGER_DIRECTORY_VALUE=/badger/data
-      - BADGER_DIRECTORY_KEY=/badger/key
-    volumes:
-      - jaeger-data:/badger
-    networks:
-      - jaeger-network
+      - SPAN_STORAGE_TYPE=memory
     restart: unless-stopped
-
-volumes:
-  jaeger-data:
-    driver: local
-
-networks:
-  jaeger-network:
-    driver: bridge

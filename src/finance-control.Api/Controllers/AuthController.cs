@@ -123,6 +123,18 @@ namespace finance_control.Api.Controllers
                 return BadRequest(response);
 
             return Ok(response);
-        }  
+        }
+
+        [HttpGet("test-telemetry")]
+        [AllowAnonymous]
+        public IActionResult TestTelemetry()
+        {
+            _logger.LogInformation("Teste de telemetria executado");
+            return Ok(new { 
+                message = "Teste de telemetria", 
+                timestamp = DateTime.UtcNow,
+                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            });
+        }
     }
 }
