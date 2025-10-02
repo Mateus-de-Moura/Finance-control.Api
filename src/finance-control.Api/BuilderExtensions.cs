@@ -192,8 +192,8 @@ namespace api_clean_architecture.Api
                      .AddSqlClientInstrumentation()
                      .AddOtlpExporter(options =>
                      {
-                         options.Endpoint = new Uri("http://localhost:4318");
-                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+                         options.Endpoint = new Uri("http://localhost:4317");
+                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
                      })
                      .AddConsoleExporter(); 
              })
