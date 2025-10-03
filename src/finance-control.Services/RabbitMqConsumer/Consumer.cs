@@ -10,13 +10,8 @@ using RabbitMQ.Client.Events;
 namespace finance_control.Services.RabbitMqConsumer
 {
     public class Consumer(IHubContext<NotificationHub> hub)
-    {
-        //prod
-        private static readonly string _hostName = "host.docker.internal";
-
-        //homol
-        //private static readonly string _hostName = "localhost";
-
+    {       
+        private static readonly string _hostName = "localhost";
         private readonly string _queueName = "expenses";
         private readonly IHubContext<NotificationHub> _hub = hub;
 

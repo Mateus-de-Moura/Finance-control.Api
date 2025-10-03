@@ -4,13 +4,8 @@ using System.Text;
 namespace BackgroundService.RabbitMqPublisher
 {
     public static class Publisher
-    {
-        //prod
-        private static readonly string _hostName = "host.docker.internal";
-
-        //homol
-        //private static readonly string _hostName = "localhost";
-
+    {     
+        private static readonly string _hostName = "localhost";
         private static readonly string _queueName = "expenses";
 
         public static async Task SendMessage(string message)
