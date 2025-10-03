@@ -16,24 +16,62 @@ namespace BackgroundService.Services
         {
             var expenses = await _context.Expenses
                 .Include(x => x.User)
-                .Where(x => x.DueDate.Date < DateTime.Now.Date && x.Status == InvoicesStatus.Vencido).ToListAsync();
+                .Where(x => x.DueDate.Date <= DateTime.Now.Date && x.Status == InvoicesStatus.Vencido).ToListAsync();
 
             foreach (var item in expenses)
             {
-                var payload = new NotificationMessage
+                var notification = await _context.Notify
+                    .AsNoTracking()
+                    .Where(x => x.ExpensesId.Equals(item.Id) && x.UserId.Equals(item.User.Id))
+                    .FirstOrDefaultAsync();
+
+                if (notification is null)
                 {
-                    UserId = item.User.Id.ToString(),
-                    Text = $"{item.User.UserName}, voce possui uma nova notificação"
-                };
+                    string message = string.Empty;
+                    int days = (item.DueDate - DateTime.Now.Date).Days;
+                    string priority = "";
 
-                var json = JsonSerializer.Serialize(payload);
+                    if (item.DueDate.Date < DateTime.Now.Date)
+                    {
+                        message = $"Despesa em Atraso a {days} dias.";
+                        priority = "Alta";
+                    }
+                    else
+                    {
+                        message = "Você possui uma despesa que vence hoje. Atente-se para não atrasar";
+                        priority = "Média";
+                    }
 
-                _ = Task.Run(async () =>
-                {
-                    await _mailSender.Send(item.User.Email!);
-                });
+                    var notificacao = new Notify
+                    {
+                        ExpensesId = item.Id,
+                        Message = message,
+                        Priority = priority,
+                        UserId = item.User.Id
+                    };
 
-                await Publisher.SendMessage(json);              
+                    await _context.Notify.AddAsync(notificacao);
+
+                    var rowsAffected = await _context.SaveChangesAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        var payload = new NotificationMessage
+                        {
+                            UserId = item.User.Id.ToString(),
+                            Text = $"{item.User.UserName}, voce possui uma nova notificação"
+                        };
+
+                        var json = JsonSerializer.Serialize(payload);
+
+                        _ = Task.Run(async () =>
+                        {
+                            await _mailSender.Send(item.User.Email!);
+                        });
+
+                        await Publisher.SendMessage(json);
+                    }
+                }
             }
         }
 
@@ -73,7 +111,7 @@ namespace BackgroundService.Services
                         Status = expense.Status,
                         CategoryId = expense.CategoryId,
                         UserId = expense.UserId,
-                        Description = expense.Description,                      
+                        Description = expense.Description,
                         DueDate = expense.DueDate.AddMonths(1),
                     };
                 }).ToList();

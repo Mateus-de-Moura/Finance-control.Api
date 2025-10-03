@@ -99,6 +99,12 @@ namespace api_clean_architecture.Api
                     );
             });
 
+            builder.Services.AddSignalR(options =>
+            {
+                options.KeepAliveInterval = TimeSpan.FromSeconds(15); 
+                options.ClientTimeoutInterval = TimeSpan.FromSeconds(60); 
+            });
+
 
             builder.Services.AddMemoryCache();
 

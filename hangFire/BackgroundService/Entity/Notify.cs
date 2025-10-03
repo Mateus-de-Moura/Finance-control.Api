@@ -9,10 +9,10 @@ namespace BackgroundService.Entity
 {
     public class Notify : BaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; } = Guid.NewGuid();
         public Guid ExpensesId { get; set; }
         public string Message { get; set; }
-        public bool WasRead { get; set; }
+        public bool WasRead { get; private set; } = false;
         public DateTime ReadDate { get; set; }
         public string Priority { get; set; }
         public Guid UserId { get; set; }
