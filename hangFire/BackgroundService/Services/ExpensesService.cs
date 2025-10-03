@@ -122,5 +122,31 @@ namespace BackgroundService.Services
             }
         }
 
+        public async Task DeleteOldLocationData()
+        {
+            var allData = await _context.LoginLocationData.ToListAsync();
+
+            var groupedByEmail = allData
+                 .GroupBy(x => x.EmailRequest);
+
+            var recordsToDelete = new List<LoginLocationData>();
+
+            foreach (var group in groupedByEmail) 
+            {
+                var oldRecords = group
+                    .OrderByDescending(x => x.AccessDate)
+                    .Skip(10)
+                    .ToList();
+
+                recordsToDelete.AddRange(oldRecords);
+            }
+
+            if(recordsToDelete is not null && recordsToDelete.Any())
+            {
+                _context.LoginLocationData.RemoveRange(recordsToDelete);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

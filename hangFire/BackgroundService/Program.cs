@@ -37,4 +37,10 @@ RecurringJob.AddOrUpdate<ExpensesService>(
     "0 0 30 * *"
 );
 
+RecurringJob.AddOrUpdate<ExpensesService>(
+    "job-delete-old-locationData",
+    service => service.DeleteOldLocationData(),
+    "0 */3 * * *"
+);
+
 app.Run();
