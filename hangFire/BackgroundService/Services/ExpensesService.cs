@@ -16,7 +16,7 @@ namespace BackgroundService.Services
         {
             var expenses = await _context.Expenses
                 .Include(x => x.User)
-                .Where(x => x.DueDate.Date <= DateTime.Now.Date && x.Status == InvoicesStatus.Vencido).ToListAsync();
+                .Where(x => x.DueDate.Date <= DateTime.Now.Date && x.Status != InvoicesStatus.Pago).ToListAsync();
 
             foreach (var item in expenses)
             {
