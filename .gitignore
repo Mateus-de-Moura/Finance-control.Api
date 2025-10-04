@@ -399,3 +399,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignorar arquivos de configuração sensíveis
+src/finance-control.Api/appsettings.json
+hangFire/BackgroundService/appsettings.json
