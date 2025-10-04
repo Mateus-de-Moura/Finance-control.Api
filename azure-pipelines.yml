@@ -7,13 +7,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
-  publishDestination: 'C:\Users\Mateus\Desktop\Publish'
-
-  connectionString: 'Data Source=192.168.18.198,59088;Initial Catalog=FinanceControlApi;User ID=finance;Password=YA6@iUz2w;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False'
-  mailSmtp: 'smtp.gmail.com'
-  mailPort: '587'
-  mailEmail: 'financecontrol724@gmail.com'
-  mailPassword: 'dvmr ares rrrt nffv'
+  publishDestination: 'C:\Users\Mateus\Desktop\Publish' 
 
 steps:
 - task: UseDotNet@2
