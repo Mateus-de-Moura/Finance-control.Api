@@ -7,7 +7,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
-  publishDestination: 'C:\Users\Mateus\Desktop\Publish'
+  publishDestination: 'C:\Users\Mateus\Desktop\Publish' 
 
 steps:
 - task: UseDotNet@2
@@ -28,6 +28,23 @@ steps:
     command: 'build'
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: 'Substituir configs sensíveis no appsettings.json'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $configPath = "$(Build.SourcesDirectory)\src\finance-control.Api\appsettings.json"
+      Write-Host "Editando arquivo: $configPath"
+
+      $json = Get-Content $configPath -Raw | ConvertFrom-Json
+
+      $json.ConnectionStrings.DefaultConnection = "$(connectionString)"      
+     
+      $json.MailConfiguration.Email = "$(mailEmail)"
+      $json.MailConfiguration.Password = "$(mailPassword)"
+
+      $json | ConvertTo-Json -Depth 10 | Set-Content -Path $configPath -Encoding UTF8
 
 - task: DotNetCoreCLI@2
   displayName: 'Publicar API (.NET 9) diretamente no destino'
