@@ -14,6 +14,8 @@ namespace BackgroundService.Services
         private readonly MailSender _mailSender = mailSender;
         public async Task CheckExpensesAndNotify()
         {
+            var UsersSend = new List<Guid>();
+
             var expenses = await _context.Expenses
                 .Include(x => x.User)
                 .Where(x => x.DueDate.Date <= DateTime.Now.Date && x.Status != InvoicesStatus.Pago).ToListAsync();
@@ -28,7 +30,7 @@ namespace BackgroundService.Services
                 if (notification is null)
                 {
                     string message = string.Empty;
-                    int days = (item.DueDate - DateTime.Now.Date).Days;
+                    int days = Math.Abs((item.DueDate - DateTime.Now.Date).Days);
                     string priority = "";
 
                     if (item.DueDate.Date < DateTime.Now.Date)
@@ -56,20 +58,24 @@ namespace BackgroundService.Services
 
                     if (rowsAffected > 0)
                     {
-                        var payload = new NotificationMessage
+                        if (!UsersSend.Contains(item.User.Id))
                         {
-                            UserId = item.User.Id.ToString(),
-                            Text = $"{item.User.UserName}, voce possui uma nova notificação"
-                        };
+                            var payload = new NotificationMessage
+                            {
+                                UserId = item.User.Id.ToString(),
+                                Text = $"{item.User.UserName}, voce possui uma nova notificação"
+                            };
 
-                        var json = JsonSerializer.Serialize(payload);
+                            var json = JsonSerializer.Serialize(payload);
+                            UsersSend.Add(item.User.Id);
 
-                        _ = Task.Run(async () =>
-                        {
-                            await _mailSender.Send(item.User.Email!);
-                        });
+                            await Publisher.SendMessage(json);
 
-                        await Publisher.SendMessage(json);
+                            _ = Task.Run(async () =>
+                            {
+                                await _mailSender.Send();
+                            });
+                        }
                     }
                 }
             }
@@ -131,7 +137,7 @@ namespace BackgroundService.Services
 
             var recordsToDelete = new List<LoginLocationData>();
 
-            foreach (var group in groupedByEmail) 
+            foreach (var group in groupedByEmail)
             {
                 var oldRecords = group
                     .OrderByDescending(x => x.AccessDate)
@@ -141,7 +147,7 @@ namespace BackgroundService.Services
                 recordsToDelete.AddRange(oldRecords);
             }
 
-            if(recordsToDelete is not null && recordsToDelete.Any())
+            if (recordsToDelete is not null && recordsToDelete.Any())
             {
                 _context.LoginLocationData.RemoveRange(recordsToDelete);
                 await _context.SaveChangesAsync();
