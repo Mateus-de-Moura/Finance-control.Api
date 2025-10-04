@@ -44,6 +44,9 @@ steps:
       $json.MailConfiguration.Email = "$(mailEmail)"
       $json.MailConfiguration.Password = "$(mailPassword)"
 
+      $json.GitHubAuth.ClientId = "$(clientIdGithub)"
+      $json.GitHubAuth.ClientSecret = "$(clientSecretGithub)"
+
       $json | ConvertTo-Json -Depth 10 | Set-Content -Path $configPath -Encoding UTF8
 
 - task: DotNetCoreCLI@2
