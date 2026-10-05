@@ -1,0 +1,11 @@
+﻿using finance_control.Application.Response;
+using finance_control.Domain.Entity;
+using MediatR;
+
+namespace finance_control.Application.TransactionsCQ.Queries
+{
+    public class GetRecentTransactionsQuery : IRequest<ResponseBase<List<Transactions>>>
+    {
+        public Guid UserId { get; set; }
+    }
+}

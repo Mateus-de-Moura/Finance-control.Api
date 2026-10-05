@@ -1,0 +1,16 @@
+services:
+  # Jaeger - recebe dados OTLP diretamente da sua API
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: finance-control-jaeger
+    ports:
+      - "16686:16686"  # Jaeger UI (interface web)
+      - "4317:4317"    # OTLP gRPC receiver (para sua API)
+      - "4318:4318"    # OTLP HTTP receiver (para sua API)
+      - "192.168.18.198:16686:16686"  # Jaeger UI (acesso externo)
+      - "192.168.18.198:4317:4317"    # OTLP gRPC receiver (acesso externo)
+      - "192.168.18.198:4318:4318"    # OTLP HTTP receiver (acesso externo)
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - SPAN_STORAGE_TYPE=memory
+    restart: unless-stopped

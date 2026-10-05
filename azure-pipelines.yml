@@ -1,0 +1,88 @@
+trigger:
+- main
+
+pool:
+  name: default
+
+variables:
+  buildConfiguration: 'Release'
+  projectPath: 'src/finance-control.Api/finance-control.Api.csproj'
+  publishDestination: 'C:\Users\Mateus\Desktop\Publish' 
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Instalar .NET 9 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar pacotes'
+  inputs:
+    command: 'restore'
+    projects: '$(projectPath)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build API (.NET 9)'
+  inputs:
+    command: 'build'
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: 'Substituir configs sensíveis no appsettings.json'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $configPath = "$(Build.SourcesDirectory)\src\finance-control.Api\appsettings.json"
+      Write-Host "Editando arquivo: $configPath"
+
+      $json = Get-Content $configPath -Raw | ConvertFrom-Json
+
+        
+     
+      $json.MailConfiguration.Email = "$(mailEmail)"
+      $json.MailConfiguration.Password = "$(mailPassword)"
+
+      $json.GitHubAuth.ClientId = "$(clientIdGithub)"
+      $json.GitHubAuth.ClientSecret = "$(clientSecretGithub)"
+
+      $json | ConvertTo-Json -Depth 10 | Set-Content -Path $configPath -Encoding UTF8
+
+- task: PowerShell@2
+  displayName: 'Colocar app offline e limpar destino'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $destination = "$(publishDestination)"
+
+      if (!(Test-Path -Path $destination)) {
+        New-Item -ItemType Directory -Path $destination | Out-Null
+      }
+
+      Set-Content -Path (Join-Path $destination "app_offline.htm") -Value "Deploy em andamento..." -Encoding UTF8
+
+      Get-ChildItem -Path $destination -Force |
+        Where-Object { $_.Name -ne "app_offline.htm" } |
+        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar API (.NET 9) diretamente no destino'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(projectPath)'
+    zipAfterPublish: false
+    arguments: '--configuration $(buildConfiguration) --output "$(publishDestination)"'
+    modifyOutputPath: false
+
+- task: PowerShell@2
+  displayName: 'Remover app offline'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $offlineFile = Join-Path "$(publishDestination)" "app_offline.htm"
+      if (Test-Path $offlineFile) {
+        Remove-Item $offlineFile -Force
+      }
